@@ -258,7 +258,7 @@ $
         (?:[~+]deb\d+u\d+)+
     )?
     (?P<revision_backports>
-        ~bpo\d+\+\d+
+        (~bpo\d+\+\d+|~bpo\d+\+lernstick\.\d+)
     )?
     |
     (?P<revision_other>
