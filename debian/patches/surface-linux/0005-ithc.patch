@@ -9,15 +9,14 @@ Patchset: ithc
  drivers/iommu/intel/irq_remapping.c | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
-diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
-index a1b987335b31..970805409470 100644
---- a/drivers/iommu/intel/irq_remapping.c
-+++ b/drivers/iommu/intel/irq_remapping.c
-@@ -390,6 +390,22 @@ static int set_msi_sid(struct irte *irte, struct pci_dev *dev)
- 	data.busmatch_count = 0;
+Index: linux-lernstick/drivers/iommu/intel/irq_remapping.c
+===================================================================
+--- linux-lernstick.orig/drivers/iommu/intel/irq_remapping.c
++++ linux-lernstick/drivers/iommu/intel/irq_remapping.c
+@@ -391,6 +391,22 @@ static int set_msi_sid(struct irte *irte
  	pci_for_each_dma_alias(dev, set_msi_sid_cb, &data);
  
-+	/*
+ 	/*
 +	 * The Intel Touch Host Controller is at 00:10.6, but for some reason
 +	 * the MSI interrupts have request id 01:05.0.
 +	 * Disable id verification to work around this.
@@ -33,69 +32,37 @@ index a1b987335b31..970805409470 100644
 +		}
 +	}
 +
- 	/*
++	/*
  	 * DMA alias provides us with a PCI device and alias.  The only case
  	 * where the it will return an alias on a different bus than the
--- 
-2.41.0
-
-From 357c5b10962caedb479db99d1383a31f9e77111f Mon Sep 17 00:00:00 2001
-From: Dorian Stoll <dorian.stoll@tmsp.io>
-Date: Sun, 11 Dec 2022 12:10:54 +0100
-Subject: [PATCH] hid: Add support for Intel Touch Host Controller
-
-Based on quo/ithc-linux@55803a2
-
-Signed-off-by: Dorian Stoll <dorian.stoll@tmsp.io>
-Patchset: ithc
----
- drivers/hid/Kconfig           |   2 +
- drivers/hid/Makefile          |   1 +
- drivers/hid/ithc/Kbuild       |   6 +
- drivers/hid/ithc/Kconfig      |  12 +
- drivers/hid/ithc/ithc-debug.c |  96 ++++++
- drivers/hid/ithc/ithc-dma.c   | 258 ++++++++++++++++
- drivers/hid/ithc/ithc-dma.h   |  67 +++++
- drivers/hid/ithc/ithc-main.c  | 534 ++++++++++++++++++++++++++++++++++
- drivers/hid/ithc/ithc-regs.c  |  64 ++++
- drivers/hid/ithc/ithc-regs.h  | 186 ++++++++++++
- drivers/hid/ithc/ithc.h       |  60 ++++
- 11 files changed, 1286 insertions(+)
- create mode 100644 drivers/hid/ithc/Kbuild
- create mode 100644 drivers/hid/ithc/Kconfig
- create mode 100644 drivers/hid/ithc/ithc-debug.c
- create mode 100644 drivers/hid/ithc/ithc-dma.c
- create mode 100644 drivers/hid/ithc/ithc-dma.h
- create mode 100644 drivers/hid/ithc/ithc-main.c
- create mode 100644 drivers/hid/ithc/ithc-regs.c
- create mode 100644 drivers/hid/ithc/ithc-regs.h
- create mode 100644 drivers/hid/ithc/ithc.h
-
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index dcedd5b90f35..847c6b07914d 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -1318,4 +1318,6 @@ source "drivers/hid/surface-hid/Kconfig"
+ 	 * device is the case of a PCIe-to-PCI bridge, where the alias is for
+Index: linux-lernstick/drivers/hid/Kconfig
+===================================================================
+--- linux-lernstick.orig/drivers/hid/Kconfig
++++ linux-lernstick/drivers/hid/Kconfig
+@@ -1357,4 +1357,6 @@ source "drivers/hid/surface-hid/Kconfig"
  
  source "drivers/hid/ipts/Kconfig"
  
 +source "drivers/hid/ithc/Kconfig"
 +
  endif # HID_SUPPORT
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 285e12d95b0e..a3ff62e922f1 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -169,3 +169,4 @@ obj-$(CONFIG_AMD_SFH_HID)       += amd-sfh-hid/
+Index: linux-lernstick/drivers/hid/Makefile
+===================================================================
+--- linux-lernstick.orig/drivers/hid/Makefile
++++ linux-lernstick/drivers/hid/Makefile
+@@ -169,6 +169,7 @@ obj-$(INTEL_ISH_FIRMWARE_DOWNLOADER)	+=
+ 
+ obj-$(CONFIG_AMD_SFH_HID)       += amd-sfh-hid/
+ 
++obj-$(CONFIG_HID_ITHC)          += ithc/
  obj-$(CONFIG_SURFACE_HID_CORE)  += surface-hid/
  
  obj-$(CONFIG_HID_IPTS)          += ipts/
-+obj-$(CONFIG_HID_ITHC)          += ithc/
-diff --git a/drivers/hid/ithc/Kbuild b/drivers/hid/ithc/Kbuild
-new file mode 100644
-index 000000000000..aea83f2ac07b
+Index: linux-lernstick/drivers/hid/ithc/Kbuild
+===================================================================
 --- /dev/null
-+++ b/drivers/hid/ithc/Kbuild
++++ linux-lernstick/drivers/hid/ithc/Kbuild
 @@ -0,0 +1,6 @@
 +obj-$(CONFIG_HID_ITHC) := ithc.o
 +
@@ -103,11 +70,10 @@ index 000000000000..aea83f2ac07b
 +
 +ccflags-y := -std=gnu11 -Wno-declaration-after-statement
 +
-diff --git a/drivers/hid/ithc/Kconfig b/drivers/hid/ithc/Kconfig
-new file mode 100644
-index 000000000000..ede713023609
+Index: linux-lernstick/drivers/hid/ithc/Kconfig
+===================================================================
 --- /dev/null
-+++ b/drivers/hid/ithc/Kconfig
++++ linux-lernstick/drivers/hid/ithc/Kconfig
 @@ -0,0 +1,12 @@
 +config HID_ITHC
 +	tristate "Intel Touch Host Controller"
@@ -121,11 +87,10 @@ index 000000000000..ede713023609
 +
 +	  To compile this driver as a module, choose M here: the
 +	  module will be called ithc.
-diff --git a/drivers/hid/ithc/ithc-debug.c b/drivers/hid/ithc/ithc-debug.c
-new file mode 100644
-index 000000000000..57bf125c45bd
+Index: linux-lernstick/drivers/hid/ithc/ithc-debug.c
+===================================================================
 --- /dev/null
-+++ b/drivers/hid/ithc/ithc-debug.c
++++ linux-lernstick/drivers/hid/ithc/ithc-debug.c
 @@ -0,0 +1,96 @@
 +#include "ithc.h"
 +
@@ -223,11 +188,10 @@ index 000000000000..57bf125c45bd
 +	return 0;
 +}
 +
-diff --git a/drivers/hid/ithc/ithc-dma.c b/drivers/hid/ithc/ithc-dma.c
-new file mode 100644
-index 000000000000..7e89b3496918
+Index: linux-lernstick/drivers/hid/ithc/ithc-dma.c
+===================================================================
 --- /dev/null
-+++ b/drivers/hid/ithc/ithc-dma.c
++++ linux-lernstick/drivers/hid/ithc/ithc-dma.c
 @@ -0,0 +1,258 @@
 +#include "ithc.h"
 +
@@ -487,11 +451,10 @@ index 000000000000..7e89b3496918
 +	return ret;
 +}
 +
-diff --git a/drivers/hid/ithc/ithc-dma.h b/drivers/hid/ithc/ithc-dma.h
-new file mode 100644
-index 000000000000..d9f2c19a13f3
+Index: linux-lernstick/drivers/hid/ithc/ithc-dma.h
+===================================================================
 --- /dev/null
-+++ b/drivers/hid/ithc/ithc-dma.h
++++ linux-lernstick/drivers/hid/ithc/ithc-dma.h
 @@ -0,0 +1,67 @@
 +#define PRD_SIZE_MASK            0xffffff
 +#define PRD_FLAG_END             0x1000000
@@ -560,11 +523,10 @@ index 000000000000..d9f2c19a13f3
 +int ithc_dma_rx(struct ithc *ithc, u8 channel);
 +int ithc_dma_tx(struct ithc *ithc, u32 cmdcode, u32 datasize, void *cmddata);
 +
-diff --git a/drivers/hid/ithc/ithc-main.c b/drivers/hid/ithc/ithc-main.c
-new file mode 100644
-index 000000000000..09512b9cb4d3
+Index: linux-lernstick/drivers/hid/ithc/ithc-main.c
+===================================================================
 --- /dev/null
-+++ b/drivers/hid/ithc/ithc-main.c
++++ linux-lernstick/drivers/hid/ithc/ithc-main.c
 @@ -0,0 +1,534 @@
 +#include "ithc.h"
 +
@@ -1100,11 +1062,10 @@ index 000000000000..09512b9cb4d3
 +module_init(ithc_init);
 +module_exit(ithc_exit);
 +
-diff --git a/drivers/hid/ithc/ithc-regs.c b/drivers/hid/ithc/ithc-regs.c
-new file mode 100644
-index 000000000000..85d567b05761
+Index: linux-lernstick/drivers/hid/ithc/ithc-regs.c
+===================================================================
 --- /dev/null
-+++ b/drivers/hid/ithc/ithc-regs.c
++++ linux-lernstick/drivers/hid/ithc/ithc-regs.c
 @@ -0,0 +1,64 @@
 +#include "ithc.h"
 +
@@ -1170,11 +1131,10 @@ index 000000000000..85d567b05761
 +	return 0;
 +}
 +
-diff --git a/drivers/hid/ithc/ithc-regs.h b/drivers/hid/ithc/ithc-regs.h
-new file mode 100644
-index 000000000000..1a96092ed7ee
+Index: linux-lernstick/drivers/hid/ithc/ithc-regs.h
+===================================================================
 --- /dev/null
-+++ b/drivers/hid/ithc/ithc-regs.h
++++ linux-lernstick/drivers/hid/ithc/ithc-regs.h
 @@ -0,0 +1,186 @@
 +#define CONTROL_QUIESCE                     BIT(1)
 +#define CONTROL_IS_QUIESCED                 BIT(2)
@@ -1362,11 +1322,10 @@ index 000000000000..1a96092ed7ee
 +int ithc_set_spi_config(struct ithc *ithc, u8 speed, u8 mode);
 +int ithc_spi_command(struct ithc *ithc, u8 command, u32 offset, u32 size, void *data);
 +
-diff --git a/drivers/hid/ithc/ithc.h b/drivers/hid/ithc/ithc.h
-new file mode 100644
-index 000000000000..6a9b0d480bc1
+Index: linux-lernstick/drivers/hid/ithc/ithc.h
+===================================================================
 --- /dev/null
-+++ b/drivers/hid/ithc/ithc.h
++++ linux-lernstick/drivers/hid/ithc/ithc.h
 @@ -0,0 +1,60 @@
 +#include <linux/module.h>
 +#include <linux/input.h>
@@ -1428,6 +1387,3 @@ index 000000000000..6a9b0d480bc1
 +int ithc_debug_init(struct ithc *ithc);
 +void ithc_log_regs(struct ithc *ithc);
 +
--- 
-2.41.0
-
