@@ -123,3 +123,42 @@ bugfix/all/perf-tools-support-extra-cxxflags.patch
 bugfix/powerpc/fbdev-offb-Update-expected-device-name.patch
 
 # ABI maintenance
+
+
+# t2-linux patches
+t2-linux/2008-i915-4-lane-quirk-for-mbp15-1.patch
+t2-linux/1003-add-modalias-to-apple-bce.patch
+t2-linux/2009-apple-gmux-allow-switching-to-igpu-at-probe.patch
+t2-linux/3004-applesmc-key-interface-wrappers.patch
+t2-linux/3006-applesmc-fan-support-on-T2-Macs.patch
+t2-linux/3008-applesmc-make-applesmc_remove-void.patch
+t2-linux/3007-applesmc-Add-iMacPro-to-applesmc_whitelist.patch
+t2-linux/3002-applesmc-make-io-port-base-addr-dynamic.patch
+t2-linux/3005-applesmc-basic-mmio-interface-implementation.patch
+t2-linux/1006-HID-hid-apple-magic-backlight-Add-driver-for-keyboar.patch
+t2-linux/1007-HID-apple-ibridge-Add-Apple-iBridge-HID-driver-for-T.patch
+t2-linux/3003-applesmc-switch-to-acpi_device-from-platform.patch
+t2-linux/3001-applesmc-convert-static-structures-to-drvdata.patch
+t2-linux/1008-HID-apple-touchbar-Add-driver-for-the-Touch-Bar-on-M.patch
+t2-linux/8004-brcmfmac-cfg80211-Use-WSEC-to-set-SAE-password.patch
+t2-linux/3009-applesmc-battery-charge-limiter.patch
+t2-linux/4001-Input-bcm5974-Add-support-for-the-T2-Macs.patch
+t2-linux/1005-Documentation-leds-standardise-keyboard-backlight-le.patch
+t2-linux/7001-drm-i915-fbdev-Discard-BIOS-framebuffers-exceeding-h.patch
+t2-linux/1001-Add-apple-bce-driver.patch
+t2-linux/1002-Put-apple-bce-in-drivers-staging.patch
+
+# Surface patches
+surface-linux/0013-rtc.patch
+surface-linux/0010-surface-gpe.patch
+surface-linux/0006-surface-sam-over-hid.patch
+surface-linux/0004-ipts.patch
+surface-linux/0002-mwifiex.patch
+#surface-linux/0003-ath10k.patch
+surface-linux/0007-surface-button.patch
+surface-linux/0008-surface-typecover.patch
+surface-linux/0009-surface-shutdown.patch
+surface-linux/0012-amd-gpio.patch
+surface-linux/0011-cameras.patch
+surface-linux/0001-surface3-oemb.patch
+surface-linux/0005-ithc.patch
