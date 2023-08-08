@@ -200,6 +200,9 @@ class Gencontrol(Base):
         assert 'CONFIG_EFI_STUB=y\n' in kconfig
         assert 'CONFIG_LOCK_DOWN_IN_EFI_SECURE_BOOT=y\n' in kconfig
         cert_file_name = config_build['trusted-certs']
+        #LERNSTICK: Check that the certfile is for the correct kernel
+        cert_file_name_check = f"debian/certs/lernstick-{self.version.complete}.pem"
+        assert cert_file_name == cert_file_name_check,  f"Wrong certfile for Kernel! Expected: {cert_file_name_check}, got {cert_file_name}"
         self.image_packages.append((image_suffix, image_package_name,
                                     cert_file_name))
 
