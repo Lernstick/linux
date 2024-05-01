@@ -122,12 +122,23 @@ bugfix/powerpc/fbdev-offb-Update-expected-device-name.patch
 t2-linux/1001-Add-apple-bce-driver.patch
 t2-linux/1002-Put-apple-bce-in-drivers-staging.patch
 t2-linux/1003-add-modalias-to-apple-bce.patch
-t2-linux/1005-Documentation-leds-standardise-keyboard-backlight-le.patch
-t2-linux/1006-HID-hid-apple-magic-backlight-Add-driver-for-keyboar.patch
-t2-linux/1007-HID-apple-ibridge-Add-Apple-iBridge-HID-driver-for-T.patch
-t2-linux/1008-HID-apple-touchbar-Add-driver-for-the-Touch-Bar-on-M.patch
+t2-linux/1004-HID-core-add-helper-for-finding-a-field-with-a-certa.patch
+t2-linux/1005-HID-hid-appletb-bl-add-driver-for-the-backlight-of-A.patch
+t2-linux/1006-HID-hid-appletb-kbd-add-driver-for-the-keyboard-mode.patch
+t2-linux/1007-HID-multitouch-support-getting-the-contact-ID-from.patch
+t2-linux/1008-HID-multitouch-support-getting-the-tip-state-from-HI.patch
+t2-linux/1009-HID-multitouch-take-cls-maxcontacts-into-account-for.patch
+t2-linux/1010-HID-multitouch-allow-specifying-if-a-device-is-direc.patch
+t2-linux/1011-HID-multitouch-add-device-ID-for-Apple-Touch-Bars.patch
+t2-linux/1012-lib-vsprintf-Add-support-for-generic-FOURCCs-by-exte.patch
+t2-linux/1013-USB-core-add-shutdown-callback-to-usb_driver.patch
+t2-linux/1014-drm-format-helper-add-helper-for-BGR888-to-XRGB8888-.patch
+t2-linux/1015-drm-tiny-add-driver-for-Apple-Touch-Bars-in-x86-Macs.patch
+t2-linux/1016-Documentation-leds-standardise-keyboard-backlight-le.patch
+t2-linux/1017-HID-hid-apple-magic-backlight-Add-driver-for-keyboar.patch
 t2-linux/2008-i915-4-lane-quirk-for-mbp15-1.patch
 t2-linux/2009-apple-gmux-allow-switching-to-igpu-at-probe.patch
+t2-linux/2010-efi-libstub-add-support-for-the-apple_set_os-protoco.patch
 t2-linux/3001-applesmc-convert-static-structures-to-drvdata.patch
 t2-linux/3002-applesmc-make-io-port-base-addr-dynamic.patch
 t2-linux/3003-applesmc-switch-to-acpi_device-from-platform.patch
@@ -139,7 +150,11 @@ t2-linux/3008-applesmc-make-applesmc_remove-void.patch
 t2-linux/3009-applesmc-battery-charge-limiter.patch
 t2-linux/4001-Input-bcm5974-Add-support-for-the-T2-Macs.patch
 t2-linux/7001-drm-i915-fbdev-Discard-BIOS-framebuffers-exceeding-h.patch
+t2-linux/7002-acpi-video-force-native-for-some-T2-macbooks.patch
+t2-linux/7003-drm-amd-display-add-nv12-bounding-box.patch
+t2-linux/7004-drm-amdgpu-skip-gpu_info-fw-loading-on-navi12.patch
 t2-linux/8004-brcmfmac-cfg80211-Use-WSEC-to-set-SAE-password.patch
+t2-linux/9001-Bluetooth-hci_bcm4377-do-not-mark-valid-bd_addr-as-invalid.patch
 
 
 # Surface patches
@@ -148,11 +163,12 @@ surface-linux/0002-mwifiex.patch
 #surface-linux/0003-ath10k.patch
 surface-linux/0004-ipts.patch
 surface-linux/0005-ithc.patch
-surface-linux/0006-surface-sam-over-hid.patch
-surface-linux/0007-surface-button.patch
-surface-linux/0008-surface-typecover.patch
-surface-linux/0009-surface-shutdown.patch
-surface-linux/0010-surface-gpe.patch
-surface-linux/0011-cameras.patch
-surface-linux/0012-amd-gpio.patch
-surface-linux/0013-rtc.patch
+surface-linux/0006-surface-sam.patch
+surface-linux/0007-surface-sam-over-hid.patch
+surface-linux/0008-surface-button.patch
+surface-linux/0009-surface-typecover.patch
+surface-linux/0010-surface-shutdown.patch
+surface-linux/0011-surface-gpe.patch
+surface-linux/0012-cameras.patch
+surface-linux/0013-amd-gpio.patch
+surface-linux/0014-rtc.patch
