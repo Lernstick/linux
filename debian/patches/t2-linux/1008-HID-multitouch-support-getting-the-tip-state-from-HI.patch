@@ -14,11 +14,11 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  drivers/hid/hid-multitouch.c | 14 ++++++++++----
  1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 902a59928..dd5509eeb 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -72,6 +72,7 @@ MODULE_LICENSE("GPL");
+Index: linux-lernstick/drivers/hid/hid-multitouch.c
+===================================================================
+--- linux-lernstick.orig/drivers/hid/hid-multitouch.c	2024-05-01 13:19:12.513780496 +0200
++++ linux-lernstick/drivers/hid/hid-multitouch.c	2024-05-01 13:19:12.513780496 +0200
+@@ -72,6 +72,7 @@
  #define MT_QUIRK_FORCE_MULTI_INPUT	BIT(20)
  #define MT_QUIRK_DISABLE_WAKEUP		BIT(21)
  #define MT_QUIRK_ORIENTATION_INVERT	BIT(22)
@@ -26,7 +26,7 @@ index 902a59928..dd5509eeb 100644
  
  #define MT_INPUTMODE_TOUCHSCREEN	0x02
  #define MT_INPUTMODE_TOUCHPAD		0x03
-@@ -810,6 +811,15 @@ static int mt_touch_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+@@ -810,6 +811,15 @@
  
  			MT_STORE_FIELD(confidence_state);
  			return 1;
@@ -42,7 +42,7 @@ index 902a59928..dd5509eeb 100644
  		case HID_DG_TIPSWITCH:
  			if (field->application != HID_GD_SYSTEM_MULTIAXIS)
  				input_set_capability(hi->input,
-@@ -873,10 +883,6 @@ static int mt_touch_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+@@ -873,10 +883,6 @@
  		case HID_DG_CONTACTMAX:
  			/* contact max are global to the report */
  			return -1;
@@ -53,6 +53,3 @@ index 902a59928..dd5509eeb 100644
  		}
  		/* let hid-input decide for the others */
  		return 0;
--- 
-2.42.0
-

@@ -14,11 +14,11 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  drivers/hid/hid-multitouch.c | 8 ++++++--
  1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 624c1d3cc..f98fb36ff 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -147,6 +147,7 @@ struct mt_class {
+Index: linux-lernstick/drivers/hid/hid-multitouch.c
+===================================================================
+--- linux-lernstick.orig/drivers/hid/hid-multitouch.c	2024-05-01 13:19:12.709782324 +0200
++++ linux-lernstick/drivers/hid/hid-multitouch.c	2024-05-01 13:19:12.705782287 +0200
+@@ -147,6 +147,7 @@
  	__s32 sn_height;	/* Signal/noise ratio for height events */
  	__s32 sn_pressure;	/* Signal/noise ratio for pressure events */
  	__u8 maxcontacts;
@@ -26,7 +26,7 @@ index 624c1d3cc..f98fb36ff 100644
  	bool is_indirect;	/* true for touchpads */
  	bool export_all_inputs;	/* do not ignore mouse, keyboards, etc... */
  };
-@@ -564,13 +565,13 @@ static struct mt_application *mt_allocate_application(struct mt_device *td,
+@@ -564,13 +565,13 @@
  	mt_application->application = application;
  	INIT_LIST_HEAD(&mt_application->mt_usages);
  
@@ -42,7 +42,7 @@ index 624c1d3cc..f98fb36ff 100644
  		mt_application->mt_flags |= INPUT_MT_POINTER;
  		td->inputmode_value = MT_INPUTMODE_TOUCHPAD;
  	}
-@@ -1318,6 +1319,9 @@ static int mt_touch_input_configured(struct hid_device *hdev,
+@@ -1318,6 +1319,9 @@
  	if (td->serial_maybe)
  		mt_post_parse_default_settings(td, app);
  
@@ -52,6 +52,3 @@ index 624c1d3cc..f98fb36ff 100644
  	if (cls->is_indirect)
  		app->mt_flags |= INPUT_MT_POINTER;
  
--- 
-2.42.0
-

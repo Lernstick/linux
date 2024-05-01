@@ -20,10 +20,10 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  drivers/hwmon/applesmc.c | 125 ++++++++++++++++++++++++++-------------
  1 file changed, 85 insertions(+), 40 deletions(-)
 
-diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index 39ed0bb21365..bdaaf696f7b6 100644
---- a/drivers/hwmon/applesmc.c
-+++ b/drivers/hwmon/applesmc.c
+Index: linux-lernstick/drivers/hwmon/applesmc.c
+===================================================================
+--- linux-lernstick.orig/drivers/hwmon/applesmc.c	2024-05-01 13:19:14.141795687 +0200
++++ linux-lernstick/drivers/hwmon/applesmc.c	2024-05-01 13:19:14.137795649 +0200
 @@ -19,7 +19,7 @@
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
@@ -41,7 +41,7 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  /* data port used by Apple SMC */
  #define APPLESMC_DATA_PORT	0
  /* command/status port used by Apple SMC */
-@@ -138,9 +137,10 @@ struct applesmc_registers {
+@@ -138,9 +137,10 @@
  };
  
  struct applesmc_device {
@@ -53,7 +53,7 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  	u16 port_base;
  
  	s16 rest_x;
-@@ -692,9 +692,13 @@ static int applesmc_init_smcreg(struct applesmc_device *smc)
+@@ -692,9 +692,13 @@
  }
  
  /* Device model stuff */
@@ -68,7 +68,7 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  {
  	struct applesmc_device *smc;
  	int ret;
-@@ -705,12 +709,16 @@ static int applesmc_probe(struct platform_device *dev)
+@@ -705,12 +709,16 @@
  	smc->dev = dev;
  	mutex_init(&smc->reg.mutex);
  
@@ -87,7 +87,7 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  	applesmc_device_init(smc);
  
  	ret = applesmc_create_modules(smc);
-@@ -721,20 +729,23 @@ static int applesmc_probe(struct platform_device *dev)
+@@ -721,20 +729,23 @@
  
  out_reg:
  	applesmc_destroy_smcreg(smc);
@@ -114,7 +114,7 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  
  	mutex_destroy(&smc->reg.mutex);
  	kfree(smc);
-@@ -742,6 +753,52 @@ static int applesmc_remove(struct platform_device *dev)
+@@ -742,6 +753,52 @@
  	return 0;
  }
  
@@ -167,7 +167,7 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  /* Synchronize device with memorized backlight state */
  static int applesmc_pm_resume(struct device *dev)
  {
-@@ -763,18 +820,28 @@ static int applesmc_pm_restore(struct device *dev)
+@@ -763,18 +820,28 @@
  	return applesmc_pm_resume(dev);
  }
  
@@ -202,7 +202,7 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  };
  
  /*
-@@ -1262,7 +1329,6 @@ static int applesmc_create_nodes(struct applesmc_device *smc,
+@@ -1262,7 +1329,6 @@
  static int applesmc_create_accelerometer(struct applesmc_device *smc)
  {
  	int ret;
@@ -210,7 +210,7 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  	if (!smc->reg.has_accelerometer)
  		return 0;
  
-@@ -1463,8 +1529,6 @@ static void applesmc_destroy_modules(struct applesmc_device *smc)
+@@ -1467,8 +1533,6 @@
  	applesmc_destroy_nodes(smc, info_group);
  }
  
@@ -219,7 +219,7 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  static int __init applesmc_init(void)
  {
  	int ret;
-@@ -1475,29 +1539,12 @@ static int __init applesmc_init(void)
+@@ -1479,29 +1543,12 @@
  		goto out;
  	}
  
@@ -251,7 +251,7 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  out:
  	pr_warn("driver init failed (ret=%d)!\n", ret);
  	return ret;
-@@ -1505,9 +1552,7 @@ static int __init applesmc_init(void)
+@@ -1509,9 +1556,7 @@
  
  static void __exit applesmc_exit(void)
  {
@@ -262,6 +262,3 @@ index 39ed0bb21365..bdaaf696f7b6 100644
  }
  
  module_init(applesmc_init);
--- 
-2.30.0
-

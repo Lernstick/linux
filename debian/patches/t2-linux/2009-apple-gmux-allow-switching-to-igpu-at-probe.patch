@@ -17,11 +17,11 @@ Based off of work by Kerem Karabay <kekrby@gmail.com>
  drivers/platform/x86/apple-gmux.c       | 18 ++++++++++++++++++
  4 files changed, 23 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index 81edf66dbea8..8f3daf28665b 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -2051,6 +2051,9 @@ static int amdgpu_pci_probe(struct pci_dev *pdev,
+Index: linux-lernstick/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+===================================================================
+--- linux-lernstick.orig/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c	2024-05-01 13:19:13.693791507 +0200
++++ linux-lernstick/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c	2024-05-01 13:19:13.689791469 +0200
+@@ -2051,6 +2051,9 @@
  	int ret, retry = 0, i;
  	bool supports_atomic = false;
  
@@ -31,11 +31,11 @@ index 81edf66dbea8..8f3daf28665b 100644
  	/* skip devices which are owned by radeon */
  	for (i = 0; i < ARRAY_SIZE(amdgpu_unsupported_pciidlist); i++) {
  		if (amdgpu_unsupported_pciidlist[i] == pdev->device)
-diff --git a/drivers/gpu/vga/vga_switcheroo.c b/drivers/gpu/vga/vga_switcheroo.c
-index 365e6ddbe90f..cf357cd3389d 100644
---- a/drivers/gpu/vga/vga_switcheroo.c
-+++ b/drivers/gpu/vga/vga_switcheroo.c
-@@ -438,12 +438,7 @@ find_active_client(struct list_head *head)
+Index: linux-lernstick/drivers/gpu/vga/vga_switcheroo.c
+===================================================================
+--- linux-lernstick.orig/drivers/gpu/vga/vga_switcheroo.c	2024-05-01 13:19:13.693791507 +0200
++++ linux-lernstick/drivers/gpu/vga/vga_switcheroo.c	2024-05-01 13:19:13.689791469 +0200
+@@ -438,12 +438,7 @@
  bool vga_switcheroo_client_probe_defer(struct pci_dev *pdev)
  {
  	if ((pdev->class >> 16) == PCI_BASE_CLASS_DISPLAY) {
@@ -49,11 +49,11 @@ index 365e6ddbe90f..cf357cd3389d 100644
  			return true;
  	}
  
-diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
-index 5e6b1eb54c64..1f11701d37d1 100644
---- a/drivers/pci/vgaarb.c
-+++ b/drivers/pci/vgaarb.c
-@@ -143,6 +143,7 @@ void vga_set_default_device(struct pci_dev *pdev)
+Index: linux-lernstick/drivers/pci/vgaarb.c
+===================================================================
+--- linux-lernstick.orig/drivers/pci/vgaarb.c	2024-05-01 13:19:13.693791507 +0200
++++ linux-lernstick/drivers/pci/vgaarb.c	2024-05-01 13:19:13.689791469 +0200
+@@ -143,6 +143,7 @@
  	pci_dev_put(vga_default);
  	vga_default = pci_dev_get(pdev);
  }
@@ -61,10 +61,10 @@ index 5e6b1eb54c64..1f11701d37d1 100644
  
  /**
   * vga_remove_vgacon - deactivate VGA console
-diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
-index 1417e230edbd..e69785af8e1d 100644
---- a/drivers/platform/x86/apple-gmux.c
-+++ b/drivers/platform/x86/apple-gmux.c
+Index: linux-lernstick/drivers/platform/x86/apple-gmux.c
+===================================================================
+--- linux-lernstick.orig/drivers/platform/x86/apple-gmux.c	2024-05-01 13:19:13.693791507 +0200
++++ linux-lernstick/drivers/platform/x86/apple-gmux.c	2024-05-01 13:19:13.689791469 +0200
 @@ -21,6 +21,7 @@
  #include <linux/delay.h>
  #include <linux/pci.h>
@@ -73,7 +73,7 @@ index 1417e230edbd..e69785af8e1d 100644
  #include <linux/debugfs.h>
  #include <acpi/video.h>
  #include <asm/io.h>
-@@ -107,6 +108,10 @@ struct apple_gmux_config {
+@@ -107,6 +108,10 @@
  
  # define MMIO_GMUX_MAX_BRIGHTNESS	0xffff
  
@@ -84,7 +84,7 @@ index 1417e230edbd..e69785af8e1d 100644
  static u8 gmux_pio_read8(struct apple_gmux_data *gmux_data, int port)
  {
  	return inb(gmux_data->iostart + port);
-@@ -945,6 +950,19 @@ static int gmux_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
+@@ -945,6 +950,19 @@
  	gmux_enable_interrupts(gmux_data);
  	gmux_read_switch_state(gmux_data);
  
@@ -104,6 +104,3 @@ index 1417e230edbd..e69785af8e1d 100644
  	/*
  	 * Retina MacBook Pros cannot switch the panel's AUX separately
  	 * and need eDP pre-calibration. They are distinguishable from
--- 
-2.43.0
-

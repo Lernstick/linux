@@ -11,31 +11,30 @@ Subject: [PATCH] Put apple-bce in drivers/staging
  4 files changed, 22 insertions(+), 1 deletion(-)
  create mode 100644 drivers/staging/apple-bce/Kconfig
 
-diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
-index 5cfabd537..3b8e61d26 100644
---- a/drivers/staging/Kconfig
-+++ b/drivers/staging/Kconfig
-@@ -80,4 +80,6 @@ source "drivers/staging/qlge/Kconfig"
+Index: linux-lernstick/drivers/staging/Kconfig
+===================================================================
+--- linux-lernstick.orig/drivers/staging/Kconfig	2024-05-01 13:19:11.833774151 +0200
++++ linux-lernstick/drivers/staging/Kconfig	2024-05-01 13:19:11.833774151 +0200
+@@ -78,4 +78,6 @@
  
  source "drivers/staging/vme_user/Kconfig"
  
 +source "drivers/staging/apple-bce/Kconfig"
 +
  endif # STAGING
-diff --git a/drivers/staging/Makefile b/drivers/staging/Makefile
-index f8c3aa9c2..1e148d6c3 100644
---- a/drivers/staging/Makefile
-+++ b/drivers/staging/Makefile
-@@ -29,3 +29,4 @@ obj-$(CONFIG_PI433)		+= pi433/
+Index: linux-lernstick/drivers/staging/Makefile
+===================================================================
+--- linux-lernstick.orig/drivers/staging/Makefile	2024-05-01 13:19:11.833774151 +0200
++++ linux-lernstick/drivers/staging/Makefile	2024-05-01 13:19:11.833774151 +0200
+@@ -28,3 +28,4 @@
  obj-$(CONFIG_XIL_AXIS_FIFO)	+= axis-fifo/
  obj-$(CONFIG_FIELDBUS_DEV)     += fieldbus/
  obj-$(CONFIG_QLGE)		+= qlge/
 +obj-$(CONFIG_APPLE_BCE)		+= apple-bce/
-diff --git a/drivers/staging/apple-bce/Kconfig b/drivers/staging/apple-bce/Kconfig
-new file mode 100644
-index 000000000..fe92bc441
---- /dev/null
-+++ b/drivers/staging/apple-bce/Kconfig
+Index: linux-lernstick/drivers/staging/apple-bce/Kconfig
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ linux-lernstick/drivers/staging/apple-bce/Kconfig	2024-05-01 13:19:11.833774151 +0200
 @@ -0,0 +1,18 @@
 +config APPLE_BCE
 +	tristate "Apple BCE driver (VHCI and Audio support)"
@@ -55,10 +54,10 @@ index 000000000..fe92bc441
 +	      - Audio: a driver for the T2 audio interface.
 +	 
 +	  If "M" is selected, the module will be called apple-bce.'
-diff --git a/drivers/staging/apple-bce/Makefile b/drivers/staging/apple-bce/Makefile
-index a6a656f06..8cfbd3f64 100644
---- a/drivers/staging/apple-bce/Makefile
-+++ b/drivers/staging/apple-bce/Makefile
+Index: linux-lernstick/drivers/staging/apple-bce/Makefile
+===================================================================
+--- linux-lernstick.orig/drivers/staging/apple-bce/Makefile	2024-05-01 13:19:11.833774151 +0200
++++ linux-lernstick/drivers/staging/apple-bce/Makefile	2024-05-01 13:19:11.833774151 +0200
 @@ -1,5 +1,5 @@
  modname := apple-bce
 -obj-m += $(modname).o
@@ -66,5 +65,3 @@ index a6a656f06..8cfbd3f64 100644
  
  apple-bce-objs := apple_bce.o mailbox.o queue.o queue_dma.o vhci/vhci.o vhci/queue.o vhci/transfer.o audio/audio.o audio/protocol.o audio/protocol_bce.o audio/pcm.o
  
--- 
-2.34.1

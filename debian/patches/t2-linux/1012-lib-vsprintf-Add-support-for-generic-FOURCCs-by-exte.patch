@@ -30,11 +30,11 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  scripts/checkpatch.pl                     |  2 +-
  4 files changed, 77 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/core-api/printk-formats.rst b/Documentation/core-api/printk-formats.rst
-index dfe7e75a7..0ccef63e6 100644
---- a/Documentation/core-api/printk-formats.rst
-+++ b/Documentation/core-api/printk-formats.rst
-@@ -631,6 +631,38 @@ Examples::
+Index: linux-lernstick/Documentation/core-api/printk-formats.rst
+===================================================================
+--- linux-lernstick.orig/Documentation/core-api/printk-formats.rst	2024-05-01 13:19:12.905784154 +0200
++++ linux-lernstick/Documentation/core-api/printk-formats.rst	2024-05-01 13:19:12.901784117 +0200
+@@ -632,6 +632,38 @@
  	%p4cc	Y10  little-endian (0x20303159)
  	%p4cc	NV12 big-endian (0xb231564e)
  
@@ -73,11 +73,11 @@ index dfe7e75a7..0ccef63e6 100644
  Rust
  ----
  
-diff --git a/lib/test_printf.c b/lib/test_printf.c
-index 7677ebccf..2355be36f 100644
---- a/lib/test_printf.c
-+++ b/lib/test_printf.c
-@@ -746,18 +746,26 @@ static void __init fwnode_pointer(void)
+Index: linux-lernstick/lib/test_printf.c
+===================================================================
+--- linux-lernstick.orig/lib/test_printf.c	2024-05-01 13:19:12.905784154 +0200
++++ linux-lernstick/lib/test_printf.c	2024-05-01 13:19:12.901784117 +0200
+@@ -745,18 +745,26 @@
  static void __init fourcc_pointer(void)
  {
  	struct {
@@ -110,11 +110,11 @@ index 7677ebccf..2355be36f 100644
  }
  
  static void __init
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 40f560959..bd9af783c 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1758,27 +1758,50 @@ char *fourcc_string(char *buf, char *end, const u32 *fourcc,
+Index: linux-lernstick/lib/vsprintf.c
+===================================================================
+--- linux-lernstick.orig/lib/vsprintf.c	2024-05-01 13:19:12.905784154 +0200
++++ linux-lernstick/lib/vsprintf.c	2024-05-01 13:19:12.901784117 +0200
+@@ -1759,27 +1759,50 @@
  	char output[sizeof("0123 little-endian (0x01234567)")];
  	char *p = output;
  	unsigned int i;
@@ -171,7 +171,7 @@ index 40f560959..bd9af783c 100644
  
  	*p++ = ' ';
  	*p++ = '(';
-@@ -2348,6 +2371,7 @@ char *rust_fmt_argument(char *buf, char *end, void *ptr);
+@@ -2354,6 +2377,7 @@
   *       read the documentation (path below) first.
   * - 'NF' For a netdev_features_t
   * - '4cc' V4L2 or DRM FourCC code, with endianness and raw numerical value.
@@ -179,11 +179,11 @@ index 40f560959..bd9af783c 100644
   * - 'h[CDN]' For a variable-length buffer, it prints it as a hex string with
   *            a certain separator (' ' by default):
   *              C colon
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 880fde13d..f080e33a4 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -6906,7 +6906,7 @@ sub process {
+Index: linux-lernstick/scripts/checkpatch.pl
+===================================================================
+--- linux-lernstick.orig/scripts/checkpatch.pl	2024-05-01 13:19:12.905784154 +0200
++++ linux-lernstick/scripts/checkpatch.pl	2024-05-01 13:19:12.901784117 +0200
+@@ -6911,7 +6911,7 @@
  					    ($extension eq "f" &&
  					     defined $qualifier && $qualifier !~ /^w/) ||
  					    ($extension eq "4" &&
@@ -192,6 +192,3 @@ index 880fde13d..f080e33a4 100755
  						$bad_specifier = $specifier;
  						last;
  					}
--- 
-2.42.0
-
