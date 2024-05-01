@@ -9,11 +9,17 @@ import os.path
 import re
 import typing
 import warnings
-from typing import (
-    Iterable,
-    Self,
-    TypeAlias,
-)
+import sys
+if sys.version_info >= (3, 11):
+    from typing import (
+        Iterable,
+        Self,
+        TypeAlias,
+        Union
+    )
+else:
+    from typing import Iterable, Union
+    from typing_extensions import Self, TypeAlias
 
 
 class Changelog(list):
@@ -291,7 +297,7 @@ class PackageDescription:
         self.long.extend(desc.long)
 
 
-class PackageRelationEntryOperator(enum.StrEnum):
+class PackageRelationEntryOperator(str, enum.Enum):
     OP_LT = '<<'
     OP_LE = '<='
     OP_EQ = '='
@@ -401,7 +407,7 @@ class PackageRelationGroup(list[PackageRelationEntry]):
 
 
 class PackageRelation(list[PackageRelationGroup]):
-    Init: TypeAlias = PackageRelationGroup | Iterable[PackageRelationEntry] | str
+    Init: TypeAlias = Union[PackageRelationGroup,Iterable[PackageRelationEntry], str]
 
     def __init__(
         self,
