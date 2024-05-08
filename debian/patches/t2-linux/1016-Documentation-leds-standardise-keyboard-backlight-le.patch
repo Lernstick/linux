@@ -14,11 +14,11 @@ Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
  Documentation/leds/well-known-leds.txt | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-Index: linux-lernstick/Documentation/leds/well-known-leds.txt
-===================================================================
---- linux-lernstick.orig/Documentation/leds/well-known-leds.txt	2024-05-01 13:19:13.365788446 +0200
-+++ linux-lernstick/Documentation/leds/well-known-leds.txt	2024-05-01 13:19:13.365788446 +0200
-@@ -44,6 +44,14 @@
+diff --git a/Documentation/leds/well-known-leds.txt b/Documentation/leds/well-known-leds.txt
+index 2160382c86be..4e5429fce4d8 100644
+--- a/Documentation/leds/well-known-leds.txt
++++ b/Documentation/leds/well-known-leds.txt
+@@ -44,6 +44,14 @@ Legacy: "lp5523:kb{1,2,3,4,5,6}" (Nokia N900)
  
  Frontlight/backlight of main keyboard.
  
@@ -33,3 +33,6 @@ Index: linux-lernstick/Documentation/leds/well-known-leds.txt
  Legacy: "button-backlight" (Motorola Droid 4)
  
  Some phones have touch buttons below screen; it is different from main
+-- 
+2.39.1
+

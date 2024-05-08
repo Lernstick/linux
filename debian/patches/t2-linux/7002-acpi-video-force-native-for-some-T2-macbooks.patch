@@ -13,14 +13,15 @@ mbp16,3 was reported not to have this issue for 6.5.8 at least.
  drivers/acpi/video_detect.c | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
-Index: linux-lernstick/drivers/acpi/video_detect.c
-===================================================================
---- linux-lernstick.orig/drivers/acpi/video_detect.c	2024-05-01 13:19:15.001803711 +0200
-+++ linux-lernstick/drivers/acpi/video_detect.c	2024-05-01 13:19:15.001803711 +0200
-@@ -540,6 +540,14 @@
+diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
+index 442396f6ed1f..baf7264d7b94 100644
+--- a/drivers/acpi/video_detect.c
++++ b/drivers/acpi/video_detect.c
+@@ -513,6 +513,14 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
+ 		DMI_MATCH(DMI_PRODUCT_NAME, "iMac12,2"),
  		},
  	},
- 	{
++	{
 +	 .callback = video_detect_force_native,
 +	 /* Apple MacBook Air 9,1 */
 +	 .matches = {
@@ -28,14 +29,14 @@ Index: linux-lernstick/drivers/acpi/video_detect.c
 +		DMI_MATCH(DMI_PRODUCT_NAME, "MacBookAir9,1"),
 +		},
 +	},
-+	{
+ 	{
  	 /* https://bugzilla.redhat.com/show_bug.cgi?id=1217249 */
  	 .callback = video_detect_force_native,
- 	 /* Apple MacBook Pro 12,1 */
-@@ -549,6 +557,14 @@
+@@ -522,6 +530,14 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
+ 		DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro12,1"),
  		},
  	},
- 	{
++	{
 +	 .callback = video_detect_force_native,
 +	 /* Apple MacBook Pro 16,2 */
 +	 .matches = {
@@ -43,7 +44,9 @@ Index: linux-lernstick/drivers/acpi/video_detect.c
 +		DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,2"),
 +		},
 +	},
-+	{
+ 	{
  	 .callback = video_detect_force_native,
  	 /* Dell Inspiron N4010 */
- 	 .matches = {
+-- 
+2.42.1
+

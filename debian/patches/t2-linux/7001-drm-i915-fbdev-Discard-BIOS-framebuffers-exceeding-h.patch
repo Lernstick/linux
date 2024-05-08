@@ -10,11 +10,11 @@ Signed-off-by: Ashish Arora <ashisharora.linux@outlook.com>
  drivers/gpu/drm/i915/display/intel_fbdev.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Index: linux-lernstick/drivers/gpu/drm/i915/display/intel_fbdev.c
-===================================================================
---- linux-lernstick.orig/drivers/gpu/drm/i915/display/intel_fbdev.c	2024-05-01 13:19:14.909802853 +0200
-+++ linux-lernstick/drivers/gpu/drm/i915/display/intel_fbdev.c	2024-05-01 13:19:14.905802815 +0200
-@@ -234,10 +234,10 @@
+diff --git a/drivers/gpu/drm/i915/display/intel_fbdev.c b/drivers/gpu/drm/i915/display/intel_fbdev.c
+index 112aa04..8fb8bcc 100644
+--- a/drivers/gpu/drm/i915/display/intel_fbdev.c
++++ b/drivers/gpu/drm/i915/display/intel_fbdev.c
+@@ -217,10 +217,10 @@ static int intelfb_create(struct drm_fb_helper *helper,
  		return ret;
  
  	if (intel_fb &&
@@ -28,3 +28,6 @@ Index: linux-lernstick/drivers/gpu/drm/i915/display/intel_fbdev.c
  			    " releasing it\n",
  			    intel_fb->base.width, intel_fb->base.height,
  			    sizes->fb_width, sizes->fb_height);
+-- 
+1.8.3.1
+

@@ -56,10 +56,11 @@ Subject: [PATCH] Add apple-bce driver
  create mode 100644 drivers/staging/apple-bce/vhci/vhci.c
  create mode 100644 drivers/staging/apple-bce/vhci/vhci.h
 
-Index: linux-lernstick/drivers/staging/apple-bce/Makefile
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/Makefile	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/Makefile b/drivers/staging/apple-bce/Makefile
+new file mode 100644
+index 000000000..a6a656f06
+--- /dev/null
++++ b/drivers/staging/apple-bce/Makefile
 @@ -0,0 +1,28 @@
 +modname := apple-bce
 +obj-m += $(modname).o
@@ -89,10 +90,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/Makefile
 +
 +install:
 +	$(MAKE) -C $(KDIR) M=$(PWD) modules_install
-Index: linux-lernstick/drivers/staging/apple-bce/apple_bce.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/apple_bce.c	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/apple_bce.c b/drivers/staging/apple-bce/apple_bce.c
+new file mode 100644
+index 000000000..ad89632df
+--- /dev/null
++++ b/drivers/staging/apple-bce/apple_bce.c
 @@ -0,0 +1,443 @@
 +#include "apple_bce.h"
 +#include <linux/module.h>
@@ -537,10 +539,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/apple_bce.c
 +MODULE_VERSION("0.01");
 +module_init(apple_bce_module_init);
 +module_exit(apple_bce_module_exit);
-Index: linux-lernstick/drivers/staging/apple-bce/apple_bce.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/apple_bce.h	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/apple_bce.h b/drivers/staging/apple-bce/apple_bce.h
+new file mode 100644
+index 000000000..f13ab8d57
+--- /dev/null
++++ b/drivers/staging/apple-bce/apple_bce.h
 @@ -0,0 +1,38 @@
 +#pragma once
 +
@@ -581,10 +584,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/apple_bce.h
 +
 +extern struct apple_bce_device *global_bce;
 \ No newline at end of file
-Index: linux-lernstick/drivers/staging/apple-bce/audio/audio.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/audio/audio.c	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/audio/audio.c b/drivers/staging/apple-bce/audio/audio.c
+new file mode 100644
+index 000000000..bd16ddd16
+--- /dev/null
++++ b/drivers/staging/apple-bce/audio/audio.c
 @@ -0,0 +1,711 @@
 +#include <linux/pci.h>
 +#include <linux/spinlock.h>
@@ -1297,10 +1301,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/audio/audio.c
 +MODULE_PARM_DESC(index, "Index value for Apple Internal Audio soundcard.");
 +module_param_named(id, aaudio_alsa_id, charp, 0444);
 +MODULE_PARM_DESC(id, "ID string for Apple Internal Audio soundcard.");
-Index: linux-lernstick/drivers/staging/apple-bce/audio/audio.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/audio/audio.h	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/audio/audio.h b/drivers/staging/apple-bce/audio/audio.h
+new file mode 100644
+index 000000000..693006e93
+--- /dev/null
++++ b/drivers/staging/apple-bce/audio/audio.h
 @@ -0,0 +1,123 @@
 +#ifndef AAUDIO_H
 +#define AAUDIO_H
@@ -1425,10 +1430,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/audio/audio.h
 +extern struct aaudio_alsa_pcm_id_mapping aaudio_alsa_id_mappings[];
 +
 +#endif //AAUDIO_H
-Index: linux-lernstick/drivers/staging/apple-bce/audio/description.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/audio/description.h	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/audio/description.h b/drivers/staging/apple-bce/audio/description.h
+new file mode 100644
+index 000000000..dfef3ab68
+--- /dev/null
++++ b/drivers/staging/apple-bce/audio/description.h
 @@ -0,0 +1,42 @@
 +#ifndef AAUDIO_DESCRIPTION_H
 +#define AAUDIO_DESCRIPTION_H
@@ -1472,10 +1478,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/audio/description.h
 +}
 +
 +#endif //AAUDIO_DESCRIPTION_H
-Index: linux-lernstick/drivers/staging/apple-bce/audio/pcm.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/audio/pcm.c	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/audio/pcm.c b/drivers/staging/apple-bce/audio/pcm.c
+new file mode 100644
+index 000000000..1026e10a9
+--- /dev/null
++++ b/drivers/staging/apple-bce/audio/pcm.c
 @@ -0,0 +1,308 @@
 +#include "pcm.h"
 +#include "audio.h"
@@ -1785,10 +1792,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/audio/pcm.c
 +    if (substream)
 +        aaudio_handle_stream_timestamp(substream, os_timestamp);
 +}
-Index: linux-lernstick/drivers/staging/apple-bce/audio/pcm.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/audio/pcm.h	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/audio/pcm.h b/drivers/staging/apple-bce/audio/pcm.h
+new file mode 100644
+index 000000000..ea5f35fbe
+--- /dev/null
++++ b/drivers/staging/apple-bce/audio/pcm.h
 @@ -0,0 +1,16 @@
 +#ifndef AAUDIO_PCM_H
 +#define AAUDIO_PCM_H
@@ -1806,10 +1814,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/audio/pcm.h
 +void aaudio_handle_timestamp(struct aaudio_subdevice *sdev, ktime_t os_timestamp, u64 dev_timestamp);
 +
 +#endif //AAUDIO_PCM_H
-Index: linux-lernstick/drivers/staging/apple-bce/audio/protocol.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/audio/protocol.c	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/audio/protocol.c b/drivers/staging/apple-bce/audio/protocol.c
+new file mode 100644
+index 000000000..2314813ae
+--- /dev/null
++++ b/drivers/staging/apple-bce/audio/protocol.c
 @@ -0,0 +1,347 @@
 +#include "protocol.h"
 +#include "protocol_bce.h"
@@ -2159,10 +2168,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/audio/protocol.c
 +    CMD_HNDL_REPLY_NO_FREE(aaudio_msg_read_get_device_list_response, dev_l, dev_cnt);
 +}
 \ No newline at end of file
-Index: linux-lernstick/drivers/staging/apple-bce/audio/protocol.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/audio/protocol.h	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/audio/protocol.h b/drivers/staging/apple-bce/audio/protocol.h
+new file mode 100644
+index 000000000..3427486f3
+--- /dev/null
++++ b/drivers/staging/apple-bce/audio/protocol.h
 @@ -0,0 +1,147 @@
 +#ifndef AAUDIO_PROTOCOL_H
 +#define AAUDIO_PROTOCOL_H
@@ -2311,10 +2321,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/audio/protocol.h
 +
 +
 +#endif //AAUDIO_PROTOCOL_H
-Index: linux-lernstick/drivers/staging/apple-bce/audio/protocol_bce.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/audio/protocol_bce.c	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/audio/protocol_bce.c b/drivers/staging/apple-bce/audio/protocol_bce.c
+new file mode 100644
+index 000000000..28f2dfd44
+--- /dev/null
++++ b/drivers/staging/apple-bce/audio/protocol_bce.c
 @@ -0,0 +1,226 @@
 +#include "protocol_bce.h"
 +
@@ -2542,10 +2553,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/audio/protocol_bce.c
 +{
 +    kfree(reply->data);
 +}
-Index: linux-lernstick/drivers/staging/apple-bce/audio/protocol_bce.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/audio/protocol_bce.h	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/audio/protocol_bce.h b/drivers/staging/apple-bce/audio/protocol_bce.h
+new file mode 100644
+index 000000000..14d26c05d
+--- /dev/null
++++ b/drivers/staging/apple-bce/audio/protocol_bce.h
 @@ -0,0 +1,72 @@
 +#ifndef AAUDIO_PROTOCOL_BCE_H
 +#define AAUDIO_PROTOCOL_BCE_H
@@ -2619,10 +2631,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/audio/protocol_bce.h
 +void aaudio_reply_free(struct aaudio_msg *reply);
 +
 +#endif //AAUDIO_PROTOCOL_BCE_H
-Index: linux-lernstick/drivers/staging/apple-bce/mailbox.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/mailbox.c	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/mailbox.c b/drivers/staging/apple-bce/mailbox.c
+new file mode 100644
+index 000000000..e24bd3521
+--- /dev/null
++++ b/drivers/staging/apple-bce/mailbox.c
 @@ -0,0 +1,151 @@
 +#include "mailbox.h"
 +#include <linux/atomic.h>
@@ -2776,10 +2789,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/mailbox.c
 +    local_irq_restore(flags);
 +}
 \ No newline at end of file
-Index: linux-lernstick/drivers/staging/apple-bce/mailbox.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/mailbox.h	2024-05-01 13:19:11.585771836 +0200
+diff --git a/drivers/staging/apple-bce/mailbox.h b/drivers/staging/apple-bce/mailbox.h
+new file mode 100644
+index 000000000..f3323f95b
+--- /dev/null
++++ b/drivers/staging/apple-bce/mailbox.h
 @@ -0,0 +1,53 @@
 +#ifndef BCE_MAILBOX_H
 +#define BCE_MAILBOX_H
@@ -2834,10 +2848,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/mailbox.h
 +void bce_timestamp_stop(struct bce_timestamp *ts);
 +
 +#endif //BCEDRIVER_MAILBOX_H
-Index: linux-lernstick/drivers/staging/apple-bce/queue.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/queue.c	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/queue.c b/drivers/staging/apple-bce/queue.c
+new file mode 100644
+index 000000000..bc9cd3bc6
+--- /dev/null
++++ b/drivers/staging/apple-bce/queue.c
 @@ -0,0 +1,390 @@
 +#include "queue.h"
 +#include "apple_bce.h"
@@ -3230,10 +3245,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/queue.c
 +    bce_free_sq(dev, sq);
 +}
 \ No newline at end of file
-Index: linux-lernstick/drivers/staging/apple-bce/queue.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/queue.h	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/queue.h b/drivers/staging/apple-bce/queue.h
+new file mode 100644
+index 000000000..8368ac5df
+--- /dev/null
++++ b/drivers/staging/apple-bce/queue.h
 @@ -0,0 +1,177 @@
 +#ifndef BCE_QUEUE_H
 +#define BCE_QUEUE_H
@@ -3412,10 +3428,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/queue.h
 +void bce_destroy_sq(struct apple_bce_device *dev, struct bce_queue_sq *sq);
 +
 +#endif //BCEDRIVER_MAILBOX_H
-Index: linux-lernstick/drivers/staging/apple-bce/queue_dma.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/queue_dma.c	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/queue_dma.c b/drivers/staging/apple-bce/queue_dma.c
+new file mode 100644
+index 000000000..b23661328
+--- /dev/null
++++ b/drivers/staging/apple-bce/queue_dma.c
 @@ -0,0 +1,220 @@
 +#include "queue_dma.h"
 +#include <linux/vmalloc.h>
@@ -3638,10 +3655,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/queue_dma.c
 +    return 0;
 +}
 \ No newline at end of file
-Index: linux-lernstick/drivers/staging/apple-bce/queue_dma.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/queue_dma.h	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/queue_dma.h b/drivers/staging/apple-bce/queue_dma.h
+new file mode 100644
+index 000000000..f8a57e50e
+--- /dev/null
++++ b/drivers/staging/apple-bce/queue_dma.h
 @@ -0,0 +1,50 @@
 +#ifndef BCE_QUEUE_DMA_H
 +#define BCE_QUEUE_DMA_H
@@ -3693,10 +3711,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/queue_dma.h
 +int bce_set_submission_buf(struct bce_qe_submission *element, struct bce_dma_buffer *buf, size_t offset, size_t length);
 +
 +#endif //BCE_QUEUE_DMA_H
-Index: linux-lernstick/drivers/staging/apple-bce/vhci/command.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/vhci/command.h	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/vhci/command.h b/drivers/staging/apple-bce/vhci/command.h
+new file mode 100644
+index 000000000..26619e0bc
+--- /dev/null
++++ b/drivers/staging/apple-bce/vhci/command.h
 @@ -0,0 +1,204 @@
 +#ifndef BCE_VHCI_COMMAND_H
 +#define BCE_VHCI_COMMAND_H
@@ -3902,10 +3921,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/vhci/command.h
 +
 +
 +#endif //BCE_VHCI_COMMAND_H
-Index: linux-lernstick/drivers/staging/apple-bce/vhci/queue.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/vhci/queue.c	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/vhci/queue.c b/drivers/staging/apple-bce/vhci/queue.c
+new file mode 100644
+index 000000000..7b0b50271
+--- /dev/null
++++ b/drivers/staging/apple-bce/vhci/queue.c
 @@ -0,0 +1,268 @@
 +#include "queue.h"
 +#include "vhci.h"
@@ -4175,10 +4195,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/vhci/queue.c
 +    mutex_unlock(&cq->mutex);
 +    return status;
 +}
-Index: linux-lernstick/drivers/staging/apple-bce/vhci/queue.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/vhci/queue.h	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/vhci/queue.h b/drivers/staging/apple-bce/vhci/queue.h
+new file mode 100644
+index 000000000..adb705b6b
+--- /dev/null
++++ b/drivers/staging/apple-bce/vhci/queue.h
 @@ -0,0 +1,76 @@
 +#ifndef BCE_VHCI_QUEUE_H
 +#define BCE_VHCI_QUEUE_H
@@ -4256,10 +4277,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/vhci/queue.h
 +void bce_vhci_command_queue_deliver_completion(struct bce_vhci_command_queue *cq, struct bce_vhci_message *msg);
 +
 +#endif //BCE_VHCI_QUEUE_H
-Index: linux-lernstick/drivers/staging/apple-bce/vhci/transfer.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/vhci/transfer.c	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/vhci/transfer.c b/drivers/staging/apple-bce/vhci/transfer.c
+new file mode 100644
+index 000000000..8226363d6
+--- /dev/null
++++ b/drivers/staging/apple-bce/vhci/transfer.c
 @@ -0,0 +1,661 @@
 +#include "transfer.h"
 +#include "../queue.h"
@@ -4922,10 +4944,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/vhci/transfer.c
 +    if (status)
 +        bce_vhci_urb_complete(urb, status);
 +}
-Index: linux-lernstick/drivers/staging/apple-bce/vhci/transfer.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/vhci/transfer.h	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/vhci/transfer.h b/drivers/staging/apple-bce/vhci/transfer.h
+new file mode 100644
+index 000000000..6a62a00b2
+--- /dev/null
++++ b/drivers/staging/apple-bce/vhci/transfer.h
 @@ -0,0 +1,71 @@
 +#ifndef BCEDRIVER_TRANSFER_H
 +#define BCEDRIVER_TRANSFER_H
@@ -4998,10 +5021,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/vhci/transfer.h
 +int bce_vhci_urb_request_cancel(struct bce_vhci_transfer_queue *q, struct urb *urb, int status);
 +
 +#endif //BCEDRIVER_TRANSFER_H
-Index: linux-lernstick/drivers/staging/apple-bce/vhci/vhci.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/vhci/vhci.c	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/vhci/vhci.c b/drivers/staging/apple-bce/vhci/vhci.c
+new file mode 100644
+index 000000000..053a9f39e
+--- /dev/null
++++ b/drivers/staging/apple-bce/vhci/vhci.c
 @@ -0,0 +1,759 @@
 +#include "vhci.h"
 +#include "../apple_bce.h"
@@ -5762,10 +5786,11 @@ Index: linux-lernstick/drivers/staging/apple-bce/vhci/vhci.c
 +
 +module_param_named(vhci_port_mask, bce_vhci_port_mask, ushort, 0444);
 +MODULE_PARM_DESC(vhci_port_mask, "Specifies which VHCI ports are enabled");
-Index: linux-lernstick/drivers/staging/apple-bce/vhci/vhci.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux-lernstick/drivers/staging/apple-bce/vhci/vhci.h	2024-05-01 13:19:11.589771875 +0200
+diff --git a/drivers/staging/apple-bce/vhci/vhci.h b/drivers/staging/apple-bce/vhci/vhci.h
+new file mode 100644
+index 000000000..90641d1ba
+--- /dev/null
++++ b/drivers/staging/apple-bce/vhci/vhci.h
 @@ -0,0 +1,48 @@
 +#ifndef BCE_VHCI_H
 +#define BCE_VHCI_H
@@ -5815,3 +5840,6 @@ Index: linux-lernstick/drivers/staging/apple-bce/vhci/vhci.h
 +void bce_vhci_destroy(struct bce_vhci *vhci);
 +
 +#endif //BCE_VHCI_H
+-- 
+2.39.2
+

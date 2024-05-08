@@ -19,11 +19,11 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  drivers/hwmon/applesmc.c | 119 ++++++++++++++++++++++++++-------------
  1 file changed, 79 insertions(+), 40 deletions(-)
 
-Index: linux-lernstick/drivers/hwmon/applesmc.c
-===================================================================
---- linux-lernstick.orig/drivers/hwmon/applesmc.c	2024-05-01 13:19:14.233796545 +0200
-+++ linux-lernstick/drivers/hwmon/applesmc.c	2024-05-01 13:19:14.233796545 +0200
-@@ -172,7 +172,7 @@
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index bdaaf696f7b6..3017d8ca2c79 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -172,7 +172,7 @@ static const int debug;
   * run out past 500ms.
   */
  
@@ -32,7 +32,7 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  {
  	u8 status;
  	int us;
-@@ -190,13 +190,13 @@
+@@ -190,13 +190,13 @@ static int wait_status(struct applesmc_device *smc, u8 val, u8 mask)
  	return -EIO;
  }
  
@@ -49,7 +49,7 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  	if (status)
  		return status;
  	/*
-@@ -205,7 +205,7 @@
+@@ -205,7 +205,7 @@ static int send_byte(struct applesmc_device *smc, u8 cmd, u16 port)
  	 * this extra read may not happen if status returns both
  	 * simultaneously and this would appear to be required.
  	 */
@@ -58,7 +58,7 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  	if (status)
  		return status;
  
-@@ -213,15 +213,16 @@
+@@ -213,15 +213,16 @@ static int send_byte(struct applesmc_device *smc, u8 cmd, u16 port)
  	return 0;
  }
  
@@ -78,7 +78,7 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  	outb(cmd, smc->port_base + APPLESMC_CMD_PORT);
  	return 0;
  }
-@@ -232,53 +233,53 @@
+@@ -232,53 +233,53 @@ static int send_command(struct applesmc_device *smc, u8 cmd)
   * If busy is stuck high after the command then the SMC is jammed.
   */
  
@@ -143,7 +143,7 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  				SMC_STATUS_AWAITING_DATA | SMC_STATUS_BUSY,
  				SMC_STATUS_AWAITING_DATA | SMC_STATUS_BUSY)) {
  			pr_warn("%.4s: read data[%d] fail\n", key, i);
-@@ -298,37 +299,80 @@
+@@ -298,37 +299,80 @@ static int read_smc(struct applesmc_device *smc, u8 cmd, const char *key,
  	if (i)
  		pr_warn("flushed %d bytes, last value is: %d\n", i, data);
  
@@ -231,7 +231,7 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  }
  
  static int read_register_count(struct applesmc_device *smc,
-@@ -337,8 +381,8 @@
+@@ -337,8 +381,8 @@ static int read_register_count(struct applesmc_device *smc,
  	__be32 be;
  	int ret;
  
@@ -242,7 +242,7 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  		return ret;
  
  	*count = be32_to_cpu(be);
-@@ -360,7 +404,7 @@
+@@ -360,7 +404,7 @@ static int applesmc_read_entry(struct applesmc_device *smc,
  	if (entry->len != len)
  		return -EINVAL;
  	mutex_lock(&smc->reg.mutex);
@@ -251,7 +251,7 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  	mutex_unlock(&smc->reg.mutex);
  
  	return ret;
-@@ -374,7 +418,7 @@
+@@ -374,7 +418,7 @@ static int applesmc_write_entry(struct applesmc_device *smc,
  	if (entry->len != len)
  		return -EINVAL;
  	mutex_lock(&smc->reg.mutex);
@@ -260,7 +260,7 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  	mutex_unlock(&smc->reg.mutex);
  	return ret;
  }
-@@ -383,8 +427,7 @@
+@@ -383,8 +427,7 @@ static const struct applesmc_entry *applesmc_get_entry_by_index(
  	struct applesmc_device *smc, int index)
  {
  	struct applesmc_entry *cache = &smc->reg.cache[index];
@@ -270,7 +270,7 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  	int ret = 0;
  
  	if (cache->valid)
-@@ -394,18 +437,14 @@
+@@ -394,18 +437,14 @@ static const struct applesmc_entry *applesmc_get_entry_by_index(
  
  	if (cache->valid)
  		goto out;
@@ -293,3 +293,6 @@ Index: linux-lernstick/drivers/hwmon/applesmc.c
  	cache->valid = true;
  
  out:
+-- 
+2.30.0
+

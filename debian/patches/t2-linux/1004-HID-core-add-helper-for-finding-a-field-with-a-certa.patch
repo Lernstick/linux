@@ -16,11 +16,11 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  include/linux/hid.h             |  2 ++
  3 files changed, 29 insertions(+), 25 deletions(-)
 
-Index: linux-lernstick/drivers/hid/hid-core.c
-===================================================================
---- linux-lernstick.orig/drivers/hid/hid-core.c	2024-05-01 13:19:12.053776204 +0200
-+++ linux-lernstick/drivers/hid/hid-core.c	2024-05-01 13:19:12.053776204 +0200
-@@ -1913,6 +1913,31 @@
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 8992e3c1e..6395bdc2e 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -1906,6 +1906,31 @@ int hid_set_field(struct hid_field *field, unsigned offset, __s32 value)
  }
  EXPORT_SYMBOL_GPL(hid_set_field);
  
@@ -52,11 +52,11 @@ Index: linux-lernstick/drivers/hid/hid-core.c
  static struct hid_report *hid_get_report(struct hid_report_enum *report_enum,
  		const u8 *data)
  {
-Index: linux-lernstick/drivers/hid/hid-google-hammer.c
-===================================================================
---- linux-lernstick.orig/drivers/hid/hid-google-hammer.c	2024-05-01 13:19:12.053776204 +0200
-+++ linux-lernstick/drivers/hid/hid-google-hammer.c	2024-05-01 13:19:12.053776204 +0200
-@@ -419,38 +419,15 @@
+diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
+index c6bdb9c4e..fba3652aa 100644
+--- a/drivers/hid/hid-google-hammer.c
++++ b/drivers/hid/hid-google-hammer.c
+@@ -419,38 +419,15 @@ static int hammer_event(struct hid_device *hid, struct hid_field *field,
  	return 0;
  }
  
@@ -97,11 +97,11 @@ Index: linux-lernstick/drivers/hid/hid-google-hammer.c
  				HID_GD_KEYBOARD, HID_AD_BRIGHTNESS);
  }
  
-Index: linux-lernstick/include/linux/hid.h
-===================================================================
---- linux-lernstick.orig/include/linux/hid.h	2024-05-01 13:19:12.053776204 +0200
-+++ linux-lernstick/include/linux/hid.h	2024-05-01 13:19:12.053776204 +0200
-@@ -940,6 +940,8 @@
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index 39e21e381..9520fdfdd 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -913,6 +913,8 @@ extern void hidinput_report_event(struct hid_device *hid, struct hid_report *rep
  extern int hidinput_connect(struct hid_device *hid, unsigned int force);
  extern void hidinput_disconnect(struct hid_device *);
  
@@ -110,3 +110,6 @@ Index: linux-lernstick/include/linux/hid.h
  int hid_set_field(struct hid_field *, unsigned, __s32);
  int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data, u32 size,
  		     int interrupt);
+-- 
+2.42.0
+

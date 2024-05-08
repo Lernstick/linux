@@ -78,11 +78,11 @@ Reported-by: Felix Zhang <mrman@mrman314.tech>
  drivers/bluetooth/hci_bcm4377.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-Index: linux-lernstick/drivers/bluetooth/hci_bcm4377.c
-===================================================================
---- linux-lernstick.orig/drivers/bluetooth/hci_bcm4377.c	2024-05-01 13:19:15.201805577 +0200
-+++ linux-lernstick/drivers/bluetooth/hci_bcm4377.c	2024-05-01 13:19:15.201805577 +0200
-@@ -1417,7 +1417,7 @@
+diff --git a/drivers/bluetooth/hci_bcm4377.c b/drivers/bluetooth/hci_bcm4377.c
+index a61757835695..9a7243d5db71 100644
+--- a/drivers/bluetooth/hci_bcm4377.c
++++ b/drivers/bluetooth/hci_bcm4377.c
+@@ -1417,7 +1417,7 @@ static int bcm4377_check_bdaddr(struct bcm4377_data *bcm4377)
  
  	bda = (struct hci_rp_read_bd_addr *)skb->data;
  	if (!bcm4377_is_valid_bdaddr(bcm4377, &bda->bdaddr))
@@ -91,7 +91,7 @@ Index: linux-lernstick/drivers/bluetooth/hci_bcm4377.c
  
  	kfree_skb(skb);
  	return 0;
-@@ -2368,7 +2368,6 @@
+@@ -2368,7 +2368,6 @@ static int bcm4377_probe(struct pci_dev *pdev, const struct pci_device_id *id)
  	hdev->set_bdaddr = bcm4377_hci_set_bdaddr;
  	hdev->setup = bcm4377_hci_setup;
  

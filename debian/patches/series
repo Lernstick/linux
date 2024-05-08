@@ -150,11 +150,8 @@ t2-linux/3009-applesmc-battery-charge-limiter.patch
 t2-linux/4001-Input-bcm5974-Add-support-for-the-T2-Macs.patch
 t2-linux/7001-drm-i915-fbdev-Discard-BIOS-framebuffers-exceeding-h.patch
 t2-linux/7002-acpi-video-force-native-for-some-T2-macbooks.patch
-#t2-linux/7003-drm-amd-display-add-nv12-bounding-box.patch
-#t2-linux/7004-drm-amdgpu-skip-gpu_info-fw-loading-on-navi12.patch
 t2-linux/8004-brcmfmac-cfg80211-Use-WSEC-to-set-SAE-password.patch
 t2-linux/9001-Bluetooth-hci_bcm4377-do-not-mark-valid-bd_addr-as-invalid.patch
-
 
 # Surface patches
 surface-linux/0001-surface3-oemb.patch
