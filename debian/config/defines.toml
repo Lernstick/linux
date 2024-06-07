@@ -1,0 +1,29 @@
+[[kernelarch]]
+name = 'x86'
+  [[kernelarch.debianarch]]
+  name = 'amd64'
+
+[[featureset]]
+name = 'none'
+
+[build]
+compiler = 'gcc-12'
+trusted_certs = 'debian/certs/lernstick-6.6.13-1~bpo12+lernstick.1.pem'
+
+[relations.image]
+depends = [
+  'initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool',
+]
+recommends = [
+  'apparmor',
+]
+breaks = [
+  'fwupdate (<< 12-7)',
+  'wireless-regdb (<< 2019.06.03-1~)',
+]
+
+[packages]
+docs = false
+source = false
+tools_unversioned = false
+installer = false
