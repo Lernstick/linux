@@ -9,15 +9,12 @@ Patchset: ithc
  drivers/iommu/intel/irq_remapping.c | 16 ++++++++++++++++
  1 file changed, 16 insertions(+)
 
-diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
-index 29b9e55dcf26..986e91c813ae 100644
 --- a/drivers/iommu/intel/irq_remapping.c
 +++ b/drivers/iommu/intel/irq_remapping.c
-@@ -386,6 +386,22 @@ static int set_msi_sid(struct irte *irte, struct pci_dev *dev)
- 	data.busmatch_count = 0;
+@@ -387,6 +387,22 @@
  	pci_for_each_dma_alias(dev, set_msi_sid_cb, &data);
  
-+	/*
+ 	/*
 +	 * The Intel Touch Host Controller is at 00:10.6, but for some reason
 +	 * the MSI interrupts have request id 01:05.0.
 +	 * Disable id verification to work around this.
@@ -33,67 +30,26 @@ index 29b9e55dcf26..986e91c813ae 100644
 +		}
 +	}
 +
- 	/*
++	/*
  	 * DMA alias provides us with a PCI device and alias.  The only case
  	 * where the it will return an alias on a different bus than the
--- 
-2.44.0
-
-From fe08b40d122fdb102c2cc4876d2d68ac19d74ae3 Mon Sep 17 00:00:00 2001
-From: quo <tuple@list.ru>
-Date: Sun, 11 Dec 2022 12:10:54 +0100
-Subject: [PATCH] hid: Add support for Intel Touch Host Controller
-
-Based on quo/ithc-linux@0b8b45d
-
-Signed-off-by: Dorian Stoll <dorian.stoll@tmsp.io>
-Patchset: ithc
----
- drivers/hid/Kconfig           |   2 +
- drivers/hid/Makefile          |   1 +
- drivers/hid/ithc/Kbuild       |   6 +
- drivers/hid/ithc/Kconfig      |  12 +
- drivers/hid/ithc/ithc-debug.c | 130 ++++++
- drivers/hid/ithc/ithc-dma.c   | 373 +++++++++++++++++
- drivers/hid/ithc/ithc-dma.h   |  69 ++++
- drivers/hid/ithc/ithc-main.c  | 728 ++++++++++++++++++++++++++++++++++
- drivers/hid/ithc/ithc-regs.c  |  96 +++++
- drivers/hid/ithc/ithc-regs.h  | 189 +++++++++
- drivers/hid/ithc/ithc.h       |  67 ++++
- 11 files changed, 1673 insertions(+)
- create mode 100644 drivers/hid/ithc/Kbuild
- create mode 100644 drivers/hid/ithc/Kconfig
- create mode 100644 drivers/hid/ithc/ithc-debug.c
- create mode 100644 drivers/hid/ithc/ithc-dma.c
- create mode 100644 drivers/hid/ithc/ithc-dma.h
- create mode 100644 drivers/hid/ithc/ithc-main.c
- create mode 100644 drivers/hid/ithc/ithc-regs.c
- create mode 100644 drivers/hid/ithc/ithc-regs.h
- create mode 100644 drivers/hid/ithc/ithc.h
-
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 86c6c815bd5b..a87c3c6911fb 100644
+ 	 * device is the case of a PCIe-to-PCI bridge, where the alias is for
 --- a/drivers/hid/Kconfig
 +++ b/drivers/hid/Kconfig
-@@ -1343,4 +1343,6 @@ source "drivers/hid/surface-hid/Kconfig"
+@@ -1378,4 +1378,6 @@
  
  source "drivers/hid/ipts/Kconfig"
  
 +source "drivers/hid/ithc/Kconfig"
 +
  endif # HID_SUPPORT
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 2ef21b257d0b..e94b79727b48 100644
 --- a/drivers/hid/Makefile
 +++ b/drivers/hid/Makefile
-@@ -171,3 +171,4 @@ obj-$(CONFIG_AMD_SFH_HID)       += amd-sfh-hid/
+@@ -174,3 +174,4 @@
  obj-$(CONFIG_SURFACE_HID_CORE)  += surface-hid/
  
  obj-$(CONFIG_HID_IPTS)          += ipts/
 +obj-$(CONFIG_HID_ITHC)          += ithc/
-diff --git a/drivers/hid/ithc/Kbuild b/drivers/hid/ithc/Kbuild
-new file mode 100644
-index 000000000000..aea83f2ac07b
 --- /dev/null
 +++ b/drivers/hid/ithc/Kbuild
 @@ -0,0 +1,6 @@
@@ -103,9 +59,6 @@ index 000000000000..aea83f2ac07b
 +
 +ccflags-y := -std=gnu11 -Wno-declaration-after-statement
 +
-diff --git a/drivers/hid/ithc/Kconfig b/drivers/hid/ithc/Kconfig
-new file mode 100644
-index 000000000000..ede713023609
 --- /dev/null
 +++ b/drivers/hid/ithc/Kconfig
 @@ -0,0 +1,12 @@
@@ -121,9 +74,6 @@ index 000000000000..ede713023609
 +
 +	  To compile this driver as a module, choose M here: the
 +	  module will be called ithc.
-diff --git a/drivers/hid/ithc/ithc-debug.c b/drivers/hid/ithc/ithc-debug.c
-new file mode 100644
-index 000000000000..1f1f1e33f2e5
 --- /dev/null
 +++ b/drivers/hid/ithc/ithc-debug.c
 @@ -0,0 +1,130 @@
@@ -257,9 +207,6 @@ index 000000000000..1f1f1e33f2e5
 +	return 0;
 +}
 +
-diff --git a/drivers/hid/ithc/ithc-dma.c b/drivers/hid/ithc/ithc-dma.c
-new file mode 100644
-index 000000000000..ffb8689b8a78
 --- /dev/null
 +++ b/drivers/hid/ithc/ithc-dma.c
 @@ -0,0 +1,373 @@
@@ -636,9 +583,6 @@ index 000000000000..ffb8689b8a78
 +	return ret;
 +}
 +
-diff --git a/drivers/hid/ithc/ithc-dma.h b/drivers/hid/ithc/ithc-dma.h
-new file mode 100644
-index 000000000000..93652e4476bf
 --- /dev/null
 +++ b/drivers/hid/ithc/ithc-dma.h
 @@ -0,0 +1,69 @@
@@ -711,9 +655,6 @@ index 000000000000..93652e4476bf
 +int ithc_dma_rx(struct ithc *ithc, u8 channel);
 +int ithc_dma_tx(struct ithc *ithc, u32 cmdcode, u32 datasize, void *cmddata);
 +
-diff --git a/drivers/hid/ithc/ithc-main.c b/drivers/hid/ithc/ithc-main.c
-new file mode 100644
-index 000000000000..87ed4aa70fda
 --- /dev/null
 +++ b/drivers/hid/ithc/ithc-main.c
 @@ -0,0 +1,728 @@
@@ -1445,9 +1386,6 @@ index 000000000000..87ed4aa70fda
 +module_init(ithc_init);
 +module_exit(ithc_exit);
 +
-diff --git a/drivers/hid/ithc/ithc-regs.c b/drivers/hid/ithc/ithc-regs.c
-new file mode 100644
-index 000000000000..e058721886e3
 --- /dev/null
 +++ b/drivers/hid/ithc/ithc-regs.c
 @@ -0,0 +1,96 @@
@@ -1547,9 +1485,6 @@ index 000000000000..e058721886e3
 +	return 0;
 +}
 +
-diff --git a/drivers/hid/ithc/ithc-regs.h b/drivers/hid/ithc/ithc-regs.h
-new file mode 100644
-index 000000000000..d4007d9e2bac
 --- /dev/null
 +++ b/drivers/hid/ithc/ithc-regs.h
 @@ -0,0 +1,189 @@
@@ -1742,9 +1677,6 @@ index 000000000000..d4007d9e2bac
 +int ithc_set_spi_config(struct ithc *ithc, u8 speed, u8 mode);
 +int ithc_spi_command(struct ithc *ithc, u8 command, u32 offset, u32 size, void *data);
 +
-diff --git a/drivers/hid/ithc/ithc.h b/drivers/hid/ithc/ithc.h
-new file mode 100644
-index 000000000000..028e55a4ec53
 --- /dev/null
 +++ b/drivers/hid/ithc/ithc.h
 @@ -0,0 +1,67 @@
@@ -1815,6 +1747,3 @@ index 000000000000..028e55a4ec53
 +int ithc_debug_init(struct ithc *ithc);
 +void ithc_log_regs(struct ithc *ithc);
 +
--- 
-2.44.0
-

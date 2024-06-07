@@ -11,11 +11,9 @@ Signed-off-by: Orlando Chamberlain <redecorating@protonmail.com>
  drivers/hwmon/applesmc.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index 8b3f73fcb..493f95bb0 100644
 --- a/drivers/hwmon/applesmc.c
 +++ b/drivers/hwmon/applesmc.c
-@@ -1804,6 +1804,10 @@ static const struct dmi_system_id applesmc_whitelist[] __initconst = {
+@@ -1804,6 +1804,10 @@
  	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
  	  DMI_MATCH(DMI_PRODUCT_NAME, "Macmini") },
  	},
@@ -26,6 +24,3 @@ index 8b3f73fcb..493f95bb0 100644
  	{ applesmc_dmi_match, "Apple MacPro", {
  	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
  	  DMI_MATCH(DMI_PRODUCT_NAME, "MacPro") },
--- 
-2.34.1
-

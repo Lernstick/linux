@@ -20,8 +20,6 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  drivers/hwmon/applesmc.c | 237 ++++++++++++++++++++++++++++++++++++++-
  1 file changed, 231 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index 3017d8ca2c79..2d23bb9ad9dd 100644
 --- a/drivers/hwmon/applesmc.c
 +++ b/drivers/hwmon/applesmc.c
 @@ -42,6 +42,18 @@
@@ -43,7 +41,7 @@ index 3017d8ca2c79..2d23bb9ad9dd 100644
  #define APPLESMC_MAX_DATA_LENGTH 32
  
  /* Apple SMC status bits */
-@@ -138,10 +150,13 @@ struct applesmc_registers {
+@@ -138,10 +150,13 @@
  
  struct applesmc_device {
  	struct acpi_device *dev;
@@ -58,7 +56,7 @@ index 3017d8ca2c79..2d23bb9ad9dd 100644
  
  	s16 rest_x;
  	s16 rest_y;
-@@ -347,16 +362,156 @@ static int port_get_smc_key_info(struct applesmc_device *smc,
+@@ -347,16 +362,156 @@
  	return 0;
  }
  
@@ -217,7 +215,7 @@ index 3017d8ca2c79..2d23bb9ad9dd 100644
  }
  
  static int get_smc_key_by_index(struct applesmc_device *smc,
-@@ -365,14 +520,21 @@ static int get_smc_key_by_index(struct applesmc_device *smc,
+@@ -365,14 +520,21 @@
  	__be32 be;
  
  	be = cpu_to_be32(index);
@@ -242,7 +240,7 @@ index 3017d8ca2c79..2d23bb9ad9dd 100644
  }
  
  static int read_register_count(struct applesmc_device *smc,
-@@ -746,6 +908,7 @@ static int applesmc_add(struct acpi_device *dev)
+@@ -746,6 +908,7 @@
  	if (!smc)
  		return -ENOMEM;
  	smc->dev = dev;
@@ -250,7 +248,7 @@ index 3017d8ca2c79..2d23bb9ad9dd 100644
  	mutex_init(&smc->reg.mutex);
  
  	dev_set_drvdata(&dev->dev, smc);
-@@ -807,6 +970,20 @@ static acpi_status applesmc_walk_resources(struct acpi_resource *res,
+@@ -807,6 +970,20 @@
  		}
  		return AE_OK;
  
@@ -271,7 +269,7 @@ index 3017d8ca2c79..2d23bb9ad9dd 100644
  	case ACPI_RESOURCE_TYPE_END_TAG:
  		if (smc->port_base_set)
  			return AE_OK;
-@@ -818,6 +995,8 @@ static acpi_status applesmc_walk_resources(struct acpi_resource *res,
+@@ -818,6 +995,8 @@
  	}
  }
  
@@ -280,7 +278,7 @@ index 3017d8ca2c79..2d23bb9ad9dd 100644
  static int applesmc_init_resources(struct applesmc_device *smc)
  {
  	int ret;
-@@ -830,11 +1009,57 @@ static int applesmc_init_resources(struct applesmc_device *smc)
+@@ -830,11 +1009,57 @@
  	if (!request_region(smc->port_base, APPLESMC_NR_PORTS, "applesmc"))
  		return -ENXIO;
  
@@ -338,6 +336,3 @@ index 3017d8ca2c79..2d23bb9ad9dd 100644
  	release_region(smc->port_base, APPLESMC_NR_PORTS);
  }
  
--- 
-2.30.0
-

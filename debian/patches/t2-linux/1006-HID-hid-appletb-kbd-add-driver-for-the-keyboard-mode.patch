@@ -29,9 +29,6 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  create mode 100644 Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
  create mode 100644 drivers/hid/hid-appletb-kbd.c
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd b/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
-new file mode 100644
-index 000000000..2a19584d0
 --- /dev/null
 +++ b/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
 @@ -0,0 +1,13 @@
@@ -48,11 +45,9 @@ index 000000000..2a19584d0
 +		2  Media/brightness keys
 +		3  None
 +		== =================
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index cf19a3b33..852de13aa 100644
 --- a/drivers/hid/Kconfig
 +++ b/drivers/hid/Kconfig
-@@ -158,6 +158,17 @@ config HID_APPLETB_BL
+@@ -158,6 +158,17 @@
  	  To compile this driver as a module, choose M here: the
  	  module will be called hid-appletb-bl.
  
@@ -70,11 +65,9 @@ index cf19a3b33..852de13aa 100644
  config HID_ASUS
  	tristate "Asus"
  	depends on USB_HID
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index bc86e38b2..5b60015fd 100644
 --- a/drivers/hid/Makefile
 +++ b/drivers/hid/Makefile
-@@ -30,6 +30,7 @@ obj-$(CONFIG_HID_ACRUX)		+= hid-axff.o
+@@ -30,6 +30,7 @@
  obj-$(CONFIG_HID_APPLE)		+= hid-apple.o
  obj-$(CONFIG_HID_APPLEIR)	+= hid-appleir.o
  obj-$(CONFIG_HID_APPLETB_BL)	+= hid-appletb-bl.o
@@ -82,9 +75,6 @@ index bc86e38b2..5b60015fd 100644
  obj-$(CONFIG_HID_CREATIVE_SB0540)	+= hid-creative-sb0540.o
  obj-$(CONFIG_HID_ASUS)		+= hid-asus.o
  obj-$(CONFIG_HID_AUREAL)	+= hid-aureal.o
-diff --git a/drivers/hid/hid-appletb-kbd.c b/drivers/hid/hid-appletb-kbd.c
-new file mode 100644
-index 000000000..bc004c408
 --- /dev/null
 +++ b/drivers/hid/hid-appletb-kbd.c
 @@ -0,0 +1,289 @@
@@ -377,11 +367,9 @@ index 000000000..bc004c408
 +MODULE_AUTHOR("Kerem Karabay <kekrby@gmail.com>");
 +MODULE_DESCRIPTION("MacBookPro Touch Bar Keyboard Mode Driver");
 +MODULE_LICENSE("GPL");
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 82e7a80c9..82be9dfaf 100644
 --- a/drivers/hid/hid-quirks.c
 +++ b/drivers/hid/hid-quirks.c
-@@ -325,7 +325,6 @@ static const struct hid_device_id hid_have_special_driver[] = {
+@@ -328,7 +328,6 @@
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021) },
@@ -389,7 +377,7 @@ index 82e7a80c9..82be9dfaf 100644
  #endif
  #if IS_ENABLED(CONFIG_HID_APPLEIR)
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL) },
-@@ -337,6 +336,9 @@ static const struct hid_device_id hid_have_special_driver[] = {
+@@ -340,6 +339,9 @@
  #if IS_ENABLED(CONFIG_HID_APPLETB_BL)
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT) },
  #endif
@@ -399,6 +387,3 @@ index 82e7a80c9..82be9dfaf 100644
  #if IS_ENABLED(CONFIG_HID_ASUS)
  	{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_KEYBOARD) },
  	{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_TOUCHPAD) },
--- 
-2.42.0
-

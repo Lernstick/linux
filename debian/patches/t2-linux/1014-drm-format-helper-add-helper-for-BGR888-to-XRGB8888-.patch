@@ -13,11 +13,9 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  include/drm/drm_format_helper.h               |  3 +
  3 files changed, 125 insertions(+)
 
-diff --git a/drivers/gpu/drm/drm_format_helper.c b/drivers/gpu/drm/drm_format_helper.c
-index f93a4efce..5508fbde1 100644
 --- a/drivers/gpu/drm/drm_format_helper.c
 +++ b/drivers/gpu/drm/drm_format_helper.c
-@@ -601,6 +601,56 @@ void drm_fb_xrgb8888_to_rgb888(struct iosys_map *dst, const unsigned int *dst_pi
+@@ -601,6 +601,56 @@
  }
  EXPORT_SYMBOL(drm_fb_xrgb8888_to_rgb888);
  
@@ -74,7 +72,7 @@ index f93a4efce..5508fbde1 100644
  static void drm_fb_xrgb8888_to_argb8888_line(void *dbuf, const void *sbuf, unsigned int pixels)
  {
  	__le32 *dbuf32 = dbuf;
-@@ -925,6 +975,9 @@ int drm_fb_blit(struct iosys_map *dst, const unsigned int *dst_pitch, uint32_t d
+@@ -925,6 +975,9 @@
  		} else if (dst_format == DRM_FORMAT_RGB888) {
  			drm_fb_xrgb8888_to_rgb888(dst, dst_pitch, src, fb, clip);
  			return 0;
@@ -84,11 +82,9 @@ index f93a4efce..5508fbde1 100644
  		} else if (dst_format == DRM_FORMAT_ARGB8888) {
  			drm_fb_xrgb8888_to_argb8888(dst, dst_pitch, src, fb, clip);
  			return 0;
-diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
-index 474bb7a1c..dff7fabd9 100644
 --- a/drivers/gpu/drm/tests/drm_format_helper_test.c
 +++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-@@ -52,6 +52,11 @@ struct convert_to_rgb888_result {
+@@ -56,6 +56,11 @@
  	const u8 expected[TEST_BUF_SIZE];
  };
  
@@ -100,7 +96,7 @@ index 474bb7a1c..dff7fabd9 100644
  struct convert_to_argb8888_result {
  	unsigned int dst_pitch;
  	const u32 expected[TEST_BUF_SIZE];
-@@ -84,6 +89,7 @@ struct convert_xrgb8888_case {
+@@ -103,6 +108,7 @@
  	struct convert_to_argb1555_result argb1555_result;
  	struct convert_to_rgba5551_result rgba5551_result;
  	struct convert_to_rgb888_result rgb888_result;
@@ -108,7 +104,7 @@ index 474bb7a1c..dff7fabd9 100644
  	struct convert_to_argb8888_result argb8888_result;
  	struct convert_to_xrgb2101010_result xrgb2101010_result;
  	struct convert_to_argb2101010_result argb2101010_result;
-@@ -125,6 +131,10 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
+@@ -147,6 +153,10 @@
  			.dst_pitch = TEST_USE_DEFAULT_PITCH,
  			.expected = { 0x00, 0x00, 0xFF },
  		},
@@ -119,7 +115,7 @@ index 474bb7a1c..dff7fabd9 100644
  		.argb8888_result = {
  			.dst_pitch = TEST_USE_DEFAULT_PITCH,
  			.expected = { 0xFFFF0000 },
-@@ -179,6 +189,10 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
+@@ -213,6 +223,10 @@
  			.dst_pitch = TEST_USE_DEFAULT_PITCH,
  			.expected = { 0x00, 0x00, 0xFF },
  		},
@@ -130,7 +126,7 @@ index 474bb7a1c..dff7fabd9 100644
  		.argb8888_result = {
  			.dst_pitch = TEST_USE_DEFAULT_PITCH,
  			.expected = { 0xFFFF0000 },
-@@ -280,6 +294,15 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
+@@ -326,6 +340,15 @@
  				0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00,
  			},
  		},
@@ -146,7 +142,7 @@ index 474bb7a1c..dff7fabd9 100644
  		.argb8888_result = {
  			.dst_pitch = TEST_USE_DEFAULT_PITCH,
  			.expected = {
-@@ -391,6 +414,17 @@ static struct convert_xrgb8888_case convert_xrgb8888_cases[] = {
+@@ -464,6 +487,17 @@
  				0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
  			},
  		},
@@ -164,7 +160,7 @@ index 474bb7a1c..dff7fabd9 100644
  		.argb8888_result = {
  			.dst_pitch = 20,
  			.expected = {
-@@ -727,6 +761,40 @@ static void drm_test_fb_xrgb8888_to_rgb888(struct kunit *test)
+@@ -904,6 +938,40 @@
  	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
  }
  
@@ -205,7 +201,7 @@ index 474bb7a1c..dff7fabd9 100644
  static void drm_test_fb_xrgb8888_to_argb8888(struct kunit *test)
  {
  	const struct convert_xrgb8888_case *params = test->param_value;
-@@ -858,6 +926,7 @@ static struct kunit_case drm_format_helper_test_cases[] = {
+@@ -1835,6 +1903,7 @@
  	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_argb1555, convert_xrgb8888_gen_params),
  	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_rgba5551, convert_xrgb8888_gen_params),
  	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_rgb888, convert_xrgb8888_gen_params),
@@ -213,11 +209,9 @@ index 474bb7a1c..dff7fabd9 100644
  	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_argb8888, convert_xrgb8888_gen_params),
  	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_xrgb2101010, convert_xrgb8888_gen_params),
  	KUNIT_CASE_PARAM(drm_test_fb_xrgb8888_to_argb2101010, convert_xrgb8888_gen_params),
-diff --git a/include/drm/drm_format_helper.h b/include/drm/drm_format_helper.h
-index 291deb094..7fc553318 100644
 --- a/include/drm/drm_format_helper.h
 +++ b/include/drm/drm_format_helper.h
-@@ -42,6 +42,9 @@ void drm_fb_xrgb8888_to_rgba5551(struct iosys_map *dst, const unsigned int *dst_
+@@ -42,6 +42,9 @@
  void drm_fb_xrgb8888_to_rgb888(struct iosys_map *dst, const unsigned int *dst_pitch,
  			       const struct iosys_map *src, const struct drm_framebuffer *fb,
  			       const struct drm_rect *clip);
@@ -227,6 +221,3 @@ index 291deb094..7fc553318 100644
  void drm_fb_xrgb8888_to_argb8888(struct iosys_map *dst, const unsigned int *dst_pitch,
  				 const struct iosys_map *src, const struct drm_framebuffer *fb,
  				 const struct drm_rect *clip);
--- 
-2.42.0
-

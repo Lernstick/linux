@@ -7,8 +7,6 @@ Subject: [PATCH] Input: bcm5974 - Add support for the T2 Macs
  drivers/input/mouse/bcm5974.c | 138 ++++++++++++++++++++++++++++++++++
  1 file changed, 138 insertions(+)
 
-diff --git a/drivers/input/mouse/bcm5974.c b/drivers/input/mouse/bcm5974.c
-index 59a14505b..88f17f21a 100644
 --- a/drivers/input/mouse/bcm5974.c
 +++ b/drivers/input/mouse/bcm5974.c
 @@ -83,6 +83,24 @@
@@ -36,7 +34,7 @@ index 59a14505b..88f17f21a 100644
  #define BCM5974_DEVICE(prod) {					\
  	.match_flags = (USB_DEVICE_ID_MATCH_DEVICE |		\
  			USB_DEVICE_ID_MATCH_INT_CLASS |		\
-@@ -147,6 +165,22 @@ static const struct usb_device_id bcm5974_table[] = {
+@@ -147,6 +165,22 @@
  	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING9_ANSI),
  	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING9_ISO),
  	BCM5974_DEVICE(USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
@@ -59,7 +57,7 @@ index 59a14505b..88f17f21a 100644
  	/* Terminating entry */
  	{}
  };
-@@ -483,6 +517,110 @@ static const struct bcm5974_config bcm5974_config_table[] = {
+@@ -483,6 +517,110 @@
  		{ SN_COORD, -203, 6803 },
  		{ SN_ORIENT, -MAX_FINGER_ORIENTATION, MAX_FINGER_ORIENTATION }
  	},
@@ -170,6 +168,3 @@ index 59a14505b..88f17f21a 100644
  	{}
  };
  
--- 
-2.25.1
-

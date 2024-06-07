@@ -23,11 +23,9 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  5 files changed, 213 insertions(+), 1 deletion(-)
  create mode 100644 drivers/hid/hid-appletb-bl.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4cc6bf79f..519b3b736 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -9157,6 +9157,12 @@ F:	include/linux/pm.h
+@@ -9351,6 +9351,12 @@
  F:	include/linux/suspend.h
  F:	kernel/power/
  
@@ -40,11 +38,9 @@ index 4cc6bf79f..519b3b736 100644
  HID CORE LAYER
  M:	Jiri Kosina <jikos@kernel.org>
  M:	Benjamin Tissoires <benjamin.tissoires@redhat.com>
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index e11c1c803..cf19a3b33 100644
 --- a/drivers/hid/Kconfig
 +++ b/drivers/hid/Kconfig
-@@ -148,6 +148,16 @@ config HID_APPLEIR
+@@ -148,6 +148,16 @@
  
  	Say Y here if you want support for Apple infrared remote control.
  
@@ -61,11 +57,9 @@ index e11c1c803..cf19a3b33 100644
  config HID_ASUS
  	tristate "Asus"
  	depends on USB_HID
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 7a9e16015..bc86e38b2 100644
 --- a/drivers/hid/Makefile
 +++ b/drivers/hid/Makefile
-@@ -29,6 +29,7 @@ obj-$(CONFIG_HID_ALPS)		+= hid-alps.o
+@@ -29,6 +29,7 @@
  obj-$(CONFIG_HID_ACRUX)		+= hid-axff.o
  obj-$(CONFIG_HID_APPLE)		+= hid-apple.o
  obj-$(CONFIG_HID_APPLEIR)	+= hid-appleir.o
@@ -73,9 +67,6 @@ index 7a9e16015..bc86e38b2 100644
  obj-$(CONFIG_HID_CREATIVE_SB0540)	+= hid-creative-sb0540.o
  obj-$(CONFIG_HID_ASUS)		+= hid-asus.o
  obj-$(CONFIG_HID_AUREAL)	+= hid-aureal.o
-diff --git a/drivers/hid/hid-appletb-bl.c b/drivers/hid/hid-appletb-bl.c
-new file mode 100644
-index 000000000..0c5e4b776
 --- /dev/null
 +++ b/drivers/hid/hid-appletb-bl.c
 @@ -0,0 +1,193 @@
@@ -272,11 +263,9 @@ index 000000000..0c5e4b776
 +MODULE_AUTHOR("Kerem Karabay <kekrby@gmail.com>");
 +MODULE_DESCRIPTION("MacBookPro Touch Bar Backlight Driver");
 +MODULE_LICENSE("GPL");
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 3983b4f28..82e7a80c9 100644
 --- a/drivers/hid/hid-quirks.c
 +++ b/drivers/hid/hid-quirks.c
-@@ -325,7 +325,6 @@ static const struct hid_device_id hid_have_special_driver[] = {
+@@ -328,7 +328,6 @@
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021) },
@@ -284,7 +273,7 @@ index 3983b4f28..82e7a80c9 100644
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY) },
  #endif
  #if IS_ENABLED(CONFIG_HID_APPLEIR)
-@@ -335,6 +334,9 @@ static const struct hid_device_id hid_have_special_driver[] = {
+@@ -338,6 +337,9 @@
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL4) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL5) },
  #endif
@@ -294,6 +283,3 @@ index 3983b4f28..82e7a80c9 100644
  #if IS_ENABLED(CONFIG_HID_ASUS)
  	{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_KEYBOARD) },
  	{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_TOUCHPAD) },
--- 
-2.42.0
-
