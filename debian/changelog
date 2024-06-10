@@ -1,3 +1,9 @@
+linux (6.7.12-1~bpo12+lernstick.1) lernstick-12-backports; urgency=medium
+
+  * Rebuild for Lernstick 12
+
+ -- Thore Sommer <mail©thson.de>  Mon, 10 Jun 2024 13:10:35 +0200
+
 linux (6.7.12-1~bpo12+1) bookworm-backports; urgency=medium
 
   * Rebuild for bookworm-backports:

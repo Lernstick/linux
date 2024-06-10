@@ -8,7 +8,7 @@ name = 'none'
 
 [build]
 compiler = 'gcc-12'
-trusted_certs = 'debian/certs/lernstick-6.6.13-1~bpo12+lernstick.1.pem'
+trusted_certs = 'debian/certs/lernstick-6.7.12-1~bpo12+lernstick.1.pem'
 
 [relations.image]
 depends = [
