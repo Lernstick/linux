@@ -25,10 +25,12 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  4 files changed, 643 insertions(+)
  create mode 100644 drivers/gpu/drm/tiny/appletbdrm.c
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 519b3b736..dfc63d257 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -6481,6 +6481,12 @@
- T:	git git://anongit.freedesktop.org/drm/drm-misc
+@@ -6372,6 +6372,12 @@ S:	Supported
+ T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
  F:	drivers/gpu/drm/sun4i/sun8i*
  
 +DRM DRIVER FOR APPLE TOUCH BARS
@@ -38,8 +40,10 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
 +F:	drivers/gpu/drm/tiny/appletbdrm.c
 +
  DRM DRIVER FOR ARM PL111 CLCD
- M:	Emma Anholt <emma@anholt.net>
- S:	Supported
+ S:	Orphan
+ T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
+diff --git a/drivers/gpu/drm/tiny/Kconfig b/drivers/gpu/drm/tiny/Kconfig
+index f6889f649..559a97bce 100644
 --- a/drivers/gpu/drm/tiny/Kconfig
 +++ b/drivers/gpu/drm/tiny/Kconfig
 @@ -1,5 +1,17 @@
@@ -60,6 +64,8 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  config DRM_ARCPGU
  	tristate "ARC PGU"
  	depends on DRM && OF
+diff --git a/drivers/gpu/drm/tiny/Makefile b/drivers/gpu/drm/tiny/Makefile
+index 76dde89a0..9a1b412e7 100644
 --- a/drivers/gpu/drm/tiny/Makefile
 +++ b/drivers/gpu/drm/tiny/Makefile
 @@ -1,5 +1,6 @@
@@ -69,6 +75,9 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  obj-$(CONFIG_DRM_ARCPGU)		+= arcpgu.o
  obj-$(CONFIG_DRM_BOCHS)			+= bochs.o
  obj-$(CONFIG_DRM_CIRRUS_QEMU)		+= cirrus.o
+diff --git a/drivers/gpu/drm/tiny/appletbdrm.c b/drivers/gpu/drm/tiny/appletbdrm.c
+new file mode 100644
+index 000000000..33a99436b
 --- /dev/null
 +++ b/drivers/gpu/drm/tiny/appletbdrm.c
 @@ -0,0 +1,624 @@
@@ -426,7 +435,7 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
 +		frame->buf_size = cpu_to_le32(buf_size);
 +
 +		ret = drm_fb_blit(&dst, NULL, DRM_FORMAT_BGR888,
-+				  &shadow_plane_state->data[0], fb, &damage);
++				  &shadow_plane_state->data[0], fb, &damage, &shadow_plane_state->fmtcnv_state);
 +		if (ret) {
 +			drm_err(drm, "Failed to copy damage clip (%pe)\n", ERR_PTR(ret));
 +			goto end_fb_cpu_access;
@@ -696,3 +705,6 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
 +MODULE_AUTHOR("Kerem Karabay <kekrby@gmail.com>");
 +MODULE_DESCRIPTION("Apple Touch Bar DRM Driver");
 +MODULE_LICENSE("GPL");
+-- 
+2.42.0
+

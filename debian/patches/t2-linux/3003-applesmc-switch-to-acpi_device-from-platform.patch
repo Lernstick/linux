@@ -1,7 +1,7 @@
-From ee3d4bf4a01bc94553bde2ae3e806a63a13faa12 Mon Sep 17 00:00:00 2001
+From c405f826e30e0035581b350084d61457ddde6146 Mon Sep 17 00:00:00 2001
 From: Paul Pawlowski <paul@mrarm.io>
-Date: Sun, 17 Nov 2019 23:12:08 +0100
-Subject: [PATCH 3/6] applesmc: switch to acpi_device (from platform)
+Date: Sat, 29 Jun 2024 04:49:16 +0000
+Subject: [PATCH 3/9] applesmc: switch to acpi_device (from platform)
 
 This change makes the change from platform_device
 to acpi_device. The rationale for this change is
@@ -17,9 +17,11 @@ should not result in any incompatibilities.
 
 Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
 ---
- drivers/hwmon/applesmc.c | 125 ++++++++++++++++++++++++++-------------
- 1 file changed, 85 insertions(+), 40 deletions(-)
+ drivers/hwmon/applesmc.c | 124 ++++++++++++++++++++++++++-------------
+ 1 file changed, 84 insertions(+), 40 deletions(-)
 
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index a599db68b..b4fe412c0 100644
 --- a/drivers/hwmon/applesmc.c
 +++ b/drivers/hwmon/applesmc.c
 @@ -19,7 +19,7 @@
@@ -39,7 +41,7 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  /* data port used by Apple SMC */
  #define APPLESMC_DATA_PORT	0
  /* command/status port used by Apple SMC */
-@@ -138,9 +137,10 @@
+@@ -138,9 +137,10 @@ struct applesmc_registers {
  };
  
  struct applesmc_device {
@@ -51,7 +53,7 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  	u16 port_base;
  
  	s16 rest_x;
-@@ -692,9 +692,13 @@
+@@ -692,9 +692,13 @@ static int applesmc_init_smcreg(struct applesmc_device *smc)
  }
  
  /* Device model stuff */
@@ -66,7 +68,7 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  {
  	struct applesmc_device *smc;
  	int ret;
-@@ -705,12 +709,16 @@
+@@ -705,12 +709,16 @@ static int applesmc_probe(struct platform_device *dev)
  	smc->dev = dev;
  	mutex_init(&smc->reg.mutex);
  
@@ -85,7 +87,7 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  	applesmc_device_init(smc);
  
  	ret = applesmc_create_modules(smc);
-@@ -721,20 +729,23 @@
+@@ -721,20 +729,23 @@ static int applesmc_probe(struct platform_device *dev)
  
  out_reg:
  	applesmc_destroy_smcreg(smc);
@@ -112,7 +114,7 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  
  	mutex_destroy(&smc->reg.mutex);
  	kfree(smc);
-@@ -742,6 +753,52 @@
+@@ -742,6 +753,52 @@ static int applesmc_remove(struct platform_device *dev)
  	return 0;
  }
  
@@ -165,7 +167,7 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  /* Synchronize device with memorized backlight state */
  static int applesmc_pm_resume(struct device *dev)
  {
-@@ -763,18 +820,28 @@
+@@ -763,17 +820,26 @@ static int applesmc_pm_restore(struct device *dev)
  	return applesmc_pm_resume(dev);
  }
  
@@ -192,15 +194,13 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
 +	.ops = {
 +		.add = applesmc_add,
 +		.remove = applesmc_remove
- 	},
++	},
 +	.drv = {
 +		.pm = &applesmc_pm_ops
-+	},
-+	.owner = THIS_MODULE
+ 	},
  };
  
- /*
-@@ -1262,7 +1329,6 @@
+@@ -1262,7 +1328,6 @@ static int applesmc_create_nodes(struct applesmc_device *smc,
  static int applesmc_create_accelerometer(struct applesmc_device *smc)
  {
  	int ret;
@@ -208,7 +208,7 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  	if (!smc->reg.has_accelerometer)
  		return 0;
  
-@@ -1467,8 +1533,6 @@
+@@ -1467,8 +1532,6 @@ static void applesmc_destroy_modules(struct applesmc_device *smc)
  	applesmc_destroy_nodes(smc, info_group);
  }
  
@@ -217,7 +217,7 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  static int __init applesmc_init(void)
  {
  	int ret;
-@@ -1479,29 +1543,12 @@
+@@ -1479,29 +1542,12 @@ static int __init applesmc_init(void)
  		goto out;
  	}
  
@@ -249,7 +249,7 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  out:
  	pr_warn("driver init failed (ret=%d)!\n", ret);
  	return ret;
-@@ -1509,9 +1556,7 @@
+@@ -1509,9 +1555,7 @@ static int __init applesmc_init(void)
  
  static void __exit applesmc_exit(void)
  {
@@ -260,3 +260,6 @@ Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
  }
  
  module_init(applesmc_init);
+-- 
+2.45.2
+

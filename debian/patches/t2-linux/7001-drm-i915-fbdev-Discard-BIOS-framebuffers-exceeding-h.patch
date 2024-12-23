@@ -10,9 +10,11 @@ Signed-off-by: Ashish Arora <ashisharora.linux@outlook.com>
  drivers/gpu/drm/i915/display/intel_fbdev.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/i915/display/intel_fbdev.c b/drivers/gpu/drm/i915/display/intel_fbdev.c
+index 112aa04..8fb8bcc 100644
 --- a/drivers/gpu/drm/i915/display/intel_fbdev.c
 +++ b/drivers/gpu/drm/i915/display/intel_fbdev.c
-@@ -234,10 +234,10 @@
+@@ -217,10 +217,10 @@ static int intelfb_create(struct drm_fb_helper *helper,
  		return ret;
  
  	if (intel_fb &&
@@ -26,3 +28,6 @@ Signed-off-by: Ashish Arora <ashisharora.linux@outlook.com>
  			    " releasing it\n",
  			    intel_fb->base.width, intel_fb->base.height,
  			    sizes->fb_width, sizes->fb_height);
+-- 
+1.8.3.1
+

@@ -352,7 +352,6 @@ CONFIG_HID_APPLETB_BL=m
 CONFIG_HID_APPLETB_KBD=m
 CONFIG_HID_APPLE=m
 CONFIG_DRM_APPLETBDRM=m
-CONFIG_HID_APPLE_MAGIC_BACKLIGHT=m
 CONFIG_HID_SENSOR_ALS=m
 CONFIG_SND_PCM=m
 CONFIG_STAGING=y
@@ -424,6 +423,12 @@ CONFIG_VIDEO_OV8865=m
 ## ALS Sensor for Surface Book 3, Surface Laptop 3, Surface Pro 7
 ##
 CONFIG_APDS9960=m
+
+##
+## Build-in UFS support (required for some Surface Go devices)
+##
+CONFIG_SCSI_UFSHCD=m
+CONFIG_SCSI_UFSHCD_PCI=m
 
 ##
 ## Other Drivers
