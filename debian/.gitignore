@@ -28,6 +28,9 @@
 /linux-*
 /rules.gen
 /tests/control
+!/linux-bpf-dev.*
+!/linux-cpupower.*
+!/linux-perf.*
 
 # Ignore compiled Python files
 __pycache__/
