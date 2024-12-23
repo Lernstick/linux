@@ -8,11 +8,11 @@ for linux6.2 compatibility
  drivers/hwmon/applesmc.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
-index 8c7b2e2cd..5f67d7362 100644
---- a/drivers/hwmon/applesmc.c
-+++ b/drivers/hwmon/applesmc.c
-@@ -979,7 +979,7 @@ static int applesmc_add(struct acpi_device *dev)
+Index: lernstick-linux/drivers/hwmon/applesmc.c
+===================================================================
+--- lernstick-linux.orig/drivers/hwmon/applesmc.c	2024-10-18 15:25:57.247636782 +0200
++++ lernstick-linux/drivers/hwmon/applesmc.c	2024-10-18 15:25:57.243636702 +0200
+@@ -979,7 +979,7 @@
  	return ret;
  }
  
@@ -21,7 +21,7 @@ index 8c7b2e2cd..5f67d7362 100644
  {
  	struct applesmc_device *smc = dev_get_drvdata(&dev->dev);
  
-@@ -990,7 +990,7 @@ static int applesmc_remove(struct acpi_device *dev)
+@@ -990,7 +990,7 @@
  	mutex_destroy(&smc->reg.mutex);
  	kfree(smc);
  
@@ -30,6 +30,3 @@ index 8c7b2e2cd..5f67d7362 100644
  }
  
  static acpi_status applesmc_walk_resources(struct acpi_resource *res,
--- 
-2.45.2
-

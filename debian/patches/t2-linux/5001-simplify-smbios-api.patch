@@ -16,11 +16,11 @@ Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
  drivers/firmware/efi/libstub/smbios.c  | 4 ++--
  3 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/firmware/efi/libstub/arm64.c b/drivers/firmware/efi/libstub/arm64.c
-index 446e35eaf3d943..e57cd3de0a00f4 100644
---- a/drivers/firmware/efi/libstub/arm64.c
-+++ b/drivers/firmware/efi/libstub/arm64.c
-@@ -39,8 +39,7 @@ static bool system_needs_vamap(void)
+Index: lernstick-linux/drivers/firmware/efi/libstub/arm64.c
+===================================================================
+--- lernstick-linux.orig/drivers/firmware/efi/libstub/arm64.c	2024-10-18 15:25:57.755646894 +0200
++++ lernstick-linux/drivers/firmware/efi/libstub/arm64.c	2024-10-18 15:25:57.751646814 +0200
+@@ -39,8 +39,7 @@
  		static char const emag[] = "eMAG";
  
  	default:
@@ -30,11 +30,11 @@ index 446e35eaf3d943..e57cd3de0a00f4 100644
  		if (!version || (strncmp(version, altra, sizeof(altra) - 1) &&
  				 strncmp(version, emag, sizeof(emag) - 1)))
  			break;
-diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-index 27abb4ce029173..d33ccbc4a2c630 100644
---- a/drivers/firmware/efi/libstub/efistub.h
-+++ b/drivers/firmware/efi/libstub/efistub.h
-@@ -1204,14 +1204,13 @@ struct efi_smbios_type4_record {
+Index: lernstick-linux/drivers/firmware/efi/libstub/efistub.h
+===================================================================
+--- lernstick-linux.orig/drivers/firmware/efi/libstub/efistub.h	2024-10-18 15:25:57.755646894 +0200
++++ lernstick-linux/drivers/firmware/efi/libstub/efistub.h	2024-10-18 15:25:57.751646814 +0200
+@@ -1204,14 +1204,13 @@
  	u16				thread_enabled;
  };
  
@@ -53,11 +53,11 @@ index 27abb4ce029173..d33ccbc4a2c630 100644
  
  void efi_remap_image(unsigned long image_base, unsigned alloc_size,
  		     unsigned long code_size);
-diff --git a/drivers/firmware/efi/libstub/smbios.c b/drivers/firmware/efi/libstub/smbios.c
-index c217de2cc8d56d..520c9079717a30 100644
---- a/drivers/firmware/efi/libstub/smbios.c
-+++ b/drivers/firmware/efi/libstub/smbios.c
-@@ -38,7 +38,7 @@ const struct efi_smbios_record *efi_get_smbios_record(u8 type)
+Index: lernstick-linux/drivers/firmware/efi/libstub/smbios.c
+===================================================================
+--- lernstick-linux.orig/drivers/firmware/efi/libstub/smbios.c	2024-10-18 15:25:57.755646894 +0200
++++ lernstick-linux/drivers/firmware/efi/libstub/smbios.c	2024-10-18 15:25:57.751646814 +0200
+@@ -38,7 +38,7 @@
  }
  
  const u8 *__efi_get_smbios_string(const struct efi_smbios_record *record,
@@ -66,7 +66,7 @@ index c217de2cc8d56d..520c9079717a30 100644
  {
  	const u8 *strtable;
  
-@@ -46,7 +46,7 @@ const u8 *__efi_get_smbios_string(const struct efi_smbios_record *record,
+@@ -46,7 +46,7 @@
  		return NULL;
  
  	strtable = (u8 *)record + record->length;
@@ -75,6 +75,3 @@ index c217de2cc8d56d..520c9079717a30 100644
  		int len = strlen(strtable);
  
  		if (!len)
--- 
-cgit 1.2.3-korg
-
