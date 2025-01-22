@@ -1,4 +1,4 @@
-From 3d3aec0cd78fd07d406486dd140daa7baf1fba7c Mon Sep 17 00:00:00 2001
+From 2ce5cf2a597c9015c64ea9f386a396f97b8589c6 Mon Sep 17 00:00:00 2001
 From: Tsuchiya Yuto <kitakar@gmail.com>
 Date: Sun, 18 Oct 2020 16:42:44 +0900
 Subject: [PATCH] (surface3-oemb) add DMI matches for Surface 3 with broken DMI
@@ -39,11 +39,11 @@ Patchset: surface3-oemb
  sound/soc/intel/common/soc-acpi-intel-cht-match.c | 8 ++++++++
  3 files changed, 24 insertions(+)
 
-Index: lernstick-linux/drivers/platform/surface/surface3-wmi.c
-===================================================================
---- lernstick-linux.orig/drivers/platform/surface/surface3-wmi.c	2024-10-18 15:25:58.687665445 +0200
-+++ lernstick-linux/drivers/platform/surface/surface3-wmi.c	2024-10-18 15:25:58.679665285 +0200
-@@ -37,6 +37,13 @@
+diff --git a/drivers/platform/surface/surface3-wmi.c b/drivers/platform/surface/surface3-wmi.c
+index c15ed7a12784..1ec8edb5aafa 100644
+--- a/drivers/platform/surface/surface3-wmi.c
++++ b/drivers/platform/surface/surface3-wmi.c
+@@ -37,6 +37,13 @@ static const struct dmi_system_id surface3_dmi_table[] = {
  			DMI_MATCH(DMI_PRODUCT_NAME, "Surface 3"),
  		},
  	},
@@ -57,14 +57,15 @@ Index: lernstick-linux/drivers/platform/surface/surface3-wmi.c
  #endif
  	{ }
  };
-Index: lernstick-linux/sound/soc/codecs/rt5645.c
-===================================================================
---- lernstick-linux.orig/sound/soc/codecs/rt5645.c	2024-10-18 15:25:58.687665445 +0200
-+++ lernstick-linux/sound/soc/codecs/rt5645.c	2024-10-18 15:25:58.679665285 +0200
-@@ -3791,6 +3791,15 @@
+diff --git a/sound/soc/codecs/rt5645.c b/sound/soc/codecs/rt5645.c
+index 51187b1e0ed2..bfb83ce8d8f8 100644
+--- a/sound/soc/codecs/rt5645.c
++++ b/sound/soc/codecs/rt5645.c
+@@ -3790,6 +3790,15 @@ static const struct dmi_system_id dmi_platform_data[] = {
+ 		},
  		.driver_data = (void *)&intel_braswell_platform_data,
  	},
- 	{
++	{
 +		.ident = "Microsoft Surface 3",
 +		.matches = {
 +			DMI_MATCH(DMI_BIOS_VENDOR, "American Megatrends Inc."),
@@ -73,15 +74,14 @@ Index: lernstick-linux/sound/soc/codecs/rt5645.c
 +		},
 +		.driver_data = (void *)&intel_braswell_platform_data,
 +	},
-+	{
+ 	{
  		/*
  		 * Match for the GPDwin which unfortunately uses somewhat
- 		 * generic dmi strings, which is why we test for 4 strings.
-Index: lernstick-linux/sound/soc/intel/common/soc-acpi-intel-cht-match.c
-===================================================================
---- lernstick-linux.orig/sound/soc/intel/common/soc-acpi-intel-cht-match.c	2024-10-18 15:25:58.687665445 +0200
-+++ lernstick-linux/sound/soc/intel/common/soc-acpi-intel-cht-match.c	2024-10-18 15:25:58.679665285 +0200
-@@ -27,6 +27,14 @@
+diff --git a/sound/soc/intel/common/soc-acpi-intel-cht-match.c b/sound/soc/intel/common/soc-acpi-intel-cht-match.c
+index e4c3492a0c28..0b930c91bccb 100644
+--- a/sound/soc/intel/common/soc-acpi-intel-cht-match.c
++++ b/sound/soc/intel/common/soc-acpi-intel-cht-match.c
+@@ -27,6 +27,14 @@ static const struct dmi_system_id cht_table[] = {
  			DMI_MATCH(DMI_PRODUCT_NAME, "Surface 3"),
  		},
  	},
@@ -96,3 +96,6 @@ Index: lernstick-linux/sound/soc/intel/common/soc-acpi-intel-cht-match.c
  	{ }
  };
  
+-- 
+2.47.1
+

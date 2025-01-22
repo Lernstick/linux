@@ -11,11 +11,11 @@ Signed-off-by: Orlando Chamberlain <redecorating@protonmail.com>
  drivers/hwmon/applesmc.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-Index: lernstick-linux/drivers/hwmon/applesmc.c
-===================================================================
---- lernstick-linux.orig/drivers/hwmon/applesmc.c	2024-10-18 15:25:57.075633359 +0200
-+++ lernstick-linux/drivers/hwmon/applesmc.c	2024-10-18 15:25:57.071633279 +0200
-@@ -1803,6 +1803,10 @@
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index 46b64eba7..8c7b2e2cd 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -1803,6 +1803,10 @@ static const struct dmi_system_id applesmc_whitelist[] __initconst = {
  	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
  	  DMI_MATCH(DMI_PRODUCT_NAME, "Macmini") },
  	},
@@ -26,3 +26,6 @@ Index: lernstick-linux/drivers/hwmon/applesmc.c
  	{ applesmc_dmi_match, "Apple MacPro", {
  	  DMI_MATCH(DMI_BOARD_VENDOR, "Apple"),
  	  DMI_MATCH(DMI_PRODUCT_NAME, "MacPro") },
+-- 
+2.45.2
+

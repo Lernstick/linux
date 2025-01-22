@@ -1,7 +1,7 @@
-From f94e8e0b275b22c94d0cf8277c33185ed405de87 Mon Sep 17 00:00:00 2001
+From 5a1adaa13943fd27405f3bbc2ca5e2f24f9641a0 Mon Sep 17 00:00:00 2001
 From: Kerem Karabay <kekrby@gmail.com>
 Date: Sun, 5 Mar 2023 18:17:23 +0300
-Subject: [PATCH 2/2] HID: hid-appletb-kbd: add driver for the keyboard mode of
+Subject: [PATCH 2/4] HID: hid-appletb-kbd: add driver for the keyboard mode of
  Apple Touch Bars
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -23,18 +23,19 @@ Co-developed-by: Aditya Garg <gargaditya08@live.com>
 Signed-off-by: Aditya Garg <gargaditya08@live.com>
 ---
  .../ABI/testing/sysfs-driver-hid-appletb-kbd  |  13 +
- drivers/hid/Kconfig                           |  11 +
+ drivers/hid/Kconfig                           |  13 +
  drivers/hid/Makefile                          |   1 +
- drivers/hid/hid-appletb-kbd.c                 | 304 ++++++++++++++++++
+ drivers/hid/hid-appletb-kbd.c                 | 303 ++++++++++++++++++
  drivers/hid/hid-quirks.c                      |   4 +-
- 5 files changed, 332 insertions(+), 1 deletion(-)
+ 5 files changed, 333 insertions(+), 1 deletion(-)
  create mode 100644 Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
  create mode 100644 drivers/hid/hid-appletb-kbd.c
 
-Index: lernstick-linux/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd	2024-10-18 15:25:53.671565602 +0200
+diff --git a/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd b/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
+new file mode 100644
+index 000000000..2a19584d0
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
 @@ -0,0 +1,13 @@
 +What:		/sys/bus/hid/drivers/hid-appletb-kbd/<dev>/mode
 +Date:		September, 2023
@@ -49,17 +50,19 @@ Index: lernstick-linux/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
 +		2  Media/brightness keys
 +		3  None
 +		== =================
-Index: lernstick-linux/drivers/hid/Kconfig
-===================================================================
---- lernstick-linux.orig/drivers/hid/Kconfig	2024-10-18 15:25:53.679565761 +0200
-+++ lernstick-linux/drivers/hid/Kconfig	2024-10-18 15:25:53.671565602 +0200
-@@ -158,6 +158,17 @@
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index f6678db27..5b16bfadc 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -158,6 +158,19 @@ config HID_APPLETB_BL
  	  To compile this driver as a module, choose M here: the
  	  module will be called hid-appletb-bl.
  
 +config HID_APPLETB_KBD
 +	tristate "Apple Touch Bar Keyboard Mode"
 +	depends on USB_HID
++	depends on INPUT
++	select INPUT_SPARSEKMAP
 +	help
 +	  Say Y here if you want support for the keyboard mode (escape,
 +	  function, media and brightness keys) of Touch Bars on x86 MacBook
@@ -71,11 +74,11 @@ Index: lernstick-linux/drivers/hid/Kconfig
  config HID_ASUS
  	tristate "Asus"
  	depends on USB_HID
-Index: lernstick-linux/drivers/hid/Makefile
-===================================================================
---- lernstick-linux.orig/drivers/hid/Makefile	2024-10-18 15:25:53.679565761 +0200
-+++ lernstick-linux/drivers/hid/Makefile	2024-10-18 15:25:53.675565682 +0200
-@@ -30,6 +30,7 @@
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index 444d24cec..1989288e0 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -30,6 +30,7 @@ obj-$(CONFIG_HID_ACRUX)		+= hid-axff.o
  obj-$(CONFIG_HID_APPLE)		+= hid-apple.o
  obj-$(CONFIG_HID_APPLEIR)	+= hid-appleir.o
  obj-$(CONFIG_HID_APPLETB_BL)	+= hid-appletb-bl.o
@@ -83,11 +86,12 @@ Index: lernstick-linux/drivers/hid/Makefile
  obj-$(CONFIG_HID_CREATIVE_SB0540)	+= hid-creative-sb0540.o
  obj-$(CONFIG_HID_ASUS)		+= hid-asus.o
  obj-$(CONFIG_HID_AUREAL)	+= hid-aureal.o
-Index: lernstick-linux/drivers/hid/hid-appletb-kbd.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/hid/hid-appletb-kbd.c	2024-10-18 15:25:53.675565682 +0200
-@@ -0,0 +1,304 @@
+diff --git a/drivers/hid/hid-appletb-kbd.c b/drivers/hid/hid-appletb-kbd.c
+new file mode 100644
+index 000000000..80c87396f
+--- /dev/null
++++ b/drivers/hid/hid-appletb-kbd.c
+@@ -0,0 +1,303 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Apple Touch Bar Keyboard Mode Driver
@@ -279,9 +283,8 @@ Index: lernstick-linux/drivers/hid/hid-appletb-kbd.c
 +
 +	sparse_keymap_setup(input, appletb_kbd_keymap, NULL);
 +
-+	for (idx = 0; appletb_kbd_keymap[idx].type != KE_END; idx++) {
++	for (idx = 0; appletb_kbd_keymap[idx].type != KE_END; idx++)
 +		input_set_capability(input, EV_KEY, appletb_kbd_keymap[idx].code);
-+	}
 +
 +	return 0;
 +}
@@ -392,11 +395,11 @@ Index: lernstick-linux/drivers/hid/hid-appletb-kbd.c
 +MODULE_AUTHOR("Kerem Karabay <kekrby@gmail.com>");
 +MODULE_DESCRIPTION("MacBookPro Touch Bar Keyboard Mode Driver");
 +MODULE_LICENSE("GPL");
-Index: lernstick-linux/drivers/hid/hid-quirks.c
-===================================================================
---- lernstick-linux.orig/drivers/hid/hid-quirks.c	2024-10-18 15:25:53.679565761 +0200
-+++ lernstick-linux/drivers/hid/hid-quirks.c	2024-10-18 15:25:53.675565682 +0200
-@@ -328,7 +328,6 @@
+diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+index 818d41a35..7c576d654 100644
+--- a/drivers/hid/hid-quirks.c
++++ b/drivers/hid/hid-quirks.c
+@@ -328,7 +328,6 @@ static const struct hid_device_id hid_have_special_driver[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021) },
@@ -404,7 +407,7 @@ Index: lernstick-linux/drivers/hid/hid-quirks.c
  #endif
  #if IS_ENABLED(CONFIG_HID_APPLEIR)
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL) },
-@@ -340,6 +339,9 @@
+@@ -340,6 +339,9 @@ static const struct hid_device_id hid_have_special_driver[] = {
  #if IS_ENABLED(CONFIG_HID_APPLETB_BL)
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT) },
  #endif
@@ -414,3 +417,6 @@ Index: lernstick-linux/drivers/hid/hid-quirks.c
  #if IS_ENABLED(CONFIG_HID_ASUS)
  	{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_KEYBOARD) },
  	{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_TOUCHPAD) },
+-- 
+2.43.0
+

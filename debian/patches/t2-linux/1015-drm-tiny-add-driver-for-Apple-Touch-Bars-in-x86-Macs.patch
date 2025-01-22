@@ -25,11 +25,11 @@ Signed-off-by: Kerem Karabay <kekrby@gmail.com>
  4 files changed, 643 insertions(+)
  create mode 100644 drivers/gpu/drm/tiny/appletbdrm.c
 
-Index: lernstick-linux/MAINTAINERS
-===================================================================
---- lernstick-linux.orig/MAINTAINERS	2024-10-18 15:25:55.103594106 +0200
-+++ lernstick-linux/MAINTAINERS	2024-10-18 15:25:55.095593947 +0200
-@@ -6728,6 +6728,12 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 519b3b736..dfc63d257 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6372,6 +6372,12 @@ S:	Supported
  T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
  F:	drivers/gpu/drm/sun4i/sun8i*
  
@@ -42,10 +42,10 @@ Index: lernstick-linux/MAINTAINERS
  DRM DRIVER FOR ARM PL111 CLCD
  S:	Orphan
  T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
-Index: lernstick-linux/drivers/gpu/drm/tiny/Kconfig
-===================================================================
---- lernstick-linux.orig/drivers/gpu/drm/tiny/Kconfig	2024-10-18 15:25:55.103594106 +0200
-+++ lernstick-linux/drivers/gpu/drm/tiny/Kconfig	2024-10-18 15:25:55.095593947 +0200
+diff --git a/drivers/gpu/drm/tiny/Kconfig b/drivers/gpu/drm/tiny/Kconfig
+index f6889f649..559a97bce 100644
+--- a/drivers/gpu/drm/tiny/Kconfig
++++ b/drivers/gpu/drm/tiny/Kconfig
 @@ -1,5 +1,17 @@
  # SPDX-License-Identifier: GPL-2.0-only
  
@@ -64,10 +64,10 @@ Index: lernstick-linux/drivers/gpu/drm/tiny/Kconfig
  config DRM_ARCPGU
  	tristate "ARC PGU"
  	depends on DRM && OF
-Index: lernstick-linux/drivers/gpu/drm/tiny/Makefile
-===================================================================
---- lernstick-linux.orig/drivers/gpu/drm/tiny/Makefile	2024-10-18 15:25:55.103594106 +0200
-+++ lernstick-linux/drivers/gpu/drm/tiny/Makefile	2024-10-18 15:25:55.095593947 +0200
+diff --git a/drivers/gpu/drm/tiny/Makefile b/drivers/gpu/drm/tiny/Makefile
+index 76dde89a0..9a1b412e7 100644
+--- a/drivers/gpu/drm/tiny/Makefile
++++ b/drivers/gpu/drm/tiny/Makefile
 @@ -1,5 +1,6 @@
  # SPDX-License-Identifier: GPL-2.0-only
  
@@ -75,10 +75,11 @@ Index: lernstick-linux/drivers/gpu/drm/tiny/Makefile
  obj-$(CONFIG_DRM_ARCPGU)		+= arcpgu.o
  obj-$(CONFIG_DRM_BOCHS)			+= bochs.o
  obj-$(CONFIG_DRM_CIRRUS_QEMU)		+= cirrus.o
-Index: lernstick-linux/drivers/gpu/drm/tiny/appletbdrm.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/gpu/drm/tiny/appletbdrm.c	2024-10-18 15:25:55.099594026 +0200
+diff --git a/drivers/gpu/drm/tiny/appletbdrm.c b/drivers/gpu/drm/tiny/appletbdrm.c
+new file mode 100644
+index 000000000..33a99436b
+--- /dev/null
++++ b/drivers/gpu/drm/tiny/appletbdrm.c
 @@ -0,0 +1,624 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -89,7 +90,7 @@ Index: lernstick-linux/drivers/gpu/drm/tiny/appletbdrm.c
 +
 +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 +
-+#include <asm/unaligned.h>
++#include <linux/unaligned.h>
 +
 +#include <linux/usb.h>
 +#include <linux/module.h>
@@ -704,3 +705,6 @@ Index: lernstick-linux/drivers/gpu/drm/tiny/appletbdrm.c
 +MODULE_AUTHOR("Kerem Karabay <kekrby@gmail.com>");
 +MODULE_DESCRIPTION("Apple Touch Bar DRM Driver");
 +MODULE_LICENSE("GPL");
+-- 
+2.42.0
+

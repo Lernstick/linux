@@ -1,8 +1,8 @@
-From c1017aa85e76f3a5f549f56973ab895f8e22ad27 Mon Sep 17 00:00:00 2001
+From 1e34fd0bbe2ad1fd4d2091379b93ac19b84b7af3 Mon Sep 17 00:00:00 2001
 From: Kerem Karabay <kekrby@gmail.com>
 Date: Sun, 5 Mar 2023 18:52:43 +0300
-Subject: [PATCH] HID: hid-appletb-bl: add driver for the backlight of Apple
- Touch Bars
+Subject: [PATCH 1/4] HID: hid-appletb-bl: add driver for the backlight of
+ Apple Touch Bars
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -24,11 +24,11 @@ Signed-off-by: Aditya Garg <gargaditya08@live.com>
  4 files changed, 221 insertions(+), 1 deletion(-)
  create mode 100644 drivers/hid/hid-appletb-bl.c
 
-Index: lernstick-linux/drivers/hid/Kconfig
-===================================================================
---- lernstick-linux.orig/drivers/hid/Kconfig	2024-10-18 15:25:53.463561462 +0200
-+++ lernstick-linux/drivers/hid/Kconfig	2024-10-18 15:25:53.459561382 +0200
-@@ -148,6 +148,16 @@
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 4d2a89d65..f6678db27 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -148,6 +148,16 @@ config HID_APPLEIR
  
  	Say Y here if you want support for Apple infrared remote control.
  
@@ -45,11 +45,11 @@ Index: lernstick-linux/drivers/hid/Kconfig
  config HID_ASUS
  	tristate "Asus"
  	depends on USB_HID
-Index: lernstick-linux/drivers/hid/Makefile
-===================================================================
---- lernstick-linux.orig/drivers/hid/Makefile	2024-10-18 15:25:53.463561462 +0200
-+++ lernstick-linux/drivers/hid/Makefile	2024-10-18 15:25:53.459561382 +0200
-@@ -29,6 +29,7 @@
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index 24de45f36..444d24cec 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -29,6 +29,7 @@ obj-$(CONFIG_HID_ALPS)		+= hid-alps.o
  obj-$(CONFIG_HID_ACRUX)		+= hid-axff.o
  obj-$(CONFIG_HID_APPLE)		+= hid-apple.o
  obj-$(CONFIG_HID_APPLEIR)	+= hid-appleir.o
@@ -57,10 +57,11 @@ Index: lernstick-linux/drivers/hid/Makefile
  obj-$(CONFIG_HID_CREATIVE_SB0540)	+= hid-creative-sb0540.o
  obj-$(CONFIG_HID_ASUS)		+= hid-asus.o
  obj-$(CONFIG_HID_AUREAL)	+= hid-aureal.o
-Index: lernstick-linux/drivers/hid/hid-appletb-bl.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/hid/hid-appletb-bl.c	2024-10-18 15:25:53.459561382 +0200
+diff --git a/drivers/hid/hid-appletb-bl.c b/drivers/hid/hid-appletb-bl.c
+new file mode 100644
+index 000000000..819157686
+--- /dev/null
++++ b/drivers/hid/hid-appletb-bl.c
 @@ -0,0 +1,207 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -269,11 +270,11 @@ Index: lernstick-linux/drivers/hid/hid-appletb-bl.c
 +MODULE_AUTHOR("Kerem Karabay <kekrby@gmail.com>");
 +MODULE_DESCRIPTION("MacBookPro Touch Bar Backlight Driver");
 +MODULE_LICENSE("GPL");
-Index: lernstick-linux/drivers/hid/hid-quirks.c
-===================================================================
---- lernstick-linux.orig/drivers/hid/hid-quirks.c	2024-10-18 15:25:53.463561462 +0200
-+++ lernstick-linux/drivers/hid/hid-quirks.c	2024-10-18 15:25:53.459561382 +0200
-@@ -328,7 +328,6 @@
+diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+index e0bbf0c63..818d41a35 100644
+--- a/drivers/hid/hid-quirks.c
++++ b/drivers/hid/hid-quirks.c
+@@ -328,7 +328,6 @@ static const struct hid_device_id hid_have_special_driver[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021) },
@@ -281,7 +282,7 @@ Index: lernstick-linux/drivers/hid/hid-quirks.c
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY) },
  #endif
  #if IS_ENABLED(CONFIG_HID_APPLEIR)
-@@ -338,6 +337,9 @@
+@@ -338,6 +337,9 @@ static const struct hid_device_id hid_have_special_driver[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL4) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL5) },
  #endif
@@ -291,3 +292,6 @@ Index: lernstick-linux/drivers/hid/hid-quirks.c
  #if IS_ENABLED(CONFIG_HID_ASUS)
  	{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_KEYBOARD) },
  	{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_TOUCHPAD) },
+-- 
+2.43.0
+
