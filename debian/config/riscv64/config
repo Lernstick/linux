@@ -53,6 +53,7 @@ CONFIG_AHCI_DWC=m
 ## file: drivers/cache/Kconfig
 ##
 CONFIG_SIFIVE_CCACHE=y
+CONFIG_STARFIVE_STARLINK_CACHE=y
 
 ##
 ## file: drivers/char/hw_random/Kconfig
@@ -64,6 +65,9 @@ CONFIG_HW_RANDOM_JH7110=m
 ## file: drivers/clk/sophgo/Kconfig
 ##
 CONFIG_CLK_SOPHGO_CV1800=m
+CONFIG_CLK_SOPHGO_SG2042_PLL=m
+CONFIG_CLK_SOPHGO_SG2042_CLKGEN=m
+CONFIG_CLK_SOPHGO_SG2042_RPGATE=m
 
 ##
 ## file: drivers/cpufreq/Kconfig
@@ -93,6 +97,7 @@ CONFIG_POLARFIRE_SOC_AUTO_UPDATE=m
 ## file: drivers/gpio/Kconfig
 ##
 CONFIG_GPIOLIB=y
+CONFIG_GPIO_DWAPB=m
 CONFIG_GPIO_SIFIVE=y
 
 ##
@@ -120,6 +125,7 @@ CONFIG_DRM_SUN4I=m
 ##
 CONFIG_SENSORS_LM90=m
 CONFIG_SENSORS_SFCTEMP=m
+CONFIG_SENSORS_SG2042_MCU=m
 
 ##
 ## file: drivers/i2c/Kconfig
@@ -129,12 +135,14 @@ CONFIG_I2C=y
 ##
 ## file: drivers/i2c/busses/Kconfig
 ##
+CONFIG_I2C_DESIGNWARE_CORE=y
 CONFIG_I2C_DESIGNWARE_PLATFORM=m
 CONFIG_I2C_MV64XXX=m
 
 ##
 ## file: drivers/input/misc/Kconfig
 ##
+CONFIG_INPUT_MISC=y
 CONFIG_INPUT_DA9063_ONKEY=m
 
 ##
@@ -158,6 +166,11 @@ CONFIG_LEDS_PWM_MULTICOLOR=m
 ##
 CONFIG_MAILBOX=y
 CONFIG_POLARFIRE_SOC_MAILBOX=m
+
+##
+## file: drivers/media/platform/cadence/Kconfig
+##
+CONFIG_VIDEO_CADENCE_CSI2RX=m
 
 ##
 ## file: drivers/mfd/Kconfig
@@ -211,7 +224,6 @@ CONFIG_PCI=y
 ## file: drivers/pci/controller/Kconfig
 ##
 CONFIG_PCI_HOST_GENERIC=y
-CONFIG_PCIE_MICROCHIP_HOST=y
 CONFIG_PCIE_XILINX=y
 
 ##
@@ -219,6 +231,12 @@ CONFIG_PCIE_XILINX=y
 ##
 CONFIG_PCIE_DW_PLAT_HOST=y
 CONFIG_PCIE_FU740=y
+
+##
+## file: drivers/pci/controller/plda/Kconfig
+##
+CONFIG_PCIE_MICROCHIP_HOST=y
+CONFIG_PCIE_STARFIVE_HOST=y
 
 ##
 ## file: drivers/perf/Kconfig
@@ -234,8 +252,17 @@ CONFIG_PHY_SUN4I_USB=m
 ## file: drivers/phy/starfive/Kconfig
 ##
 CONFIG_PHY_STARFIVE_JH7110_DPHY_RX=m
+CONFIG_PHY_STARFIVE_JH7110_DPHY_TX=m
 CONFIG_PHY_STARFIVE_JH7110_PCIE=m
 CONFIG_PHY_STARFIVE_JH7110_USB=m
+
+##
+## file: drivers/pinctrl/sophgo/Kconfig
+##
+CONFIG_PINCTRL_SOPHGO_CV1800B=y
+CONFIG_PINCTRL_SOPHGO_CV1812H=y
+CONFIG_PINCTRL_SOPHGO_SG2000=y
+CONFIG_PINCTRL_SOPHGO_SG2002=y
 
 ##
 ## file: drivers/power/reset/Kconfig
@@ -283,8 +310,20 @@ CONFIG_POLARFIRE_SOC_SYS_CTRL=m
 ##
 ## file: drivers/spi/Kconfig
 ##
+CONFIG_SPI_DESIGNWARE=y
+CONFIG_SPI_DW_MMIO=m
 CONFIG_SPI_SIFIVE=m
 CONFIG_SPI_SUN6I=m
+
+##
+## file: drivers/staging/media/Kconfig
+##
+CONFIG_STAGING_MEDIA=y
+
+##
+## file: drivers/staging/media/starfive/camss/Kconfig
+##
+CONFIG_VIDEO_STARFIVE_CAMSS=m
 
 ##
 ## file: drivers/tty/hvc/Kconfig
@@ -346,11 +385,26 @@ CONFIG_USB_MUSB_POLARFIRE_SOC=m
 CONFIG_NOP_USB_XCEIV=m
 
 ##
+## file: drivers/video/fbdev/Kconfig
+##
+CONFIG_FB_EFI=y
+
+##
 ## file: drivers/watchdog/Kconfig
 ##
 CONFIG_DA9063_WATCHDOG=m
 CONFIG_SUNXI_WATCHDOG=m
 CONFIG_STARFIVE_WATCHDOG=m
+
+##
+## file: init/Kconfig
+##
+## choice: Kernel compression mode
+#. Decompression is done by the bootloader, so we need to be
+#. conservative here.
+CONFIG_KERNEL_GZIP=y
+# CONFIG_KERNEL_XZ is not set
+## end choice
 
 ##
 ## file: kernel/Kconfig.kexec
