@@ -31,11 +31,10 @@ Signed-off-by: Aditya Garg <gargaditya08@live.com>
  create mode 100644 Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
  create mode 100644 drivers/hid/hid-appletb-kbd.c
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd b/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
-new file mode 100644
-index 000000000..2a19584d0
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
+Index: lernstick-linux/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ lernstick-linux/Documentation/ABI/testing/sysfs-driver-hid-appletb-kbd	2025-01-22 16:08:13.642367414 +0100
 @@ -0,0 +1,13 @@
 +What:		/sys/bus/hid/drivers/hid-appletb-kbd/<dev>/mode
 +Date:		September, 2023
@@ -50,11 +49,11 @@ index 000000000..2a19584d0
 +		2  Media/brightness keys
 +		3  None
 +		== =================
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index f6678db27..5b16bfadc 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -158,6 +158,19 @@ config HID_APPLETB_BL
+Index: lernstick-linux/drivers/hid/Kconfig
+===================================================================
+--- lernstick-linux.orig/drivers/hid/Kconfig	2025-01-22 16:08:13.650367577 +0100
++++ lernstick-linux/drivers/hid/Kconfig	2025-01-22 16:08:13.642367414 +0100
+@@ -158,6 +158,19 @@
  	  To compile this driver as a module, choose M here: the
  	  module will be called hid-appletb-bl.
  
@@ -74,11 +73,11 @@ index f6678db27..5b16bfadc 100644
  config HID_ASUS
  	tristate "Asus"
  	depends on USB_HID
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 444d24cec..1989288e0 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -30,6 +30,7 @@ obj-$(CONFIG_HID_ACRUX)		+= hid-axff.o
+Index: lernstick-linux/drivers/hid/Makefile
+===================================================================
+--- lernstick-linux.orig/drivers/hid/Makefile	2025-01-22 16:08:13.650367577 +0100
++++ lernstick-linux/drivers/hid/Makefile	2025-01-22 16:08:13.642367414 +0100
+@@ -30,6 +30,7 @@
  obj-$(CONFIG_HID_APPLE)		+= hid-apple.o
  obj-$(CONFIG_HID_APPLEIR)	+= hid-appleir.o
  obj-$(CONFIG_HID_APPLETB_BL)	+= hid-appletb-bl.o
@@ -86,11 +85,10 @@ index 444d24cec..1989288e0 100644
  obj-$(CONFIG_HID_CREATIVE_SB0540)	+= hid-creative-sb0540.o
  obj-$(CONFIG_HID_ASUS)		+= hid-asus.o
  obj-$(CONFIG_HID_AUREAL)	+= hid-aureal.o
-diff --git a/drivers/hid/hid-appletb-kbd.c b/drivers/hid/hid-appletb-kbd.c
-new file mode 100644
-index 000000000..80c87396f
---- /dev/null
-+++ b/drivers/hid/hid-appletb-kbd.c
+Index: lernstick-linux/drivers/hid/hid-appletb-kbd.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ lernstick-linux/drivers/hid/hid-appletb-kbd.c	2025-01-22 16:08:13.646367495 +0100
 @@ -0,0 +1,303 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
@@ -395,11 +393,11 @@ index 000000000..80c87396f
 +MODULE_AUTHOR("Kerem Karabay <kekrby@gmail.com>");
 +MODULE_DESCRIPTION("MacBookPro Touch Bar Keyboard Mode Driver");
 +MODULE_LICENSE("GPL");
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 818d41a35..7c576d654 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -328,7 +328,6 @@ static const struct hid_device_id hid_have_special_driver[] = {
+Index: lernstick-linux/drivers/hid/hid-quirks.c
+===================================================================
+--- lernstick-linux.orig/drivers/hid/hid-quirks.c	2025-01-22 16:08:13.650367577 +0100
++++ lernstick-linux/drivers/hid/hid-quirks.c	2025-01-22 16:08:13.646367495 +0100
+@@ -328,7 +328,6 @@
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021) },
@@ -407,7 +405,7 @@ index 818d41a35..7c576d654 100644
  #endif
  #if IS_ENABLED(CONFIG_HID_APPLEIR)
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_IRCONTROL) },
-@@ -340,6 +339,9 @@ static const struct hid_device_id hid_have_special_driver[] = {
+@@ -340,6 +339,9 @@
  #if IS_ENABLED(CONFIG_HID_APPLETB_BL)
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT) },
  #endif
@@ -417,6 +415,3 @@ index 818d41a35..7c576d654 100644
  #if IS_ENABLED(CONFIG_HID_ASUS)
  	{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_KEYBOARD) },
  	{ HID_I2C_DEVICE(USB_VENDOR_ID_ASUSTEK, USB_DEVICE_ID_ASUSTEK_I2C_TOUCHPAD) },
--- 
-2.43.0
-

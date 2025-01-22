@@ -15,11 +15,11 @@ Signed-off-by: Aditya Garg <gargaditya08@live.com>
  drivers/hid/hid-appletb-kbd.c | 83 +++++++++++++++++++++++++++++++++--
  2 files changed, 81 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 5b16bfadc..4dadf42a2 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -161,8 +161,10 @@ config HID_APPLETB_BL
+Index: lernstick-linux/drivers/hid/Kconfig
+===================================================================
+--- lernstick-linux.orig/drivers/hid/Kconfig	2025-01-22 16:08:15.362402427 +0100
++++ lernstick-linux/drivers/hid/Kconfig	2025-01-22 16:08:15.358402346 +0100
+@@ -161,8 +161,10 @@
  config HID_APPLETB_KBD
  	tristate "Apple Touch Bar Keyboard Mode"
  	depends on USB_HID
@@ -30,10 +30,10 @@ index 5b16bfadc..4dadf42a2 100644
  	help
  	  Say Y here if you want support for the keyboard mode (escape,
  	  function, media and brightness keys) of Touch Bars on x86 MacBook
-diff --git a/drivers/hid/hid-appletb-kbd.c b/drivers/hid/hid-appletb-kbd.c
-index de5770500..fa28a691d 100644
---- a/drivers/hid/hid-appletb-kbd.c
-+++ b/drivers/hid/hid-appletb-kbd.c
+Index: lernstick-linux/drivers/hid/hid-appletb-kbd.c
+===================================================================
+--- lernstick-linux.orig/drivers/hid/hid-appletb-kbd.c	2025-01-22 16:08:15.362402427 +0100
++++ lernstick-linux/drivers/hid/hid-appletb-kbd.c	2025-01-22 16:08:15.358402346 +0100
 @@ -16,6 +16,8 @@
  #include <linux/bitops.h>
  #include <linux/module.h>
@@ -51,7 +51,7 @@ index de5770500..fa28a691d 100644
  
  #define HID_USAGE_MODE		0x00ff0004
  
-@@ -41,14 +44,29 @@ static bool appletb_tb_fn_toggle = true;
+@@ -41,14 +44,29 @@
  module_param_named(fntoggle, appletb_tb_fn_toggle, bool, 0644);
  MODULE_PARM_DESC(fntoggle, "Switch between Fn and media controls on pressing Fn key");
  
@@ -85,7 +85,7 @@ index de5770500..fa28a691d 100644
  };
  
  static const struct key_entry appletb_kbd_keymap[] = {
-@@ -146,6 +164,34 @@ static int appletb_tb_key_to_slot(unsigned int code)
+@@ -146,6 +164,34 @@
  	}
  }
  
@@ -120,7 +120,7 @@ index de5770500..fa28a691d 100644
  static int appletb_kbd_hid_event(struct hid_device *hdev, struct hid_field *field,
  				      struct hid_usage *usage, __s32 value)
  {
-@@ -170,6 +216,8 @@ static int appletb_kbd_hid_event(struct hid_device *hdev, struct hid_field *fiel
+@@ -170,6 +216,8 @@
  	if (slot < 0)
  		return 0;
  
@@ -129,7 +129,7 @@ index de5770500..fa28a691d 100644
  	translation = sparse_keymap_entry_from_scancode(input, usage->code);
  
  	if (translation && kbd->current_mode == APPLETB_KBD_MODE_SPCL) {
-@@ -186,6 +234,8 @@ static void appletb_kbd_inp_event(struct input_handle *handle, unsigned int type
+@@ -186,6 +234,8 @@
  {
  	struct appletb_kbd *kbd = handle->private;
  
@@ -138,7 +138,7 @@ index de5770500..fa28a691d 100644
  	if (type == EV_KEY && code == KEY_FN && appletb_tb_fn_toggle) {
  		if (value == 1) {
  			kbd->saved_mode = kbd->current_mode;
-@@ -211,6 +261,9 @@ static int appletb_kbd_inp_connect(struct input_handler *handler,
+@@ -211,6 +261,9 @@
  	if (id->driver_info == APPLETB_DEVID_KEYBOARD) {
  		handle = &kbd->kbd_handle;
  		handle->name = "tbkbd";
@@ -148,7 +148,7 @@ index de5770500..fa28a691d 100644
  	} else {
  		return -ENOENT;
  	}
-@@ -283,6 +336,15 @@ static const struct input_device_id appletb_kbd_input_devices[] = {
+@@ -283,6 +336,15 @@
  		.keybit = { [BIT_WORD(KEY_FN)] = BIT_MASK(KEY_FN) },
  		.driver_info = APPLETB_DEVID_KEYBOARD,
  	},
@@ -164,7 +164,7 @@ index de5770500..fa28a691d 100644
  	{ }
  };
  
-@@ -339,6 +401,15 @@ static int appletb_kbd_probe(struct hid_device *hdev, const struct hid_device_id
+@@ -339,6 +401,15 @@
  		goto stop_hw;
  	}
  
@@ -180,7 +180,7 @@ index de5770500..fa28a691d 100644
  	kbd->inp_handler.event = appletb_kbd_inp_event;
  	kbd->inp_handler.connect = appletb_kbd_inp_connect;
  	kbd->inp_handler.disconnect = appletb_kbd_inp_disconnect;
-@@ -377,6 +448,7 @@ static void appletb_kbd_remove(struct hid_device *hdev)
+@@ -377,6 +448,7 @@
  	appletb_kbd_set_mode(kbd, APPLETB_KBD_MODE_OFF);
  
  	input_unregister_handler(&kbd->inp_handler);
@@ -188,7 +188,7 @@ index de5770500..fa28a691d 100644
  
  	hid_hw_close(hdev);
  	hid_hw_stop(hdev);
-@@ -425,6 +497,9 @@ static struct hid_driver appletb_kbd_hid_driver = {
+@@ -425,6 +497,9 @@
  };
  module_hid_driver(appletb_kbd_hid_driver);
  
@@ -198,6 +198,3 @@ index de5770500..fa28a691d 100644
  MODULE_AUTHOR("Ronald Tschalär");
  MODULE_AUTHOR("Kerem Karabay <kekrby@gmail.com>");
  MODULE_DESCRIPTION("MacBookPro Touch Bar Keyboard Mode Driver");
--- 
-2.43.0
-

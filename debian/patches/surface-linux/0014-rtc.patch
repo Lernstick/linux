@@ -20,11 +20,11 @@ Patchset: rtc
  drivers/acpi/acpi_tad.c | 36 ++++++++++++++++++++++++------------
  1 file changed, 24 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/acpi/acpi_tad.c b/drivers/acpi/acpi_tad.c
-index b831cb8e53dc..78bd0f926505 100644
---- a/drivers/acpi/acpi_tad.c
-+++ b/drivers/acpi/acpi_tad.c
-@@ -433,6 +433,14 @@ static ssize_t caps_show(struct device *dev, struct device_attribute *attr,
+Index: lernstick-linux/drivers/acpi/acpi_tad.c
+===================================================================
+--- lernstick-linux.orig/drivers/acpi/acpi_tad.c	2025-01-22 16:08:20.770512501 +0100
++++ lernstick-linux/drivers/acpi/acpi_tad.c	2025-01-22 16:08:20.766512420 +0100
+@@ -433,6 +433,14 @@
  
  static DEVICE_ATTR_RO(caps);
  
@@ -39,7 +39,7 @@ index b831cb8e53dc..78bd0f926505 100644
  static ssize_t ac_alarm_store(struct device *dev, struct device_attribute *attr,
  			      const char *buf, size_t count)
  {
-@@ -481,15 +489,14 @@ static ssize_t ac_status_show(struct device *dev, struct device_attribute *attr,
+@@ -481,15 +489,14 @@
  
  static DEVICE_ATTR_RW(ac_status);
  
@@ -58,7 +58,7 @@ index b831cb8e53dc..78bd0f926505 100644
  };
  
  static ssize_t dc_alarm_store(struct device *dev, struct device_attribute *attr,
-@@ -565,13 +572,18 @@ static void acpi_tad_remove(struct platform_device *pdev)
+@@ -565,13 +572,18 @@
  
  	pm_runtime_get_sync(dev);
  
@@ -79,7 +79,7 @@ index b831cb8e53dc..78bd0f926505 100644
  	if (dd->capabilities & ACPI_TAD_DC_WAKE) {
  		acpi_tad_disable_timer(dev, ACPI_TAD_DC_TIMER);
  		acpi_tad_clear_status(dev, ACPI_TAD_DC_TIMER);
-@@ -613,12 +625,6 @@ static int acpi_tad_probe(struct platform_device *pdev)
+@@ -613,12 +625,6 @@
  		goto remove_handler;
  	}
  
@@ -92,7 +92,7 @@ index b831cb8e53dc..78bd0f926505 100644
  	dd = devm_kzalloc(dev, sizeof(*dd), GFP_KERNEL);
  	if (!dd) {
  		ret = -ENOMEM;
-@@ -649,6 +655,12 @@ static int acpi_tad_probe(struct platform_device *pdev)
+@@ -649,6 +655,12 @@
  	if (ret)
  		goto fail;
  
@@ -105,6 +105,3 @@ index b831cb8e53dc..78bd0f926505 100644
  	if (caps & ACPI_TAD_DC_WAKE) {
  		ret = sysfs_create_group(&dev->kobj, &acpi_tad_dc_attr_group);
  		if (ret)
--- 
-2.47.1
-

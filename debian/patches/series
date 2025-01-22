@@ -123,7 +123,7 @@ t2-linux/1007-HID-multitouch-support-getting-the-contact-ID-from.patch
 t2-linux/1008-HID-multitouch-support-getting-the-tip-state-from-HI.patch
 t2-linux/1009-HID-multitouch-take-cls-maxcontacts-into-account-for.patch
 t2-linux/1010-HID-multitouch-allow-specifying-if-a-device-is-direc.patch
-t2-linux/1011-HID-multitouch-add-device-ID-for-Apple-Touch-Bars.patch
+#t2-linux/1011-HID-multitouch-add-device-ID-for-Apple-Touch-Bars.patch
 t2-linux/1012-lib-vsprintf-Add-support-for-generic-FOURCCs-by-exte.patch
 t2-linux/1014-drm-format-helper-add-helper-for-BGR888-to-XRGB8888-.patch
 t2-linux/1015-drm-tiny-add-driver-for-Apple-Touch-Bars-in-x86-Macs.patch
