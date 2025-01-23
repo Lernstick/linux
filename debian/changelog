@@ -1,3 +1,9 @@
+linux (6.12.9-1~bpo12+lernstick.1) lernstick-12-backports; urgency=medium
+
+  * Rebuild for Lernstick 12.
+
+ -- Jörg Berkel <joerg.berkel@bfh.ch>  Thu, 23 Jan 2025 09:47:07 +0100
+
 linux (6.12.9-1~bpo12+1) bookworm-backports; urgency=medium
 
   * Rebuild for bookworm-backports:
