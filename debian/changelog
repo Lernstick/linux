@@ -1,3 +1,9 @@
+linux (6.16.3-1~bpo13+1) UNRELEASED; urgency=medium
+
+  * Rebuild for trixie-backports
+
+ -- Ben Hutchings <benh@debian.org>  Sat, 06 Sep 2025 17:35:14 +0200
+
 linux (6.16.3-1) unstable; urgency=medium
 
   * New upstream stable update:
