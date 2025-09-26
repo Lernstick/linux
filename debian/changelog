@@ -1,3 +1,9 @@
+linux (6.16.3-1~bpo13+lernstick.1) lernstick-13-backports; urgency=medium
+
+  * Rebuild for Lernstick 13
+
+ -- Jörg Berkel <joerg.berkel@bfh.ch>  Fri, 26 Sep 2025 11:17:33 +0200
+
 linux (6.16.3-1~bpo13+1) trixie-backports; urgency=medium
 
   * Rebuild for trixie-backports:
