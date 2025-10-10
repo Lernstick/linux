@@ -471,6 +471,10 @@ linux-signed-{vars['arch']} (@signedtemplate_sourceversion@) {dist}; urgency={ur
         makeflags['KCONFIG_OPTIONS'] += \
             ' -o "BUILD_SALT=\\"%(abiname)s%(localversion)s\\""' % vars
 
+        if config.build.trusted_certs:
+            makeflags['KCONFIG_OPTIONS'] += \
+                f' -o "SYSTEM_TRUSTED_KEYS=\\"${{CURDIR}}/{config.build.trusted_certs}\\""'
+
         merged_config = ('debian/build/config.%s_%s_%s' %
                          (config.name_debianarch, config.name_featureset, config.name_flavour))
         self.bundle.makefile.add_cmds(merged_config,

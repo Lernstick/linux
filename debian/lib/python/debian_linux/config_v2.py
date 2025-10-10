@@ -51,7 +51,7 @@ class ConfigBuild:
     enable_vdso: Optional[bool] = None
     kernel_file: Optional[str] = None
     kernel_stem: Optional[str] = None
-
+    trusted_certs: Optional[str] = None
 
 @dataclasses.dataclass
 class ConfigDescription:
