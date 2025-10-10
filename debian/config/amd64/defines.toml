@@ -6,26 +6,7 @@ is_default = true
 hardware = '64-bit PCs'
 hardware_long = 'PCs with AMD64, Intel 64 or VIA Nano processors'
 [flavour.packages]
-installer = true
-
-[[flavour]]
-name = 'cloud-amd64'
-[flavour.build]
-config = ['config.cloud']
-[flavour.defs]
-is_quick = true
-[flavour.description]
-hardware = 'x86-64 cloud'
-hardware_long = 'cloud platforms including Amazon EC2, Microsoft Azure, and Google Compute Engine'
-
-[[flavour]]
-name = 'rt-amd64'
-[flavour.build]
-config = ['config.rt']
-[flavour.description]
-hardware = '64-bit PCs'
-hardware_long = 'PCs with AMD64, Intel 64 or VIA Nano processors'
-parts = ['rt']
+installer = false
 
 [[featureset]]
 name = 'none'
@@ -38,3 +19,10 @@ kernel_stem = 'vmlinuz'
 
 [relations.image]
 suggests = ['grub-pc | grub-efi-amd64 | extlinux']
+
+# manually tinkered-- might break again (Debian WIP):
+[packages]
+docs = false
+source = false
+tools_unversioned = false
+installer = false
