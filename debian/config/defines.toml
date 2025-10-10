@@ -41,6 +41,11 @@ name_regex = 'bookworm-backports'
 abi_suffix = '+deb12'
 revision_regex = '\d+(\.\d+)?(\+deb13u\d+)?~bpo12\+\d+'
 
+[[debianrelease]]
+name_regex = 'lernstick-13(-backports)?'
+abi_suffix = '+deb13'
+revision_regex = '\d+(\.\d+)?(\+deb14u\d+)?~bpo13\+lernstick\.\d+'
+
 # Use default rules for any suite with no explicit config
 [[debianrelease]]
 name_regex = '.*'
