@@ -15,11 +15,11 @@ Signed-off-by: Aditya Garg <gargaditya08@live.com>
  drivers/hid/hid-multitouch.c | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 99ecf6c8e..f71500d1f 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -1335,6 +1335,13 @@ static int mt_touch_input_configured(struct hid_device *hdev,
+Index: lernstick-linux/drivers/hid/hid-multitouch.c
+===================================================================
+--- lernstick-linux.orig/drivers/hid/hid-multitouch.c	2025-10-13 14:24:14.132953033 +0200
++++ lernstick-linux/drivers/hid/hid-multitouch.c	2025-10-13 14:24:14.128952931 +0200
+@@ -1335,6 +1335,13 @@
  	struct input_dev *input = hi->input;
  	int ret;
  
@@ -33,6 +33,3 @@ index 99ecf6c8e..f71500d1f 100644
  	if (!td->maxcontacts)
  		td->maxcontacts = MT_DEFAULT_MAXCONTACT;
  
--- 
-2.49.0
-

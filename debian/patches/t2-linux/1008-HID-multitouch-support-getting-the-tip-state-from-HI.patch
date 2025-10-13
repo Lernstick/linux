@@ -17,11 +17,11 @@ Signed-off-by: Aditya Garg <gargaditya08@live.com>
  drivers/hid/hid-multitouch.c | 15 +++++++++++----
  1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 2788a081f..99ecf6c8e 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -827,6 +827,17 @@ static int mt_touch_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+Index: lernstick-linux/drivers/hid/hid-multitouch.c
+===================================================================
+--- lernstick-linux.orig/drivers/hid/hid-multitouch.c	2025-10-13 14:24:13.912947493 +0200
++++ lernstick-linux/drivers/hid/hid-multitouch.c	2025-10-13 14:24:13.904947292 +0200
+@@ -827,6 +827,17 @@
  
  			MT_STORE_FIELD(confidence_state);
  			return 1;
@@ -39,7 +39,7 @@ index 2788a081f..99ecf6c8e 100644
  		case HID_DG_TIPSWITCH:
  			if (field->application != HID_GD_SYSTEM_MULTIAXIS)
  				input_set_capability(hi->input,
-@@ -897,10 +908,6 @@ static int mt_touch_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+@@ -897,10 +908,6 @@
  		case HID_DG_CONTACTMAX:
  			/* contact max are global to the report */
  			return -1;
@@ -50,6 +50,3 @@ index 2788a081f..99ecf6c8e 100644
  		}
  		/* let hid-input decide for the others */
  		return 0;
--- 
-2.49.0
-

@@ -13,11 +13,11 @@ Signed-off-by: Aditya Garg <gargaditya08@live.com>
  drivers/hid/hid-magicmouse.c | 371 +++++++++++++++++++++++++++++------
  1 file changed, 313 insertions(+), 58 deletions(-)
 
-diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
-index d5ab547b1..eb62752d7 100644
---- a/drivers/hid/hid-magicmouse.c
-+++ b/drivers/hid/hid-magicmouse.c
-@@ -117,6 +117,94 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+Index: lernstick-linux/drivers/hid/hid-magicmouse.c
+===================================================================
+--- lernstick-linux.orig/drivers/hid/hid-magicmouse.c	2025-10-13 14:24:18.325058553 +0200
++++ lernstick-linux/drivers/hid/hid-magicmouse.c	2025-10-13 14:24:18.317058351 +0200
+@@ -118,6 +118,94 @@
  #define TRACKPAD2_RES_Y \
  	((TRACKPAD2_MAX_Y - TRACKPAD2_MIN_Y) / (TRACKPAD2_DIMENSION_Y / 100))
  
@@ -112,7 +112,7 @@ index d5ab547b1..eb62752d7 100644
  /* These are fallback values, since the real values will be queried from the device. */
  #define J314_TP_DIMENSION_X (float)13000
  #define J314_TP_MIN_X -5900
-@@ -129,7 +217,11 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+@@ -130,7 +218,11 @@
  #define J314_TP_RES_Y \
  	((J314_TP_MAX_Y - J314_TP_MIN_Y) / (J314_TP_DIMENSION_Y / 100))
  
@@ -125,7 +125,7 @@ index d5ab547b1..eb62752d7 100644
  
  struct magicmouse_input_ops {
  	int (*raw_event)(struct hid_device *hdev,
-@@ -196,24 +288,46 @@ static int magicmouse_enable_multitouch(struct hid_device *hdev)
+@@ -197,24 +289,46 @@
  	int ret;
  	int feature_size;
  
@@ -187,7 +187,7 @@ index d5ab547b1..eb62752d7 100644
  	}
  
  	buf = kmemdup(feature, feature_size, GFP_KERNEL);
-@@ -784,7 +897,7 @@ static void report_finger_data(struct input_dev *input, int slot,
+@@ -788,7 +902,7 @@
  	input_report_abs(input, ABS_MT_WIDTH_MINOR,
  			 le16_to_int(f->tool_minor) << 1);
  	input_report_abs(input, ABS_MT_ORIENTATION,
@@ -196,7 +196,7 @@ index d5ab547b1..eb62752d7 100644
  	input_report_abs(input, ABS_MT_PRESSURE, le16_to_int(f->pressure));
  	input_report_abs(input, ABS_MT_POSITION_X, pos->x);
  	input_report_abs(input, ABS_MT_POSITION_Y, pos->y);
-@@ -872,6 +985,20 @@ static int magicmouse_raw_event_spi(struct hid_device *hdev,
+@@ -876,6 +990,20 @@
  	return magicmouse_raw_event_mtp(hdev, report, data + hdr_sz, size - hdr_sz);
  }
  
@@ -217,7 +217,7 @@ index d5ab547b1..eb62752d7 100644
  static int magicmouse_event(struct hid_device *hdev, struct hid_field *field,
  		struct hid_usage *usage, __s32 value)
  {
-@@ -1063,8 +1190,31 @@ static int magicmouse_setup_input_usb(struct input_dev *input,
+@@ -1073,8 +1201,31 @@
  	return 0;
  }
  
@@ -251,7 +251,7 @@ index d5ab547b1..eb62752d7 100644
  {
  	int error;
  	int mt_flags = 0;
-@@ -1105,19 +1255,17 @@ static int magicmouse_setup_input_mtp(struct input_dev *input,
+@@ -1115,19 +1266,17 @@
  	input_abs_set_res(input, ABS_MT_PRESSURE, 1);
  
  	/* finger orientation */
@@ -277,7 +277,7 @@ index d5ab547b1..eb62752d7 100644
  
  	input_set_events_per_packet(input, 60);
  
-@@ -1144,7 +1292,20 @@ static int magicmouse_setup_input_mtp(struct input_dev *input,
+@@ -1154,7 +1303,20 @@
  	 */
  	input->open = magicmouse_open;
  	input->close = magicmouse_close;
@@ -299,7 +299,7 @@ index d5ab547b1..eb62752d7 100644
  
  	return 0;
  }
-@@ -1152,7 +1313,34 @@ static int magicmouse_setup_input_mtp(struct input_dev *input,
+@@ -1162,7 +1324,34 @@
  static int magicmouse_setup_input_spi(struct input_dev *input,
  				      struct hid_device *hdev)
  {
@@ -335,7 +335,7 @@ index d5ab547b1..eb62752d7 100644
  	if (ret)
  		return ret;
  
-@@ -1244,8 +1432,22 @@ static int magicmouse_probe(struct hid_device *hdev,
+@@ -1269,8 +1458,22 @@
  	int ret;
  
  	if ((id->bus == BUS_SPI || id->bus == BUS_HOST) && id->vendor == SPI_VENDOR_ID_APPLE &&
@@ -360,7 +360,7 @@ index d5ab547b1..eb62752d7 100644
  
  	msc = devm_kzalloc(&hdev->dev, sizeof(*msc), GFP_KERNEL);
  	if (msc == NULL) {
-@@ -1255,16 +1457,32 @@ static int magicmouse_probe(struct hid_device *hdev,
+@@ -1280,16 +1483,32 @@
  
  	// internal trackpad use a data format use input ops to avoid
  	// conflicts with the report ID.
@@ -399,7 +399,7 @@ index d5ab547b1..eb62752d7 100644
  	}
  
  	msc->scroll_accel = SCROLL_ACCEL_DEFAULT;
-@@ -1336,6 +1336,17 @@ static int magicmouse_probe(struct hid_device *hdev,
+@@ -1350,6 +1569,17 @@
  				TRACKPAD2_USB_REPORT_ID, 0);
  		}
  		break;
@@ -417,7 +417,7 @@ index d5ab547b1..eb62752d7 100644
  	default: /* USB_DEVICE_ID_APPLE_MAGICTRACKPAD */
  		if (id->bus == BUS_SPI) {
  			report = hid_register_report(hdev, HID_INPUT_REPORT, SPI_REPORT_ID, 0);
-@@ -1414,6 +1653,22 @@ static const struct hid_device_id magic_mice[] = {
+@@ -1467,6 +1697,22 @@
  		USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC), .driver_data = 0 },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE,
  		USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC), .driver_data = 0 },
@@ -440,6 +440,3 @@ index d5ab547b1..eb62752d7 100644
  	{ HID_SPI_DEVICE(SPI_VENDOR_ID_APPLE, HID_ANY_ID),
  	  .driver_data = 0 },
  	{ HID_DEVICE(BUS_HOST, HID_GROUP_ANY, HOST_VENDOR_ID_APPLE,
--- 
-2.43.0
-
