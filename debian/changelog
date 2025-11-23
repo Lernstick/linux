@@ -2,6 +2,7 @@ linux (6.17.8-1~bpo13+1) UNRELEASED; urgency=medium
 
   * Rebuild for trixie-backports:
     - d/salsa-ci.yml: Set RELEASE to trixie-backports
+    - Revert "Compile with gcc-15 on all architectures"
 
  -- Ben Hutchings <benh@debian.org>  Sun, 23 Nov 2025 23:15:31 +0100
 
