@@ -106,16 +106,10 @@ bugfix/all/tools-hv-Make-the-sample-hv_get_dhcp_info-script-mor.patch
 # ABI maintenance
 
 # Lernstick specific patches
-
 t2-linux/1001-Add-apple-bce-driver.patch
 t2-linux/1002-Put-apple-bce-in-drivers-staging.patch
 t2-linux/1003-Fix-sparse-errors.patch
 t2-linux/1004-Fix-freezing-on-turning-off-camera.patch
-t2-linux/1007-HID-multitouch-Get-the-contact-ID-from-HID_DG_TRANSD.patch
-t2-linux/1008-HID-multitouch-support-getting-the-tip-state-from-HI.patch
-t2-linux/1009-HID-multitouch-take-cls-maxcontacts-into-account-for.patch
-t2-linux/1010-HID-multitouch-specify-that-Apple-Touch-Bar-is-direc.patch
-t2-linux/1011-HID-multitouch-add-device-ID-for-Apple-Touch-Bar.patch
 t2-linux/2008-i915-4-lane-quirk-for-mbp15-1.patch
 t2-linux/2009-apple-gmux-allow-switching-to-igpu-at-probe.patch
 t2-linux/3001-applesmc-convert-static-structures-to-drvdata.patch
@@ -128,11 +122,9 @@ t2-linux/3007-applesmc-Add-iMacPro-to-applesmc_whitelist.patch
 t2-linux/3008-applesmc-make-applesmc_remove-void.patch
 t2-linux/3009-applesmc-battery-charge-limiter.patch
 t2-linux/4001-asahi-trackpad.patch
-t2-linux/4002-HID-quirks-remove-T2-devices-from-hid_mouse_ignore_l.patch
 t2-linux/4003-HID-apple-ignore-the-trackpad-on-T2-Macs.patch
 t2-linux/4004-HID-magicmouse-Add-support-for-trackpads-found-on-T2.patch
-t2-linux/4005-HID-apple-Add-necessary-IDs-and-support-for-replacem.patch
-t2-linux/4006-HID-magicmouse-Add-MacBookPro15-1-replacement-trackp.patch
+t2-linux/4005-HID-magicmouse-fix-regression-breaking-support-for-M.patch
 t2-linux/7001-drm-i915-fbdev-Discard-BIOS-framebuffers-exceeding-h.patch
 
 surface-linux/0001-secureboot.patch
