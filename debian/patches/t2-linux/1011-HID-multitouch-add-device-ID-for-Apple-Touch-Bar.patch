@@ -17,11 +17,11 @@ Signed-off-by: Aditya Garg <gargaditya08@live.com>
  drivers/hid/hid-multitouch.c | 17 +++++++++++++++++
  2 files changed, 18 insertions(+)
 
-Index: lernstick-linux/drivers/hid/Kconfig
-===================================================================
---- lernstick-linux.orig/drivers/hid/Kconfig	2025-10-13 14:24:14.564963909 +0200
-+++ lernstick-linux/drivers/hid/Kconfig	2025-10-13 14:24:14.560963809 +0200
-@@ -771,6 +771,7 @@
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index a50325270..403f4517f 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -769,6 +769,7 @@ config HID_MULTITOUCH
  	  Say Y here if you have one of the following devices:
  	  - 3M PCT touch screens
  	  - ActionStar dual touch panels
@@ -29,11 +29,11 @@ Index: lernstick-linux/drivers/hid/Kconfig
  	  - Atmel panels
  	  - Cando dual touch panels
  	  - Chunghwa panels
-Index: lernstick-linux/drivers/hid/hid-multitouch.c
-===================================================================
---- lernstick-linux.orig/drivers/hid/hid-multitouch.c	2025-10-13 14:24:14.564963909 +0200
-+++ lernstick-linux/drivers/hid/hid-multitouch.c	2025-10-13 14:24:14.560963809 +0200
-@@ -221,6 +221,7 @@
+diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+index 81c02138f..a1b251ea6 100644
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -221,6 +221,7 @@ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
  #define MT_CLS_GOOGLE				0x0111
  #define MT_CLS_RAZER_BLADE_STEALTH		0x0112
  #define MT_CLS_SMART_TECH			0x0113
@@ -41,7 +41,7 @@ Index: lernstick-linux/drivers/hid/hid-multitouch.c
  #define MT_CLS_SIS				0x0457
  
  #define MT_DEFAULT_MAXCONTACT	10
-@@ -406,6 +407,12 @@
+@@ -406,6 +407,12 @@ static const struct mt_class mt_classes[] = {
  			MT_QUIRK_CONTACT_CNT_ACCURATE |
  			MT_QUIRK_SEPARATE_APP_REPORT,
  	},
@@ -54,7 +54,7 @@ Index: lernstick-linux/drivers/hid/hid-multitouch.c
  	{ .name = MT_CLS_SIS,
  		.quirks = MT_QUIRK_NOT_SEEN_MEANS_UP |
  			MT_QUIRK_ALWAYS_VALID |
-@@ -1858,6 +1865,11 @@
+@@ -1858,6 +1865,11 @@ static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
  	if (ret != 0)
  		return ret;
  
@@ -66,7 +66,7 @@ Index: lernstick-linux/drivers/hid/hid-multitouch.c
  	if (mtclass->quirks & MT_QUIRK_FIX_CONST_CONTACT_ID)
  		mt_fix_const_fields(hdev, HID_DG_CONTACTID);
  
-@@ -2355,6 +2367,11 @@
+@@ -2339,6 +2351,11 @@ static const struct hid_device_id mt_devices[] = {
  		MT_USB_DEVICE(USB_VENDOR_ID_XIROKU,
  			USB_DEVICE_ID_XIROKU_CSR2) },
  
@@ -78,3 +78,6 @@ Index: lernstick-linux/drivers/hid/hid-multitouch.c
  	/* Google MT devices */
  	{ .driver_data = MT_CLS_GOOGLE,
  		HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY, USB_VENDOR_ID_GOOGLE,
+-- 
+2.49.0
+

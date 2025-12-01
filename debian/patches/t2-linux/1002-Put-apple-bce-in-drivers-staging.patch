@@ -11,30 +11,31 @@ Subject: [PATCH] Put apple-bce in drivers/staging
  4 files changed, 22 insertions(+), 1 deletion(-)
  create mode 100644 drivers/staging/apple-bce/Kconfig
 
-Index: lernstick-linux/drivers/staging/Kconfig
-===================================================================
---- lernstick-linux.orig/drivers/staging/Kconfig	2025-10-13 14:24:13.012924830 +0200
-+++ lernstick-linux/drivers/staging/Kconfig	2025-10-13 14:24:13.004924628 +0200
-@@ -50,4 +50,6 @@
+diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
+index 5cfabd537..3b8e61d26 100644
+--- a/drivers/staging/Kconfig
++++ b/drivers/staging/Kconfig
+@@ -50,4 +50,6 @@ source "drivers/staging/vme_user/Kconfig"
  
  source "drivers/staging/gpib/Kconfig"
  
 +source "drivers/staging/apple-bce/Kconfig"
 +
  endif # STAGING
-Index: lernstick-linux/drivers/staging/Makefile
-===================================================================
---- lernstick-linux.orig/drivers/staging/Makefile	2025-10-13 14:24:13.012924830 +0200
-+++ lernstick-linux/drivers/staging/Makefile	2025-10-13 14:24:13.004924628 +0200
-@@ -14,3 +14,4 @@
+diff --git a/drivers/staging/Makefile b/drivers/staging/Makefile
+index f8c3aa9c2..1e148d6c3 100644
+--- a/drivers/staging/Makefile
++++ b/drivers/staging/Makefile
+@@ -29,3 +29,4 @@ obj-$(CONFIG_BCM2835_VCHIQ)	+= vc04_services/
  obj-$(CONFIG_BCM2835_VCHIQ)	+= vc04_services/
  obj-$(CONFIG_XIL_AXIS_FIFO)	+= axis-fifo/
  obj-$(CONFIG_GPIB)	 	+= gpib/
 +obj-$(CONFIG_APPLE_BCE)		+= apple-bce/
-Index: lernstick-linux/drivers/staging/apple-bce/Kconfig
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/staging/apple-bce/Kconfig	2025-10-13 14:24:13.008924729 +0200
+diff --git a/drivers/staging/apple-bce/Kconfig b/drivers/staging/apple-bce/Kconfig
+new file mode 100644
+index 000000000..fe92bc441
+--- /dev/null
++++ b/drivers/staging/apple-bce/Kconfig
 @@ -0,0 +1,18 @@
 +config APPLE_BCE
 +	tristate "Apple BCE driver (VHCI and Audio support)"
@@ -54,10 +55,10 @@ Index: lernstick-linux/drivers/staging/apple-bce/Kconfig
 +	      - Audio: a driver for the T2 audio interface.
 +	 
 +	  If "M" is selected, the module will be called apple-bce.'
-Index: lernstick-linux/drivers/staging/apple-bce/Makefile
-===================================================================
---- lernstick-linux.orig/drivers/staging/apple-bce/Makefile	2025-10-13 14:24:13.012924830 +0200
-+++ lernstick-linux/drivers/staging/apple-bce/Makefile	2025-10-13 14:24:13.008924729 +0200
+diff --git a/drivers/staging/apple-bce/Makefile b/drivers/staging/apple-bce/Makefile
+index a6a656f06..8cfbd3f64 100644
+--- a/drivers/staging/apple-bce/Makefile
++++ b/drivers/staging/apple-bce/Makefile
 @@ -1,5 +1,5 @@
  modname := apple-bce
 -obj-m += $(modname).o
@@ -65,3 +66,5 @@ Index: lernstick-linux/drivers/staging/apple-bce/Makefile
  
  apple-bce-objs := apple_bce.o mailbox.o queue.o queue_dma.o vhci/vhci.o vhci/queue.o vhci/transfer.o audio/audio.o audio/protocol.o audio/protocol_bce.o audio/pcm.o
  
+-- 
+2.34.1

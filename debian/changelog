@@ -1,4 +1,4 @@
-linux (6.17.8-1~bpo13+1+lernstick.1) lernstick-13-backports; urgency=medium
+linux (6.17.8-1~bpo13+lernstick.1) lernstick-13-backports; urgency=medium
 
   * Rebuild for Lernstick 13
 

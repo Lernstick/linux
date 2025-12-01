@@ -7,11 +7,11 @@ Subject: [PATCH 9/9] applesmc: battery charge limiter
  drivers/hwmon/applesmc.c | 42 +++++++++++++++++++++++++++++++++++++++-
  1 file changed, 41 insertions(+), 1 deletion(-)
 
-Index: lernstick-linux/drivers/hwmon/applesmc.c
-===================================================================
---- lernstick-linux.orig/drivers/hwmon/applesmc.c	2025-10-13 14:24:17.073027045 +0200
-+++ lernstick-linux/drivers/hwmon/applesmc.c	2025-10-13 14:24:17.069026944 +0200
-@@ -1477,6 +1477,35 @@
+diff --git a/drivers/hwmon/applesmc.c b/drivers/hwmon/applesmc.c
+index 5f67d7362..698f44794 100644
+--- a/drivers/hwmon/applesmc.c
++++ b/drivers/hwmon/applesmc.c
+@@ -1477,6 +1477,35 @@ static void applesmc_brightness_set(struct led_classdev *led_cdev,
  		dev_dbg(led_cdev->dev, "work was already on the queue.\n");
  }
  
@@ -47,7 +47,7 @@ Index: lernstick-linux/drivers/hwmon/applesmc.c
  static ssize_t applesmc_key_count_show(struct device *dev,
  				struct device_attribute *attr, char *sysfsbuf)
  {
-@@ -1611,6 +1640,11 @@
+@@ -1611,6 +1640,11 @@ static struct applesmc_node_group temp_group[] = {
  	{ }
  };
  
@@ -59,7 +59,7 @@ Index: lernstick-linux/drivers/hwmon/applesmc.c
  /* Module stuff */
  
  /*
-@@ -1829,10 +1863,13 @@
+@@ -1829,10 +1863,13 @@ static int applesmc_create_modules(struct applesmc_device *smc)
  	ret = applesmc_create_nodes(smc, info_group, 1);
  	if (ret)
  		goto out;
@@ -74,7 +74,7 @@ Index: lernstick-linux/drivers/hwmon/applesmc.c
  
  	ret = applesmc_create_nodes(smc, temp_group, smc->reg.index_count);
  	if (ret)
-@@ -1868,6 +1905,8 @@
+@@ -1868,6 +1905,8 @@ static int applesmc_create_modules(struct applesmc_device *smc)
  	applesmc_destroy_nodes(smc, temp_group);
  out_fans:
  	applesmc_destroy_nodes(smc, fan_group);
@@ -83,7 +83,7 @@ Index: lernstick-linux/drivers/hwmon/applesmc.c
  out_info:
  	applesmc_destroy_nodes(smc, info_group);
  out:
-@@ -1882,6 +1921,7 @@
+@@ -1882,6 +1921,7 @@ static void applesmc_destroy_modules(struct applesmc_device *smc)
  	applesmc_release_accelerometer(smc);
  	applesmc_destroy_nodes(smc, temp_group);
  	applesmc_destroy_nodes(smc, fan_group);
@@ -91,3 +91,6 @@ Index: lernstick-linux/drivers/hwmon/applesmc.c
  	applesmc_destroy_nodes(smc, info_group);
  }
  
+-- 
+2.45.2
+

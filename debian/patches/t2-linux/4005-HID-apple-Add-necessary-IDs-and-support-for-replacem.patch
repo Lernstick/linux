@@ -15,11 +15,11 @@ Signed-off-by: Aditya Garg <gargaditya08@live.com>
  drivers/hid/hid-quirks.c |  1 +
  3 files changed, 14 insertions(+), 8 deletions(-)
 
-Index: lernstick-linux/drivers/hid/hid-apple.c
-===================================================================
---- lernstick-linux.orig/drivers/hid/hid-apple.c	2025-10-13 14:24:18.557064390 +0200
-+++ lernstick-linux/drivers/hid/hid-apple.c	2025-10-13 14:24:18.553064290 +0200
-@@ -486,6 +486,7 @@
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index fdfbfe6ab..dd84a387e 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -523,6 +523,7 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
  			table = apple2021_fn_keys;
  		else if (hid->product == USB_DEVICE_ID_APPLE_WELLSPRINGT2_J132 ||
  			 hid->product == USB_DEVICE_ID_APPLE_WELLSPRINGT2_J680 ||
@@ -27,7 +27,7 @@ Index: lernstick-linux/drivers/hid/hid-apple.c
  			 hid->product == USB_DEVICE_ID_APPLE_WELLSPRINGT2_J213)
  				table = macbookpro_no_esc_fn_keys;
  		else if (hid->product == USB_DEVICE_ID_APPLE_WELLSPRINGT2_J214K ||
-@@ -1158,6 +1159,9 @@
+@@ -1191,6 +1192,9 @@ static const struct hid_device_id apple_devices[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J680),
  		.driver_data = APPLE_HAS_FN | APPLE_BACKLIGHT_CTL | APPLE_ISO_TILDE_QUIRK |
  				APPLE_IGNORE_MOUSE },
@@ -37,11 +37,11 @@ Index: lernstick-linux/drivers/hid/hid-apple.c
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J213),
  		.driver_data = APPLE_HAS_FN | APPLE_BACKLIGHT_CTL | APPLE_ISO_TILDE_QUIRK |
  				APPLE_IGNORE_MOUSE },
-Index: lernstick-linux/drivers/hid/hid-ids.h
-===================================================================
---- lernstick-linux.orig/drivers/hid/hid-ids.h	2025-10-13 14:24:18.557064390 +0200
-+++ lernstick-linux/drivers/hid/hid-ids.h	2025-10-13 14:24:18.553064290 +0200
-@@ -175,14 +175,15 @@
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 192c09c27..f4b803c5b 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -170,14 +170,15 @@
  #define USB_DEVICE_ID_APPLE_WELLSPRING9_ANSI	0x0272
  #define USB_DEVICE_ID_APPLE_WELLSPRING9_ISO		0x0273
  #define USB_DEVICE_ID_APPLE_WELLSPRING9_JIS		0x0274
@@ -65,11 +65,11 @@ Index: lernstick-linux/drivers/hid/hid-ids.h
  #define USB_DEVICE_ID_APPLE_FOUNTAIN_TP_ONLY	0x030a
  #define USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY	0x030b
  #define USB_DEVICE_ID_APPLE_IRCONTROL	0x8240
-Index: lernstick-linux/drivers/hid/hid-quirks.c
-===================================================================
---- lernstick-linux.orig/drivers/hid/hid-quirks.c	2025-10-13 14:24:18.557064390 +0200
-+++ lernstick-linux/drivers/hid/hid-quirks.c	2025-10-13 14:24:18.553064290 +0200
-@@ -314,6 +314,7 @@
+diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+index 2eb15a7ae..ecfb1c3a8 100644
+--- a/drivers/hid/hid-quirks.c
++++ b/drivers/hid/hid-quirks.c
+@@ -312,6 +312,7 @@ static const struct hid_device_id hid_have_special_driver[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J140K) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J132) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J680) },
@@ -77,3 +77,6 @@ Index: lernstick-linux/drivers/hid/hid-quirks.c
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J213) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J214K) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J223) },
+-- 
+2.43.0
+

@@ -1,4 +1,4 @@
-From 171bc5acbbdaa975f8695af30f208d7facb21eef Mon Sep 17 00:00:00 2001
+From 487f40f72255d0ac23f35612c40812869b97f2c1 Mon Sep 17 00:00:00 2001
 From: Maximilian Luz <luzmaximilian@gmail.com>
 Date: Fri, 17 Jun 2022 02:14:00 +0200
 Subject: [PATCH] rtc: Add basic support for RTC via Surface System Aggregator
@@ -13,11 +13,11 @@ Patchset: surface-sam
  3 files changed, 137 insertions(+)
  create mode 100644 drivers/rtc/rtc-surface.c
 
-Index: lernstick-linux/drivers/rtc/Kconfig
-===================================================================
---- lernstick-linux.orig/drivers/rtc/Kconfig	2025-10-13 14:24:21.249132118 +0200
-+++ lernstick-linux/drivers/rtc/Kconfig	2025-10-13 14:24:21.241131916 +0200
-@@ -1376,6 +1376,13 @@
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 64f6e9756aff..bf05361f7f13 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -1379,6 +1379,13 @@ config RTC_DRV_NTXEC
  	  embedded controller found in certain e-book readers designed by the
  	  original design manufacturer Netronix.
  
@@ -31,11 +31,11 @@ Index: lernstick-linux/drivers/rtc/Kconfig
  comment "on-CPU RTC drivers"
  
  config RTC_DRV_ASM9260
-Index: lernstick-linux/drivers/rtc/Makefile
-===================================================================
---- lernstick-linux.orig/drivers/rtc/Makefile	2025-10-13 14:24:21.249132118 +0200
-+++ lernstick-linux/drivers/rtc/Makefile	2025-10-13 14:24:21.241131916 +0200
-@@ -181,6 +181,7 @@
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 789bddfea99d..a6df07332080 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -181,6 +181,7 @@ obj-$(CONFIG_RTC_DRV_SUN4V)	+= rtc-sun4v.o
  obj-$(CONFIG_RTC_DRV_SUN6I)	+= rtc-sun6i.o
  obj-$(CONFIG_RTC_DRV_SUNPLUS)	+= rtc-sunplus.o
  obj-$(CONFIG_RTC_DRV_SUNXI)	+= rtc-sunxi.o
@@ -43,10 +43,11 @@ Index: lernstick-linux/drivers/rtc/Makefile
  obj-$(CONFIG_RTC_DRV_TEGRA)	+= rtc-tegra.o
  obj-$(CONFIG_RTC_DRV_TEST)	+= rtc-test.o
  obj-$(CONFIG_RTC_DRV_TI_K3)	+= rtc-ti-k3.o
-Index: lernstick-linux/drivers/rtc/rtc-surface.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/rtc/rtc-surface.c	2025-10-13 14:24:21.241131916 +0200
+diff --git a/drivers/rtc/rtc-surface.c b/drivers/rtc/rtc-surface.c
+new file mode 100644
+index 000000000000..f6c17c4e98d5
+--- /dev/null
++++ b/drivers/rtc/rtc-surface.c
 @@ -0,0 +1,129 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
@@ -177,11 +178,25 @@ Index: lernstick-linux/drivers/rtc/rtc-surface.c
 +MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
 +MODULE_DESCRIPTION("RTC driver for Surface System Aggregator Module");
 +MODULE_LICENSE("GPL");
-Index: lernstick-linux/drivers/platform/surface/surface_aggregator_registry.c
-===================================================================
---- lernstick-linux.orig/drivers/platform/surface/surface_aggregator_registry.c	2025-10-13 14:24:21.249132118 +0200
-+++ lernstick-linux/drivers/platform/surface/surface_aggregator_registry.c	2025-10-13 14:24:21.241131916 +0200
-@@ -460,6 +460,9 @@
+-- 
+2.51.0
+
+From 9977281edd9310d64900a4d4c1709823019b9a47 Mon Sep 17 00:00:00 2001
+From: Maximilian Luz <luzmaximilian@gmail.com>
+Date: Sun, 20 Apr 2025 01:05:14 +0200
+Subject: [PATCH] platform/surface: aggregator_registry: Add Surface Laptop 7
+ (ACPI)
+
+Patchset: surface-sam
+---
+ drivers/platform/surface/surface_aggregator_registry.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
+index a594d5fcfcfd..07b03aa4fa7f 100644
+--- a/drivers/platform/surface/surface_aggregator_registry.c
++++ b/drivers/platform/surface/surface_aggregator_registry.c
+@@ -460,6 +460,9 @@ static const struct acpi_device_id ssam_platform_hub_acpi_match[] = {
  	/* Surface Laptop 6 */
  	{ "MSHW0530", (unsigned long)ssam_node_group_sl6 },
  
@@ -191,3 +206,6 @@ Index: lernstick-linux/drivers/platform/surface/surface_aggregator_registry.c
  	/* Surface Laptop Go 1 */
  	{ "MSHW0118", (unsigned long)ssam_node_group_slg1 },
  
+-- 
+2.51.0
+
