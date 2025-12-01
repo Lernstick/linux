@@ -8,6 +8,13 @@ hardware_long = 'PCs with AMD64, Intel 64 or VIA Nano processors'
 [flavour.packages]
 installer = false
 
+[[flavour]]
+name = 'test'
+[flavour.build]
+config = ['config.test', 'amd64/config.test']
+[flavour.defs]
+is_test = true
+
 [[featureset]]
 name = 'none'
 
