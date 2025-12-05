@@ -8,10 +8,10 @@ apple_bce.h was using #pragma once, which is not acceptable by sparse
  drivers/staging/apple-bce/apple_bce.h | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/apple-bce/apple_bce.h b/drivers/staging/apple-bce/apple_bce.h
-index f13ab8d57..58dbeff79 100644
---- a/drivers/staging/apple-bce/apple_bce.h
-+++ b/drivers/staging/apple-bce/apple_bce.h
+Index: lernstick-linux/drivers/staging/apple-bce/apple_bce.h
+===================================================================
+--- lernstick-linux.orig/drivers/staging/apple-bce/apple_bce.h	2025-12-05 13:58:02.085575980 +0100
++++ lernstick-linux/drivers/staging/apple-bce/apple_bce.h	2025-12-05 13:58:02.077575795 +0100
 @@ -1,4 +1,5 @@
 -#pragma once
 +#ifndef APPLE_BCE_H
@@ -19,7 +19,7 @@ index f13ab8d57..58dbeff79 100644
  
  #include <linux/pci.h>
  #include <linux/spinlock.h>
-@@ -35,4 +36,6 @@ struct apple_bce_device {
+@@ -35,4 +36,6 @@
      struct bce_vhci vhci;
  };
  
@@ -28,6 +28,3 @@ index f13ab8d57..58dbeff79 100644
 +extern struct apple_bce_device *global_bce;
 +
 +#endif //APPLE_BCE_H
--- 
-2.49.0
-
