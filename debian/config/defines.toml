@@ -57,7 +57,7 @@ rt = 'PREEMPT_RT'
 
 [build]
 compiler = 'gcc-14'
-trusted_certs = 'lernstick-6.17.8-1~bpo13+lernstick.1.pem'
+trusted_certs = 'debian/certs/lernstick-6.17.8-1~bpo13+lernstick.1.pem'
 
 [relations.image]
 depends = [
