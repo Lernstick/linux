@@ -18,11 +18,176 @@ Signed-off-by: Janne Grunau <j@jannau.net>
  include/linux/hid.h    | 6 +++++-
  3 files changed, 13 insertions(+), 1 deletion(-)
 
-Index: lernstick-linux/drivers/hid/hid-core.c
-===================================================================
---- lernstick-linux.orig/drivers/hid/hid-core.c	2025-12-05 13:58:05.393652402 +0100
-+++ lernstick-linux/drivers/hid/hid-core.c	2025-12-05 13:58:05.381652125 +0100
-@@ -468,7 +468,10 @@
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 5419a6c10..402ec8e31 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2307,6 +2307,9 @@ int hid_connect(struct hid_device *hdev, unsigned int connect_mask)
+ 	case BUS_I2C:
+ 		bus = "I2C";
+ 		break;
++	case BUS_SPI:
++		bus = "SPI";
++		break;
+ 	case BUS_SDW:
+ 		bus = "SOUNDWIRE";
+ 		break;
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 149798754..eefda2525 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -93,6 +93,7 @@
+ 
+ #define USB_VENDOR_ID_APPLE		0x05ac
+ #define BT_VENDOR_ID_APPLE		0x004c
++#define SPI_VENDOR_ID_APPLE		0x05ac
+ #define USB_DEVICE_ID_APPLE_MIGHTYMOUSE	0x0304
+ #define USB_DEVICE_ID_APPLE_MAGICMOUSE	0x030d
+ #define USB_DEVICE_ID_APPLE_MAGICMOUSE2	0x0269
+@@ -197,6 +198,10 @@
+ #define USB_DEVICE_ID_APPLE_IRCONTROL5	0x8243
+ #define USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT 0x8102
+ #define USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY 0x8302
++#define SPI_DEVICE_ID_APPLE_MACBOOK_AIR_2020	0x0281
++#define SPI_DEVICE_ID_APPLE_MACBOOK_PRO13_2020	0x0341
++#define SPI_DEVICE_ID_APPLE_MACBOOK_PRO14_2021	0x0342
++#define SPI_DEVICE_ID_APPLE_MACBOOK_PRO16_2021	0x0343
+ 
+ #define USB_VENDOR_ID_ASETEK			0x2433
+ #define USB_DEVICE_ID_ASETEK_INVICTA		0xf300
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index 2cc4f1e4e..33d21eae2 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -594,7 +594,9 @@ struct hid_input {
+ enum hid_type {
+ 	HID_TYPE_OTHER = 0,
+ 	HID_TYPE_USBMOUSE,
+-	HID_TYPE_USBNONE
++	HID_TYPE_USBNONE,
++	HID_TYPE_SPI_KEYBOARD,
++	HID_TYPE_SPI_MOUSE,
+ };
+ 
+ enum hid_battery_status {
+@@ -755,6 +757,8 @@ struct hid_descriptor {
+ 	.bus = BUS_BLUETOOTH, .vendor = (ven), .product = (prod)
+ #define HID_I2C_DEVICE(ven, prod)				\
+ 	.bus = BUS_I2C, .vendor = (ven), .product = (prod)
++#define HID_SPI_DEVICE(ven, prod)				\
++	.bus = BUS_SPI, .vendor = (ven), .product = (prod)
+ 
+ #define HID_REPORT_ID(rep) \
+ 	.report_type = (rep)
+-- 
+2.50.1
+
+
+From f4d542242a48bdf06cc0b89594e2e8cb64d79fad Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Fri, 8 Jul 2022 00:29:43 +0900
+Subject: [PATCH 02/18] HID: add HOST vendor/device IDs for Apple MTP devices
+
+Apple M2* chips have an embedded MTP processor that handles all HID
+functions, and does not go over a traditional bus like SPI. The devices
+still have real IDs, so add them here.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/hid/hid-ids.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index eefda2525..a0a9b497a 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -94,6 +94,7 @@
+ #define USB_VENDOR_ID_APPLE		0x05ac
+ #define BT_VENDOR_ID_APPLE		0x004c
+ #define SPI_VENDOR_ID_APPLE		0x05ac
++#define HOST_VENDOR_ID_APPLE		0x05ac
+ #define USB_DEVICE_ID_APPLE_MIGHTYMOUSE	0x0304
+ #define USB_DEVICE_ID_APPLE_MAGICMOUSE	0x030d
+ #define USB_DEVICE_ID_APPLE_MAGICMOUSE2	0x0269
+@@ -202,6 +203,10 @@
+ #define SPI_DEVICE_ID_APPLE_MACBOOK_PRO13_2020	0x0341
+ #define SPI_DEVICE_ID_APPLE_MACBOOK_PRO14_2021	0x0342
+ #define SPI_DEVICE_ID_APPLE_MACBOOK_PRO16_2021	0x0343
++#define HOST_DEVICE_ID_APPLE_MACBOOK_AIR13_2022	0x0351
++#define HOST_DEVICE_ID_APPLE_MACBOOK_PRO14_2023	0x0352
++#define HOST_DEVICE_ID_APPLE_MACBOOK_PRO16_2023	0x0353
++#define HOST_DEVICE_ID_APPLE_MACBOOK_PRO13_2022	0x0354
+ 
+ #define USB_VENDOR_ID_ASETEK			0x2433
+ #define USB_DEVICE_ID_ASETEK_INVICTA		0xf300
+-- 
+2.50.1
+
+
+From 4ca7e104a51ef35c998d1ea26f084b6ab4b81030 Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Fri, 8 Jul 2022 02:06:15 +0900
+Subject: [PATCH 03/18] HID: core: Handle HOST bus type when announcing devices
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/hid/hid-core.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 402ec8e31..6d0bba108 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2310,6 +2310,9 @@ int hid_connect(struct hid_device *hdev, unsigned int connect_mask)
+ 	case BUS_SPI:
+ 		bus = "SPI";
+ 		break;
++	case BUS_HOST:
++		bus = "HOST";
++		break;
+ 	case BUS_SDW:
+ 		bus = "SOUNDWIRE";
+ 		break;
+-- 
+2.50.1
+
+
+From 4754bf18f897575b43c17efffe2c83761536a0c9 Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Mon, 10 Apr 2023 22:44:44 +0900
+Subject: [PATCH 04/18] HID: Bump maximum report size to 16384
+
+This maximum is arbitrary. Recent Apple devices have some vendor-defined
+reports with 16384 here which fail to parse without this, so let's bump
+it to that.
+
+This value is used as follows:
+
+report->size += parser->global.report_size * parser->global.report_count;
+
+[...]
+
+/* Total size check: Allow for possible report index byte */
+if (report->size > (max_buffer_size - 1) << 3) {
+	hid_err(parser->device, "report is too long\n");
+	return -1;
+}
+
+All of these fields are unsigned integers, and report_count is bounded
+by HID_MAX_USAGES (12288). Therefore, as long as the respective maximums
+do not overflow an unsigned integer (let's say a signed integer just in
+case), we're safe. This holds for 16384.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/hid/hid-core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 6d0bba108..de382dcb3 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -468,7 +468,10 @@ static int hid_parser_global(struct hid_parser *parser, struct hid_item *item)
  
  	case HID_GLOBAL_ITEM_TAG_REPORT_SIZE:
  		parser->global.report_size = item_udata(item);
@@ -34,76 +199,35 @@ Index: lernstick-linux/drivers/hid/hid-core.c
  			hid_err(parser->device, "invalid report_size %d\n",
  					parser->global.report_size);
  			return -1;
-@@ -2307,6 +2310,12 @@
- 	case BUS_I2C:
- 		bus = "I2C";
- 		break;
-+	case BUS_SPI:
-+		bus = "SPI";
-+		break;
-+	case BUS_HOST:
-+		bus = "HOST";
-+		break;
- 	case BUS_SDW:
- 		bus = "SOUNDWIRE";
- 		break;
-Index: lernstick-linux/drivers/hid/hid-ids.h
-===================================================================
---- lernstick-linux.orig/drivers/hid/hid-ids.h	2025-12-05 13:58:05.393652402 +0100
-+++ lernstick-linux/drivers/hid/hid-ids.h	2025-12-05 13:58:05.381652125 +0100
-@@ -93,6 +93,8 @@
- 
- #define USB_VENDOR_ID_APPLE		0x05ac
- #define BT_VENDOR_ID_APPLE		0x004c
-+#define SPI_VENDOR_ID_APPLE		0x05ac
-+#define HOST_VENDOR_ID_APPLE		0x05ac
- #define USB_DEVICE_ID_APPLE_MIGHTYMOUSE	0x0304
- #define USB_DEVICE_ID_APPLE_MAGICMOUSE	0x030d
- #define USB_DEVICE_ID_APPLE_MAGICMOUSE2	0x0269
-@@ -197,6 +199,14 @@
- #define USB_DEVICE_ID_APPLE_IRCONTROL5	0x8243
- #define USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT 0x8102
- #define USB_DEVICE_ID_APPLE_TOUCHBAR_DISPLAY 0x8302
-+#define SPI_DEVICE_ID_APPLE_MACBOOK_AIR_2020	0x0281
-+#define SPI_DEVICE_ID_APPLE_MACBOOK_PRO13_2020	0x0341
-+#define SPI_DEVICE_ID_APPLE_MACBOOK_PRO14_2021	0x0342
-+#define SPI_DEVICE_ID_APPLE_MACBOOK_PRO16_2021	0x0343
-+#define HOST_DEVICE_ID_APPLE_MACBOOK_AIR13_2022	0x0351
-+#define HOST_DEVICE_ID_APPLE_MACBOOK_PRO14_2023	0x0352
-+#define HOST_DEVICE_ID_APPLE_MACBOOK_PRO16_2023	0x0353
-+#define HOST_DEVICE_ID_APPLE_MACBOOK_PRO13_2022	0x0354
- 
- #define USB_VENDOR_ID_ASETEK			0x2433
- #define USB_DEVICE_ID_ASETEK_INVICTA		0xf300
-Index: lernstick-linux/include/linux/hid.h
-===================================================================
---- lernstick-linux.orig/include/linux/hid.h	2025-12-05 13:58:05.393652402 +0100
-+++ lernstick-linux/include/linux/hid.h	2025-12-05 13:58:05.381652125 +0100
-@@ -596,7 +596,9 @@
- enum hid_type {
- 	HID_TYPE_OTHER = 0,
- 	HID_TYPE_USBMOUSE,
--	HID_TYPE_USBNONE
-+	HID_TYPE_USBNONE,
-+	HID_TYPE_SPI_KEYBOARD,
-+	HID_TYPE_SPI_MOUSE,
- };
- 
- enum hid_battery_status {
-@@ -757,6 +759,8 @@
- 	.bus = BUS_BLUETOOTH, .vendor = (ven), .product = (prod)
- #define HID_I2C_DEVICE(ven, prod)				\
- 	.bus = BUS_I2C, .vendor = (ven), .product = (prod)
-+#define HID_SPI_DEVICE(ven, prod)				\
-+	.bus = BUS_SPI, .vendor = (ven), .product = (prod)
- 
- #define HID_REPORT_ID(rep) \
- 	.report_type = (rep)
-Index: lernstick-linux/drivers/hid/Kconfig
-===================================================================
---- lernstick-linux.orig/drivers/hid/Kconfig	2025-12-05 13:58:05.393652402 +0100
-+++ lernstick-linux/drivers/hid/Kconfig	2025-12-05 13:58:05.385652217 +0100
-@@ -129,7 +129,7 @@
+-- 
+2.50.1
+
+
+From 1e41289bb739bd3de1e2892abb95e4e3fc350fbf Mon Sep 17 00:00:00 2001
+From: Janne Grunau <j@jannau.net>
+Date: Thu, 16 Dec 2021 21:15:31 +0100
+Subject: [PATCH 05/18] HID: apple: Bind Apple silicon SPI devices
+
+Apple MacBook keyboards started using HID over SPI in 2015. With the
+addition of the SPI HID transport they can be supported by this driver.
+Support all product ids over with the Apple SPI vendor id for now.
+
+The Macbook Pro (M1, 13-inch, 2020) uses the same function key mapping
+as other Macbook Pros with touchbar and dedicated ESC key.
+Apple silicon Macbooks use the same function key mapping as the 2021 and
+later Magic Keyboards.
+
+Signed-off-by: Janne Grunau <j@jannau.net>
+---
+ drivers/hid/Kconfig     |  2 +-
+ drivers/hid/hid-apple.c | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 79997553d..060a5ee29 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -129,7 +129,7 @@ config HID_APPLE
  	tristate "Apple {i,Power,Mac}Books"
  	depends on LEDS_CLASS
  	depends on NEW_LEDS
@@ -112,42 +236,17 @@ Index: lernstick-linux/drivers/hid/Kconfig
  	help
  	Support for some Apple devices which less or more break
  	HID specification.
-@@ -715,11 +715,13 @@
- 
- config HID_MAGICMOUSE
- 	tristate "Apple Magic Mouse/Trackpad multi-touch support"
-+	default SPI_HID_APPLE
- 	help
- 	Support for the Apple Magic Mouse/Trackpad multi-touch.
- 
- 	Say Y here if you want support for the multi-touch features of the
--	Apple Wireless "Magic" Mouse and the Apple Wireless "Magic" Trackpad.
-+	Apple Wireless "Magic" Mouse, the Apple Wireless "Magic" Trackpad and
-+	force touch Trackpads in Macbooks starting from 2015.
- 
- config HID_MALTRON
- 	tristate "Maltron L90 keyboard"
-@@ -1434,4 +1436,8 @@
- 
- source "drivers/hid/usbhid/Kconfig"
- 
-+source "drivers/hid/spi-hid/Kconfig"
-+
-+source "drivers/hid/dockchannel-hid/Kconfig"
-+
- endif # HID_SUPPORT
-Index: lernstick-linux/drivers/hid/hid-apple.c
-===================================================================
---- lernstick-linux.orig/drivers/hid/hid-apple.c	2025-12-05 13:58:05.393652402 +0100
-+++ lernstick-linux/drivers/hid/hid-apple.c	2025-12-05 13:58:05.381652125 +0100
-@@ -517,6 +517,16 @@
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index 61404d7a4..7de5f66c0 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -517,6 +517,15 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
  				table = macbookair_fn_keys;
  			else if (hid->product < 0x21d || hid->product >= 0x300)
  				table = powerbook_fn_keys;
-+			else if (hid->bus == BUS_HOST || hid->bus == BUS_SPI)
++			else if (hid->bus == BUS_SPI)
 +				switch (hid->product) {
 +				case SPI_DEVICE_ID_APPLE_MACBOOK_PRO13_2020:
-+				case HOST_DEVICE_ID_APPLE_MACBOOK_PRO13_2022:
 +					table = macbookpro_dedicated_esc_fn_keys;
 +					break;
 +				default:
@@ -157,40 +256,97 @@ Index: lernstick-linux/drivers/hid/hid-apple.c
  			else
  				table = apple_fn_keys;
  		}
-@@ -937,6 +947,10 @@
+@@ -937,6 +946,10 @@ static int apple_probe(struct hid_device *hdev,
  	struct apple_sc *asc;
  	int ret;
  
-+	if ((id->bus == BUS_SPI || id->bus == BUS_HOST) && id->vendor == SPI_VENDOR_ID_APPLE &&
++	if (id->bus == BUS_SPI && id->vendor == SPI_VENDOR_ID_APPLE &&
 +	    hdev->type != HID_TYPE_SPI_KEYBOARD)
 +		return -ENODEV;
 +
  	asc = devm_kzalloc(&hdev->dev, sizeof(*asc), GFP_KERNEL);
  	if (asc == NULL) {
  		hid_err(hdev, "can't alloc apple descriptor\n");
-@@ -1215,6 +1229,10 @@
+@@ -1215,6 +1228,8 @@ static const struct hid_device_id apple_devices[] = {
  		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK | APPLE_RDESC_BATTERY },
  	{ HID_BLUETOOTH_DEVICE(BT_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_NUMPAD_2024),
  		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
 +	{ HID_SPI_DEVICE(SPI_VENDOR_ID_APPLE, HID_ANY_ID),
 +		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT),
+ 		.driver_data = APPLE_MAGIC_BACKLIGHT },
+ 
+-- 
+2.50.1
+
+
+From 7ffd582ce38cd91af048373c3a3e26c8e7bb7cac Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Fri, 8 Jul 2022 02:12:24 +0900
+Subject: [PATCH 06/18] HID: apple: Bind to HOST devices for MTP
+
+We use BUS_HOST for MTP HID subdevices
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/hid/hid-apple.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index 7de5f66c0..430ceee0f 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -517,9 +517,10 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+ 				table = macbookair_fn_keys;
+ 			else if (hid->product < 0x21d || hid->product >= 0x300)
+ 				table = powerbook_fn_keys;
+-			else if (hid->bus == BUS_SPI)
++			else if (hid->bus == BUS_HOST || hid->bus == BUS_SPI)
+ 				switch (hid->product) {
+ 				case SPI_DEVICE_ID_APPLE_MACBOOK_PRO13_2020:
++				case HOST_DEVICE_ID_APPLE_MACBOOK_PRO13_2022:
+ 					table = macbookpro_dedicated_esc_fn_keys;
+ 					break;
+ 				default:
+@@ -946,7 +947,7 @@ static int apple_probe(struct hid_device *hdev,
+ 	struct apple_sc *asc;
+ 	int ret;
+ 
+-	if (id->bus == BUS_SPI && id->vendor == SPI_VENDOR_ID_APPLE &&
++	if ((id->bus == BUS_SPI || id->bus == BUS_HOST) && id->vendor == SPI_VENDOR_ID_APPLE &&
+ 	    hdev->type != HID_TYPE_SPI_KEYBOARD)
+ 		return -ENODEV;
+ 
+@@ -1230,6 +1231,8 @@ static const struct hid_device_id apple_devices[] = {
+ 		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_SPI_DEVICE(SPI_VENDOR_ID_APPLE, HID_ANY_ID),
+ 		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
 +	{ HID_DEVICE(BUS_HOST, HID_GROUP_ANY, HOST_VENDOR_ID_APPLE, HID_ANY_ID),
 +		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_TOUCHBAR_BACKLIGHT),
  		.driver_data = APPLE_MAGIC_BACKLIGHT },
  
-Index: lernstick-linux/drivers/hid/hid-magicmouse.c
-===================================================================
---- lernstick-linux.orig/drivers/hid/hid-magicmouse.c	2025-12-05 13:58:05.393652402 +0100
-+++ lernstick-linux/drivers/hid/hid-magicmouse.c	2025-12-05 13:58:05.385652217 +0100
-@@ -60,8 +60,14 @@
- #define MOUSE_REPORT_ID    0x29
- #define MOUSE2_REPORT_ID   0x12
+-- 
+2.50.1
+
+
+From f11dcdcfd19860147f5b630ad13e592e2a865ef5 Mon Sep 17 00:00:00 2001
+From: Janne Grunau <j@jannau.net>
+Date: Thu, 16 Dec 2021 00:10:51 +0100
+Subject: [PATCH 07/18] HID: magicmouse: use a define of the max number of
+ touch contacts
+
+Signed-off-by: Janne Grunau <j@jannau.net>
+---
+ drivers/hid/hid-magicmouse.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index 7d4a25c6d..82868769f 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -62,6 +62,8 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
  #define DOUBLE_REPORT_ID   0xf7
-+#define SPI_REPORT_ID      0x02
-+#define SPI_RESET_REPORT_ID 0x60
-+#define MTP_REPORT_ID      0x75
-+#define SENSOR_DIMENSIONS_REPORT_ID 0xd9
  #define USB_BATTERY_TIMEOUT_SEC 60
  
 +#define MAX_CONTACTS 16
@@ -198,63 +354,7 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
  /* These definitions are not precise, but they're close enough.  (Bits
   * 0x03 seem to indicate the aspect ratio of the touch, bits 0x70 seem
   * to be some kind of bit mask -- 0x20 may be a near-field reading,
-@@ -112,30 +118,53 @@
- #define TRACKPAD2_RES_Y \
- 	((TRACKPAD2_MAX_Y - TRACKPAD2_MIN_Y) / (TRACKPAD2_DIMENSION_Y / 100))
- 
-+/* These are fallback values, since the real values will be queried from the device. */
-+#define J314_TP_DIMENSION_X (float)13000
-+#define J314_TP_MIN_X -5900
-+#define J314_TP_MAX_X 6500
-+#define J314_TP_RES_X \
-+	((J314_TP_MAX_X - J314_TP_MIN_X) / (J314_TP_DIMENSION_X / 100))
-+#define J314_TP_DIMENSION_Y (float)8100
-+#define J314_TP_MIN_Y -200
-+#define J314_TP_MAX_Y 7400
-+#define J314_TP_RES_Y \
-+	((J314_TP_MAX_Y - J314_TP_MIN_Y) / (J314_TP_DIMENSION_Y / 100))
-+
-+#define J314_TP_MAX_FINGER_ORIENTATION 16384
-+
-+struct magicmouse_input_ops {
-+	int (*raw_event)(struct hid_device *hdev,
-+		struct hid_report *report, u8 *data, int size);
-+	int (*setup_input)(struct input_dev *input, struct hid_device *hdev);
-+};
-+
- /**
-  * struct magicmouse_sc - Tracks Magic Mouse-specific data.
-  * @input: Input device through which we report events.
-  * @quirks: Currently unused.
-+ * @query_dimensions: Whether to query and update dimensions on first open
-  * @ntouches: Number of touches in most recent touch report.
-  * @scroll_accel: Number of consecutive scroll motions.
-  * @scroll_jiffies: Time of last scroll motion.
-+ * @pos: multi touch position data of the last report.
-  * @touches: Most recent data for a touch, indexed by tracking ID.
-  * @tracking_ids: Mapping of current touch input data to @touches.
-  * @hdev: Pointer to the underlying HID device.
-  * @work: Workqueue to handle initialization retry for quirky devices.
-  * @battery_timer: Timer for obtaining battery level information.
-+ * @input_ops: Input ops based on device type.
-  */
- struct magicmouse_sc {
- 	struct input_dev *input;
- 	unsigned long quirks;
-+	bool query_dimensions;
- 
- 	int ntouches;
- 	int scroll_accel;
- 	unsigned long scroll_jiffies;
- 
-+	struct input_mt_pos pos[MAX_CONTACTS];
- 	struct {
--		short x;
--		short y;
- 		short scroll_x;
- 		short scroll_y;
- 		short scroll_x_hr;
-@@ -143,14 +172,112 @@
+@@ -143,8 +145,8 @@ struct magicmouse_sc {
  		u8 size;
  		bool scroll_x_active;
  		bool scroll_y_active;
@@ -265,111 +365,53 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
  
  	struct hid_device *hdev;
  	struct delayed_work work;
- 	struct timer_list battery_timer;
-+	struct magicmouse_input_ops input_ops;
- };
+@@ -615,7 +617,7 @@ static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hd
  
-+static int magicmouse_enable_multitouch(struct hid_device *hdev);
-+
-+static inline int le16_to_int(__le16 x)
-+{
-+	return (signed short)le16_to_cpu(x);
-+}
-+
-+static int magicmouse_open(struct input_dev *dev)
-+{
-+	struct hid_device *hdev = input_get_drvdata(dev);
-+	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
-+	int ret;
-+
-+	ret = hid_hw_open(hdev);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Some devices repond with 'invalid report id' when feature
-+	 * report switching it into multitouch mode is sent to it.
-+	 *
-+	 * This results in -EIO from the _raw low-level transport callback,
-+	 * but there seems to be no other way of switching the mode.
-+	 * Thus the super-ugly hacky success check below.
-+	 *
-+	 * MTP devices do not need this.
-+	 */
-+	if (hdev->bus != BUS_HOST) {
-+		ret = magicmouse_enable_multitouch(hdev);
-+		if (ret != -EIO && ret < 0) {
-+			hid_err(hdev, "unable to request touch data (%d)\n", ret);
-+			return ret;
-+		}
-+		if (ret == -EIO && (hdev->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2 ||
-+				hdev->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2_USBC)) {
-+			schedule_delayed_work(&msc->work, msecs_to_jiffies(500));
-+		}
-+	}
-+
-+	/*
-+	 * For Apple Silicon trackpads, we want to query the dimensions on
-+	 * device open. This is because doing so requires the firmware, but
-+	 * we don't want to force a firmware load until the device is opened
-+	 * for the first time. So do that here and update the input properties
-+	 * just in time before userspace queries them.
-+	 */
-+	if (msc->query_dimensions) {
-+		struct input_dev *input = msc->input;
-+		u8 buf[32];
-+		struct {
-+			__le32 width;
-+			__le32 height;
-+			__le16 min_x;
-+			__le16 min_y;
-+			__le16 max_x;
-+			__le16 max_y;
-+		} dim;
-+		uint32_t x_span, y_span;
-+
-+		ret = hid_hw_raw_request(hdev, SENSOR_DIMENSIONS_REPORT_ID, buf, sizeof(buf), HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
-+		if (ret < (int)(1 + sizeof(dim))) {
-+			hid_err(hdev, "unable to request dimensions (%d)\n", ret);
-+			return ret;
-+		}
-+
-+		memcpy(&dim, buf + 1, sizeof(dim));
-+
-+		/* finger position */
-+		input_set_abs_params(input, ABS_MT_POSITION_X,
-+				     le16_to_int(dim.min_x), le16_to_int(dim.max_x), 0, 0);
-+		/* Y axis is inverted */
-+		input_set_abs_params(input, ABS_MT_POSITION_Y,
-+				     -le16_to_int(dim.max_y), -le16_to_int(dim.min_y), 0, 0);
-+		x_span = le16_to_int(dim.max_x) - le16_to_int(dim.min_x);
-+		y_span = le16_to_int(dim.max_y) - le16_to_int(dim.min_y);
-+
-+		/* X/Y resolution */
-+		input_abs_set_res(input, ABS_MT_POSITION_X, 100 * x_span / le32_to_cpu(dim.width) );
-+		input_abs_set_res(input, ABS_MT_POSITION_Y, 100 * y_span / le32_to_cpu(dim.height) );
-+
-+		/* copy info, as input_mt_init_slots() does */
-+		dev->absinfo[ABS_X] = dev->absinfo[ABS_MT_POSITION_X];
-+		dev->absinfo[ABS_Y] = dev->absinfo[ABS_MT_POSITION_Y];
-+
-+		msc->query_dimensions = false;
-+	}
-+
-+	return 0;
-+}
-+
-+static void magicmouse_close(struct input_dev *dev)
-+{
-+	struct hid_device *hdev = input_get_drvdata(dev);
-+
-+	hid_hw_close(hdev);
-+}
-+
- static int magicmouse_firm_touch(struct magicmouse_sc *msc)
- {
- 	int touch = -1;
-@@ -192,7 +319,7 @@
+ 	__set_bit(EV_ABS, input->evbit);
+ 
+-	error = input_mt_init_slots(input, 16, mt_flags);
++	error = input_mt_init_slots(input, MAX_CONTACTS, mt_flags);
+ 	if (error)
+ 		return error;
+ 	input_set_abs_params(input, ABS_MT_TOUCH_MAJOR, 0, 255 << 2,
+-- 
+2.50.1
+
+
+From 22a426b23e65cecdad63b1caadb9600ce1069531 Mon Sep 17 00:00:00 2001
+From: Janne Grunau <j@jannau.net>
+Date: Thu, 16 Dec 2021 00:12:35 +0100
+Subject: [PATCH 08/18] HID: magicmouse: use struct input_mt_pos for X/Y
+
+Signed-off-by: Janne Grunau <j@jannau.net>
+---
+ drivers/hid/hid-magicmouse.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index 82868769f..37de8aa93 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -121,6 +121,7 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+  * @ntouches: Number of touches in most recent touch report.
+  * @scroll_accel: Number of consecutive scroll motions.
+  * @scroll_jiffies: Time of last scroll motion.
++ * @pos: multi touch position data of the last report.
+  * @touches: Most recent data for a touch, indexed by tracking ID.
+  * @tracking_ids: Mapping of current touch input data to @touches.
+  * @hdev: Pointer to the underlying HID device.
+@@ -135,9 +136,8 @@ struct magicmouse_sc {
+ 	int scroll_accel;
+ 	unsigned long scroll_jiffies;
+ 
++	struct input_mt_pos pos[MAX_CONTACTS];
+ 	struct {
+-		short x;
+-		short y;
+ 		short scroll_x;
+ 		short scroll_y;
+ 		short scroll_x_hr;
+@@ -194,7 +194,7 @@ static void magicmouse_emit_buttons(struct magicmouse_sc *msc, int state)
  		} else if (last_state != 0) {
  			state = last_state;
  		} else if ((id = magicmouse_firm_touch(msc)) >= 0) {
@@ -378,7 +420,7 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
  			if (x < middle_button_start)
  				state = 1;
  			else if (x > middle_button_stop)
-@@ -256,8 +383,8 @@
+@@ -258,8 +258,8 @@ static void magicmouse_emit_touch(struct magicmouse_sc *msc, int raw_id, u8 *tda
  
  	/* Store tracking ID and other fields. */
  	msc->tracking_ids[raw_id] = id;
@@ -389,7 +431,58 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
  	msc->touches[id].size = size;
  
  	/* If requested, emulate a scroll wheel by detecting small
-@@ -387,6 +514,14 @@
+-- 
+2.50.1
+
+
+From ac594cf3f73822e28eb0aad940a4feab3b3fe395 Mon Sep 17 00:00:00 2001
+From: Janne Grunau <j@jannau.net>
+Date: Thu, 16 Dec 2021 00:15:30 +0100
+Subject: [PATCH 09/18] HID: magicmouse: use ops function pointers for input
+ functionality
+
+Will be used for supporting MacBook trackpads connected via SPI.
+
+Signed-off-by: Janne Grunau <j@jannau.net>
+---
+ drivers/hid/hid-magicmouse.c | 32 +++++++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index 37de8aa93..d235fcf8f 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -114,6 +114,13 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+ #define TRACKPAD2_RES_Y \
+ 	((TRACKPAD2_MAX_Y - TRACKPAD2_MIN_Y) / (TRACKPAD2_DIMENSION_Y / 100))
+ 
++
++struct magicmouse_input_ops {
++	int (*raw_event)(struct hid_device *hdev,
++		struct hid_report *report, u8 *data, int size);
++	int (*setup_input)(struct input_dev *input, struct hid_device *hdev);
++};
++
+ /**
+  * struct magicmouse_sc - Tracks Magic Mouse-specific data.
+  * @input: Input device through which we report events.
+@@ -127,6 +134,7 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+  * @hdev: Pointer to the underlying HID device.
+  * @work: Workqueue to handle initialization retry for quirky devices.
+  * @battery_timer: Timer for obtaining battery level information.
++ * @input_ops: Input ops based on device type.
+  */
+ struct magicmouse_sc {
+ 	struct input_dev *input;
+@@ -151,6 +159,7 @@ struct magicmouse_sc {
+ 	struct hid_device *hdev;
+ 	struct delayed_work work;
+ 	struct timer_list battery_timer;
++	struct magicmouse_input_ops input_ops;
+ };
+ 
+ static int magicmouse_firm_touch(struct magicmouse_sc *msc)
+@@ -389,6 +398,14 @@ static int magicmouse_raw_event(struct hid_device *hdev,
  		struct hid_report *report, u8 *data, int size)
  {
  	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
@@ -404,7 +497,108 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
  	struct input_dev *input = msc->input;
  	int x = 0, y = 0, ii, clicks = 0, npoints;
  
-@@ -518,6 +653,174 @@
+@@ -538,7 +555,17 @@ static int magicmouse_event(struct hid_device *hdev, struct hid_field *field,
+ 	return 0;
+ }
+ 
+-static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hdev)
++
++static int magicmouse_setup_input(struct input_dev *input,
++				  struct hid_device *hdev)
++{
++	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
++
++	return msc->input_ops.setup_input(input, hdev);
++}
++
++static int magicmouse_setup_input_usb(struct input_dev *input,
++				      struct hid_device *hdev)
+ {
+ 	int error;
+ 	int mt_flags = 0;
+@@ -860,6 +887,9 @@ static int magicmouse_probe(struct hid_device *hdev,
+ 		return -ENOMEM;
+ 	}
+ 
++	msc->input_ops.raw_event = magicmouse_raw_event_usb;
++	msc->input_ops.setup_input = magicmouse_setup_input_usb;
++
+ 	msc->scroll_accel = SCROLL_ACCEL_DEFAULT;
+ 	msc->hdev = hdev;
+ 	INIT_DEFERRABLE_WORK(&msc->work, magicmouse_enable_mt_work);
+-- 
+2.50.1
+
+
+From 0951cb9737d88d7124063e212c6ba5334dee1c4e Mon Sep 17 00:00:00 2001
+From: Janne Grunau <j@jannau.net>
+Date: Thu, 16 Dec 2021 01:17:48 +0100
+Subject: [PATCH 10/18] HID: magicmouse: add support for Macbook trackpads
+
+The trackpads in Macbooks beginning in 2015 are HID devices connected
+over SPI. On Intel Macbooks they are currently supported by applespi.c.
+This chang adds support for the trackpads on Apple Silicon Macbooks
+starting in late 2020. They use a new HID over SPI transport driver.
+The touch report format differs from USB/BT Magic Trackpads. It is the
+same format as the type 4 format supported by bcm5974.c.
+
+Signed-off-by: Janne Grunau <j@jannau.net>
+---
+ drivers/hid/Kconfig          |   4 +-
+ drivers/hid/hid-magicmouse.c | 266 ++++++++++++++++++++++++++++++++++-
+ 2 files changed, 266 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 060a5ee29..d44afb5f8 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -717,11 +717,13 @@ config LOGIWHEELS_FF
+ 
+ config HID_MAGICMOUSE
+ 	tristate "Apple Magic Mouse/Trackpad multi-touch support"
++	default SPI_HID_APPLE
+ 	help
+ 	Support for the Apple Magic Mouse/Trackpad multi-touch.
+ 
+ 	Say Y here if you want support for the multi-touch features of the
+-	Apple Wireless "Magic" Mouse and the Apple Wireless "Magic" Trackpad.
++	Apple Wireless "Magic" Mouse, the Apple Wireless "Magic" Trackpad and
++	force touch Trackpads in Macbooks starting from 2015.
+ 
+ config HID_MALTRON
+ 	tristate "Maltron L90 keyboard"
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index d235fcf8f..4ad971f8b 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -60,6 +60,7 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+ #define MOUSE_REPORT_ID    0x29
+ #define MOUSE2_REPORT_ID   0x12
+ #define DOUBLE_REPORT_ID   0xf7
++#define SPI_REPORT_ID      0x02
+ #define USB_BATTERY_TIMEOUT_SEC 60
+ 
+ #define MAX_CONTACTS 16
+@@ -114,6 +115,18 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+ #define TRACKPAD2_RES_Y \
+ 	((TRACKPAD2_MAX_Y - TRACKPAD2_MIN_Y) / (TRACKPAD2_DIMENSION_Y / 100))
+ 
++#define J314_TP_DIMENSION_X (float)13000
++#define J314_TP_MIN_X -5900
++#define J314_TP_MAX_X 6500
++#define J314_TP_RES_X \
++	((J314_TP_MAX_X - J314_TP_MIN_X) / (J314_TP_DIMENSION_X / 100))
++#define J314_TP_DIMENSION_Y (float)8100
++#define J314_TP_MIN_Y -200
++#define J314_TP_MAX_Y 7400
++#define J314_TP_RES_Y \
++	((J314_TP_MAX_Y - J314_TP_MIN_Y) / (J314_TP_DIMENSION_Y / 100))
++
++#define J314_TP_MAX_FINGER_ORIENTATION 16384
+ 
+ struct magicmouse_input_ops {
+ 	int (*raw_event)(struct hid_device *hdev,
+@@ -537,6 +550,154 @@ static int magicmouse_raw_event_usb(struct hid_device *hdev,
  	return 1;
  }
  
@@ -444,33 +638,31 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
 +} __attribute__((packed, aligned(2)));
 +
 +/**
-+ * vendor trackpad report
-+ *
-+ * @num_fingers:	the number of fingers being reported in @fingers
-+ * @buttons:		same as HID buttons
-+ */
-+struct tp_header {
-+	// HID vendor part, up to 1751 bytes
-+	u8 unknown[22];
-+	u8 num_fingers;
-+	u8 buttons;
-+	u8 unknown3[14];
-+};
-+
-+/**
-+ * standard HID mouse report
++ * struct trackpad report
 + *
 + * @report_id:		reportid
 + * @buttons:		HID Usage Buttons 3 1-bit reports
++ * @num_fingers:	the number of fingers being reported in @fingers
++ * @clicked:		same as @buttons
 + */
-+struct tp_mouse_report {
++struct tp_header {
 +	// HID mouse report
 +	u8 report_id;
 +	u8 buttons;
 +	u8 rel_x;
 +	u8 rel_y;
 +	u8 padding[4];
++	// HID vendor part, up to 1751 bytes
++	u8 unknown[22];
++	u8 num_fingers;
++	u8 clicked;
++	u8 unknown3[14];
 +};
++
++static inline int le16_to_int(__le16 x)
++{
++	return (signed short)le16_to_cpu(x);
++}
 +
 +static void report_finger_data(struct input_dev *input, int slot,
 +			       const struct input_mt_pos *pos,
@@ -494,7 +686,7 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
 +	input_report_abs(input, ABS_MT_POSITION_Y, pos->y);
 +}
 +
-+static int magicmouse_raw_event_mtp(struct hid_device *hdev,
++static int magicmouse_raw_event_spi(struct hid_device *hdev,
 +		struct hid_report *report, u8 *data, int size)
 +{
 +	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
@@ -510,6 +702,9 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
 +	// hid_warn(hdev, "%s\n", __func__);
 +	// print_hex_dump_debug("appleft ev: ", DUMP_PREFIX_OFFSET, 16, 1, data,
 +	// 		     size, false);
++
++	if (data[0] != SPI_REPORT_ID)
++		return 0;
 +
 +	/* Expect 46 bytes of prefix, and N * 30 bytes of touch data. */
 +	if (size < hdr_sz || ((size - hdr_sz) % touch_sz) != 0)
@@ -549,84 +744,24 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
 +	}
 +
 +	input_mt_sync_frame(input);
-+	input_report_key(input, BTN_MOUSE, tp_hdr->buttons & 1);
++	input_report_key(input, BTN_MOUSE, data[1] & 1);
 +
 +	input_sync(input);
 +	return 1;
 +}
 +
-+static int magicmouse_raw_event_spi(struct hid_device *hdev,
-+		struct hid_report *report, u8 *data, int size)
-+{
-+	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
-+	const size_t hdr_sz = sizeof(struct tp_mouse_report);
-+
-+	if (!size)
-+		return 0;
-+
-+	if (data[0] == SPI_RESET_REPORT_ID) {
-+		hid_info(hdev, "Touch controller was reset, re-enabling touch mode\n");
-+		schedule_delayed_work(&msc->work, msecs_to_jiffies(10));
-+		return 1;
-+	}
-+
-+	if (data[0] != SPI_REPORT_ID || size < hdr_sz)
-+		return 0;
-+
-+	return magicmouse_raw_event_mtp(hdev, report, data + hdr_sz, size - hdr_sz);
-+}
-+
  static int magicmouse_event(struct hid_device *hdev, struct hid_field *field,
  		struct hid_usage *usage, __s32 value)
  {
-@@ -536,7 +839,17 @@
+@@ -727,6 +888,79 @@ static int magicmouse_setup_input_usb(struct input_dev *input,
  	return 0;
  }
  
--static int magicmouse_setup_input(struct input_dev *input, struct hid_device *hdev)
-+
-+static int magicmouse_setup_input(struct input_dev *input,
-+				  struct hid_device *hdev)
-+{
-+	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
-+
-+	return msc->input_ops.setup_input(input, hdev);
-+}
-+
-+static int magicmouse_setup_input_usb(struct input_dev *input,
-+				      struct hid_device *hdev)
- {
- 	int error;
- 	int mt_flags = 0;
-@@ -615,7 +928,7 @@
- 
- 	__set_bit(EV_ABS, input->evbit);
- 
--	error = input_mt_init_slots(input, 16, mt_flags);
-+	error = input_mt_init_slots(input, MAX_CONTACTS, mt_flags);
- 	if (error)
- 		return error;
- 	input_set_abs_params(input, ABS_MT_TOUCH_MAJOR, 0, 255 << 2,
-@@ -695,6 +1008,109 @@
- 	 */
- 	__clear_bit(EV_REP, input->evbit);
- 
-+	/*
-+	 * This isn't strictly speaking needed for USB, but enabling MT on
-+	 * device open is probably more robust than only doing it once on probe
-+	 * even if USB devices are not known to suffer from the SPI reset issue.
-+	 */
-+	input->open = magicmouse_open;
-+	input->close = magicmouse_close;
-+	return 0;
-+}
-+
-+static int magicmouse_setup_input_mtp(struct input_dev *input,
++static int magicmouse_setup_input_spi(struct input_dev *input,
 +				      struct hid_device *hdev)
 +{
 +	int error;
 +	int mt_flags = 0;
-+	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
 +
 +	__set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
 +	__clear_bit(BTN_0, input->keybit);
@@ -692,32 +827,13 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
 +	if (error)
 +		return error;
 +
-+	/*
-+	 * Override the default input->open function to send the MT
-+	 * enable every time the device is opened. This ensures it works
-+	 * even if we missed a reset event due to the device being closed.
-+	 * input->close is overridden for symmetry.
-+	 *
-+	 * This also takes care of the dimensions query.
-+	 */
-+	input->open = magicmouse_open;
-+	input->close = magicmouse_close;
-+	msc->query_dimensions = true;
-+
 +	return 0;
 +}
 +
-+static int magicmouse_setup_input_spi(struct input_dev *input,
-+				      struct hid_device *hdev)
-+{
-+	int ret = magicmouse_setup_input_mtp(input, hdev);
-+	if (ret)
-+		return ret;
-+
- 	return 0;
- }
- 
-@@ -748,6 +1164,10 @@
+ static int magicmouse_input_mapping(struct hid_device *hdev,
+ 		struct hid_input *hi, struct hid_field *field,
+ 		struct hid_usage *usage, unsigned long **bit, int *max)
+@@ -777,6 +1011,10 @@ static int magicmouse_enable_multitouch(struct hid_device *hdev)
  	int feature_size;
  
  	switch (hdev->product) {
@@ -728,20 +844,20 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
  	case USB_DEVICE_ID_APPLE_MAGICTRACKPAD2:
  	case USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC:
  		switch (hdev->vendor) {
-@@ -755,7 +1175,7 @@
+@@ -784,7 +1022,7 @@ static int magicmouse_enable_multitouch(struct hid_device *hdev)
  			feature_size = sizeof(feature_mt_trackpad2_bt);
  			feature = feature_mt_trackpad2_bt;
  			break;
 -		default: /* USB_VENDOR_ID_APPLE */
-+		default:  /* USB_VENDOR_ID_APPLE || SPI_VENDOR_ID_APPLE */
++		default: /* USB_VENDOR_ID_APPLE || SPI_VENDOR_ID_APPLE */
  			feature_size = sizeof(feature_mt_trackpad2_usb);
  			feature = feature_mt_trackpad2_usb;
  		}
-@@ -852,12 +1272,29 @@
+@@ -881,14 +1119,25 @@ static int magicmouse_probe(struct hid_device *hdev,
  	struct hid_report *report;
  	int ret;
  
-+	if ((id->bus == BUS_SPI || id->bus == BUS_HOST) && id->vendor == SPI_VENDOR_ID_APPLE &&
++	if (id->bus == BUS_SPI && id->vendor == SPI_VENDOR_ID_APPLE &&
 +	    hdev->type != HID_TYPE_SPI_MOUSE)
 +		return -ENODEV;
 +
@@ -751,31 +867,26 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
  		return -ENOMEM;
  	}
  
+-	msc->input_ops.raw_event = magicmouse_raw_event_usb;
+-	msc->input_ops.setup_input = magicmouse_setup_input_usb;
 +	// internal trackpad use a data format use input ops to avoid
 +	// conflicts with the report ID.
-+	if (id->bus == BUS_HOST) {
-+		msc->input_ops.raw_event = magicmouse_raw_event_mtp;
-+		msc->input_ops.setup_input = magicmouse_setup_input_mtp;
-+	} else if (id->bus == BUS_SPI) {
++	if (id->vendor == SPI_VENDOR_ID_APPLE) {
 +		msc->input_ops.raw_event = magicmouse_raw_event_spi;
 +		msc->input_ops.setup_input = magicmouse_setup_input_spi;
 +	} else {
 +		msc->input_ops.raw_event = magicmouse_raw_event_usb;
 +		msc->input_ops.setup_input = magicmouse_setup_input_usb;
 +	}
-+
+ 
  	msc->scroll_accel = SCROLL_ACCEL_DEFAULT;
  	msc->hdev = hdev;
- 	INIT_DEFERRABLE_WORK(&msc->work, magicmouse_enable_mt_work);
-@@ -916,6 +1353,18 @@
+@@ -948,6 +1197,15 @@ static int magicmouse_probe(struct hid_device *hdev,
  				TRACKPAD2_USB_REPORT_ID, 0);
  		}
  		break;
 +	case HID_ANY_ID:
 +		switch (id->bus) {
-+		case BUS_HOST:
-+			report = hid_register_report(hdev, HID_INPUT_REPORT, MTP_REPORT_ID, 0);
-+			break;
 +		case BUS_SPI:
 +			report = hid_register_report(hdev, HID_INPUT_REPORT, SPI_REPORT_ID, 0);
 +			break;
@@ -786,9 +897,415 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
  	default: /* USB_DEVICE_ID_APPLE_MAGICTRACKPAD */
  		report = hid_register_report(hdev, HID_INPUT_REPORT,
  			TRACKPAD_REPORT_ID, 0);
-@@ -930,22 +1379,14 @@
+@@ -1055,6 +1313,8 @@ static const struct hid_device_id magic_mice[] = {
+ 		USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC), .driver_data = 0 },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE,
+ 		USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC), .driver_data = 0 },
++	{ HID_SPI_DEVICE(SPI_VENDOR_ID_APPLE, HID_ANY_ID),
++	  .driver_data = 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(hid, magic_mice);
+-- 
+2.50.1
+
+
+From 02027fc9fbef0cd999c03400a4f20028520a7477 Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Fri, 8 Jul 2022 02:12:57 +0900
+Subject: [PATCH 11/18] HID: magicmouse: Add MTP multi-touch device support
+
+Apple M2 devices expose the multi-touch device over the HID over
+DockChannel transport, which we represent as the HOST bus type. The
+report format is the same, except the legacy mouse header is gone and
+there is no enable request needed.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/hid/hid-magicmouse.c | 63 +++++++++++++++++++++++++++---------
+ 1 file changed, 47 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index 4ad971f8b..9bf1d3660 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -61,6 +61,7 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+ #define MOUSE2_REPORT_ID   0x12
+ #define DOUBLE_REPORT_ID   0xf7
+ #define SPI_REPORT_ID      0x02
++#define MTP_REPORT_ID      0x75
+ #define USB_BATTERY_TIMEOUT_SEC 60
+ 
+ #define MAX_CONTACTS 16
+@@ -586,25 +587,32 @@ struct tp_finger {
+ } __attribute__((packed, aligned(2)));
+ 
+ /**
+- * struct trackpad report
++ * vendor trackpad report
+  *
+- * @report_id:		reportid
+- * @buttons:		HID Usage Buttons 3 1-bit reports
+  * @num_fingers:	the number of fingers being reported in @fingers
+- * @clicked:		same as @buttons
++ * @buttons:		same as HID buttons
+  */
+ struct tp_header {
++	// HID vendor part, up to 1751 bytes
++	u8 unknown[22];
++	u8 num_fingers;
++	u8 buttons;
++	u8 unknown3[14];
++};
++
++/**
++ * standard HID mouse report
++ *
++ * @report_id:		reportid
++ * @buttons:		HID Usage Buttons 3 1-bit reports
++ */
++struct tp_mouse_report {
+ 	// HID mouse report
+ 	u8 report_id;
+ 	u8 buttons;
+ 	u8 rel_x;
+ 	u8 rel_y;
+ 	u8 padding[4];
+-	// HID vendor part, up to 1751 bytes
+-	u8 unknown[22];
+-	u8 num_fingers;
+-	u8 clicked;
+-	u8 unknown3[14];
+ };
+ 
+ static inline int le16_to_int(__le16 x)
+@@ -634,7 +642,7 @@ static void report_finger_data(struct input_dev *input, int slot,
+ 	input_report_abs(input, ABS_MT_POSITION_Y, pos->y);
+ }
+ 
+-static int magicmouse_raw_event_spi(struct hid_device *hdev,
++static int magicmouse_raw_event_mtp(struct hid_device *hdev,
+ 		struct hid_report *report, u8 *data, int size)
+ {
+ 	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
+@@ -651,9 +659,6 @@ static int magicmouse_raw_event_spi(struct hid_device *hdev,
+ 	// print_hex_dump_debug("appleft ev: ", DUMP_PREFIX_OFFSET, 16, 1, data,
+ 	// 		     size, false);
+ 
+-	if (data[0] != SPI_REPORT_ID)
+-		return 0;
+-
+ 	/* Expect 46 bytes of prefix, and N * 30 bytes of touch data. */
+ 	if (size < hdr_sz || ((size - hdr_sz) % touch_sz) != 0)
+ 		return 0;
+@@ -692,12 +697,26 @@ static int magicmouse_raw_event_spi(struct hid_device *hdev,
+ 	}
+ 
+ 	input_mt_sync_frame(input);
+-	input_report_key(input, BTN_MOUSE, data[1] & 1);
++	input_report_key(input, BTN_MOUSE, tp_hdr->buttons & 1);
+ 
+ 	input_sync(input);
+ 	return 1;
+ }
+ 
++static int magicmouse_raw_event_spi(struct hid_device *hdev,
++		struct hid_report *report, u8 *data, int size)
++{
++	const size_t hdr_sz = sizeof(struct tp_mouse_report);
++
++	if (size < hdr_sz)
++		return 0;
++
++	if (data[0] != SPI_REPORT_ID)
++		return 0;
++
++	return magicmouse_raw_event_mtp(hdev, report, data + hdr_sz, size - hdr_sz);
++}
++
+ static int magicmouse_event(struct hid_device *hdev, struct hid_field *field,
+ 		struct hid_usage *usage, __s32 value)
+ {
+@@ -1119,7 +1138,7 @@ static int magicmouse_probe(struct hid_device *hdev,
+ 	struct hid_report *report;
+ 	int ret;
+ 
+-	if (id->bus == BUS_SPI && id->vendor == SPI_VENDOR_ID_APPLE &&
++	if ((id->bus == BUS_SPI || id->bus == BUS_HOST) && id->vendor == SPI_VENDOR_ID_APPLE &&
+ 	    hdev->type != HID_TYPE_SPI_MOUSE)
+ 		return -ENODEV;
+ 
+@@ -1131,7 +1150,10 @@ static int magicmouse_probe(struct hid_device *hdev,
+ 
+ 	// internal trackpad use a data format use input ops to avoid
+ 	// conflicts with the report ID.
+-	if (id->vendor == SPI_VENDOR_ID_APPLE) {
++	if (id->bus == BUS_HOST) {
++		msc->input_ops.raw_event = magicmouse_raw_event_mtp;
++		msc->input_ops.setup_input = magicmouse_setup_input_spi;
++	} else if (id->bus == BUS_SPI) {
+ 		msc->input_ops.raw_event = magicmouse_raw_event_spi;
+ 		msc->input_ops.setup_input = magicmouse_setup_input_spi;
+ 	} else {
+@@ -1199,6 +1221,9 @@ static int magicmouse_probe(struct hid_device *hdev,
+ 		break;
+ 	case HID_ANY_ID:
+ 		switch (id->bus) {
++		case BUS_HOST:
++			report = hid_register_report(hdev, HID_INPUT_REPORT, MTP_REPORT_ID, 0);
++			break;
+ 		case BUS_SPI:
+ 			report = hid_register_report(hdev, HID_INPUT_REPORT, SPI_REPORT_ID, 0);
+ 			break;
+@@ -1220,6 +1245,10 @@ static int magicmouse_probe(struct hid_device *hdev,
  	}
  	report->size = 6;
+ 
++	/* MTP devices do not need the MT enable, this is handled by the MTP driver */
++	if (id->bus == BUS_HOST)
++		return 0;
++
+ 	/*
+ 	 * Some devices repond with 'invalid report id' when feature
+ 	 * report switching it into multitouch mode is sent to it.
+@@ -1315,6 +1344,8 @@ static const struct hid_device_id magic_mice[] = {
+ 		USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC), .driver_data = 0 },
+ 	{ HID_SPI_DEVICE(SPI_VENDOR_ID_APPLE, HID_ANY_ID),
+ 	  .driver_data = 0 },
++	{ HID_DEVICE(BUS_HOST, HID_GROUP_ANY, HOST_VENDOR_ID_APPLE,
++                     HID_ANY_ID), .driver_data = 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(hid, magic_mice);
+-- 
+2.50.1
+
+
+From 38ab43df5df32d202219a5eb1ba834ab31097846 Mon Sep 17 00:00:00 2001
+From: Janne Grunau <j@jannau.net>
+Date: Sun, 11 Dec 2022 22:56:16 +0100
+Subject: [PATCH 12/18] HID: magicmouse: Add .reset_resume for SPI trackpads
+
+The trackpad has to request multi touch reports during resume.
+
+Signed-off-by: Janne Grunau <j@jannau.net>
+---
+ drivers/hid/hid-magicmouse.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index 9bf1d3660..3f124d1a1 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -1350,6 +1350,16 @@ static const struct hid_device_id magic_mice[] = {
+ };
+ MODULE_DEVICE_TABLE(hid, magic_mice);
+ 
++#ifdef CONFIG_PM
++static int magicmouse_reset_resume(struct hid_device *hdev)
++{
++	if (hdev->bus == BUS_SPI)
++		return magicmouse_enable_multitouch(hdev);
++
++	return 0;
++}
++#endif
++
+ static struct hid_driver magicmouse_driver = {
+ 	.name = "magicmouse",
+ 	.id_table = magic_mice,
+@@ -1360,6 +1370,10 @@ static struct hid_driver magicmouse_driver = {
+ 	.event = magicmouse_event,
+ 	.input_mapping = magicmouse_input_mapping,
+ 	.input_configured = magicmouse_input_configured,
++#ifdef CONFIG_PM
++        .reset_resume = magicmouse_reset_resume,
++#endif
++
+ };
+ module_hid_driver(magicmouse_driver);
+ 
+-- 
+2.50.1
+
+
+From a47d2b3a894d574c8bc9cfe730095de73c0c7533 Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Sun, 30 Apr 2023 23:48:45 +0900
+Subject: [PATCH 13/18] HID: magicmouse: Handle touch controller resets on SPI
+ devices
+
+On at least some SPI devices (e.g. recent Apple Silicon machines), the
+Broadcom touch controller is prone to crashing. When this happens, the
+STM eventually notices and resets it. It then notifies the driver via
+HID report 0x60, and the driver needs to re-enable MT mode to make
+things work again.
+
+This poses an additional issue: the hidinput core will close the
+low-level transport while the device is closed, which can cause us to
+miss a reset notification. To fix this, override the input open/close
+callbacks and send the MT enable every time the HID device is opened,
+instead of only once on probe. This should increase general robustness,
+even if the reset mechanism doesn't work for some reason, so it's worth
+doing it for USB devices too. MTP devices are exempt since they do not
+require the MT enable at all.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/hid/hid-magicmouse.c | 108 ++++++++++++++++++++++++++++-------
+ 1 file changed, 87 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index 3f124d1a1..36defa0c4 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -61,6 +61,7 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+ #define MOUSE2_REPORT_ID   0x12
+ #define DOUBLE_REPORT_ID   0xf7
+ #define SPI_REPORT_ID      0x02
++#define SPI_RESET_REPORT_ID 0x60
+ #define MTP_REPORT_ID      0x75
+ #define USB_BATTERY_TIMEOUT_SEC 60
+ 
+@@ -176,6 +177,50 @@ struct magicmouse_sc {
+ 	struct magicmouse_input_ops input_ops;
+ };
+ 
++static int magicmouse_enable_multitouch(struct hid_device *hdev);
++
++static int magicmouse_open(struct input_dev *dev)
++{
++	struct hid_device *hdev = input_get_drvdata(dev);
++	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
++	int ret;
++
++	ret = hid_hw_open(hdev);
++	if (ret)
++		return ret;
++
++	/*
++	 * Some devices repond with 'invalid report id' when feature
++	 * report switching it into multitouch mode is sent to it.
++	 *
++	 * This results in -EIO from the _raw low-level transport callback,
++	 * but there seems to be no other way of switching the mode.
++	 * Thus the super-ugly hacky success check below.
++	 */
++	ret = magicmouse_enable_multitouch(hdev);
++	if (ret != -EIO && ret < 0) {
++		hid_err(hdev, "unable to request touch data (%d)\n", ret);
++		return ret;
++	}
++	if (ret == -EIO && (hdev->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2 ||
++			    hdev->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2_USBC)) {
++		schedule_delayed_work(&msc->work, msecs_to_jiffies(500));
++	}
++
++	/*
++	 * MT enable is usually not required after the first time, so don't
++	 * consider it fatal.
++	 */
++	return 0;
++}
++
++static void magicmouse_close(struct input_dev *dev)
++{
++	struct hid_device *hdev = input_get_drvdata(dev);
++
++	hid_hw_close(hdev);
++}
++
+ static int magicmouse_firm_touch(struct magicmouse_sc *msc)
+ {
+ 	int touch = -1;
+@@ -706,12 +751,19 @@ static int magicmouse_raw_event_mtp(struct hid_device *hdev,
+ static int magicmouse_raw_event_spi(struct hid_device *hdev,
+ 		struct hid_report *report, u8 *data, int size)
+ {
++	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
+ 	const size_t hdr_sz = sizeof(struct tp_mouse_report);
+ 
+-	if (size < hdr_sz)
++	if (!size)
+ 		return 0;
+ 
+-	if (data[0] != SPI_REPORT_ID)
++	if (data[0] == SPI_RESET_REPORT_ID) {
++		hid_info(hdev, "Touch controller was reset, re-enabling touch mode\n");
++		schedule_delayed_work(&msc->work, msecs_to_jiffies(10));
++		return 1;
++	}
++
++	if (data[0] != SPI_REPORT_ID || size < hdr_sz)
+ 		return 0;
+ 
+ 	return magicmouse_raw_event_mtp(hdev, report, data + hdr_sz, size - hdr_sz);
+@@ -904,10 +956,17 @@ static int magicmouse_setup_input_usb(struct input_dev *input,
+ 	 */
+ 	__clear_bit(EV_REP, input->evbit);
+ 
++	/*
++	 * This isn't strictly speaking needed for USB, but enabling MT on
++	 * device open is probably more robust than only doing it once on probe
++	 * even if USB devices are not known to suffer from the SPI reset issue.
++	 */
++	input->open = magicmouse_open;
++	input->close = magicmouse_close;
+ 	return 0;
+ }
+ 
+-static int magicmouse_setup_input_spi(struct input_dev *input,
++static int magicmouse_setup_input_mtp(struct input_dev *input,
+ 				      struct hid_device *hdev)
+ {
+ 	int error;
+@@ -980,6 +1039,25 @@ static int magicmouse_setup_input_spi(struct input_dev *input,
+ 	return 0;
+ }
+ 
++static int magicmouse_setup_input_spi(struct input_dev *input,
++				      struct hid_device *hdev)
++{
++	int ret = magicmouse_setup_input_mtp(input, hdev);
++	if (ret)
++		return ret;
++
++	/*
++	 * Override the default input->open function to send the MT
++	 * enable every time the device is opened. This ensures it works
++	 * even if we missed a reset event due to the device being closed.
++	 * input->close is overridden for symmetry.
++	 */
++	input->open = magicmouse_open;
++	input->close = magicmouse_close;
++
++	return 0;
++}
++
+ static int magicmouse_input_mapping(struct hid_device *hdev,
+ 		struct hid_input *hi, struct hid_field *field,
+ 		struct hid_usage *usage, unsigned long **bit, int *max)
+@@ -1041,7 +1119,7 @@ static int magicmouse_enable_multitouch(struct hid_device *hdev)
+ 			feature_size = sizeof(feature_mt_trackpad2_bt);
+ 			feature = feature_mt_trackpad2_bt;
+ 			break;
+-		default: /* USB_VENDOR_ID_APPLE || SPI_VENDOR_ID_APPLE */
++		default:  /* USB_VENDOR_ID_APPLE || SPI_VENDOR_ID_APPLE */
+ 			feature_size = sizeof(feature_mt_trackpad2_usb);
+ 			feature = feature_mt_trackpad2_usb;
+ 		}
+@@ -1152,7 +1230,7 @@ static int magicmouse_probe(struct hid_device *hdev,
+ 	// conflicts with the report ID.
+ 	if (id->bus == BUS_HOST) {
+ 		msc->input_ops.raw_event = magicmouse_raw_event_mtp;
+-		msc->input_ops.setup_input = magicmouse_setup_input_spi;
++		msc->input_ops.setup_input = magicmouse_setup_input_mtp;
+ 	} else if (id->bus == BUS_SPI) {
+ 		msc->input_ops.raw_event = magicmouse_raw_event_spi;
+ 		msc->input_ops.setup_input = magicmouse_setup_input_spi;
+@@ -1249,22 +1327,10 @@ static int magicmouse_probe(struct hid_device *hdev,
+ 	if (id->bus == BUS_HOST)
+ 		return 0;
  
 -	/*
 -	 * Some devices repond with 'invalid report id' when feature
@@ -806,10 +1323,6 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
 -	if (ret == -EIO && (id->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2 ||
 -			    id->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2_USBC)) {
 -		schedule_delayed_work(&msc->work, msecs_to_jiffies(500));
-+	/* MTP devices do not need the MT enable, this is handled by the MTP driver */
-+	if (id->bus == BUS_HOST)
-+		return 0;
-+
 +	/* SPI devices need to watch for reset events to re-send the MT enable */
 +	if (id->bus == BUS_SPI) {
 +		report = hid_register_report(hdev, HID_INPUT_REPORT, SPI_RESET_REPORT_ID, 0);
@@ -817,63 +1330,287 @@ Index: lernstick-linux/drivers/hid/hid-magicmouse.c
  	}
  
  	return 0;
-@@ -1023,10 +1464,24 @@
- 		USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC), .driver_data = 0 },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE,
- 		USB_DEVICE_ID_APPLE_MAGICTRACKPAD2_USBC), .driver_data = 0 },
-+	{ HID_SPI_DEVICE(SPI_VENDOR_ID_APPLE, HID_ANY_ID),
-+	  .driver_data = 0 },
-+	{ HID_DEVICE(BUS_HOST, HID_GROUP_ANY, HOST_VENDOR_ID_APPLE,
-+                     HID_ANY_ID), .driver_data = 0 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(hid, magic_mice);
+-- 
+2.50.1
+
+
+From 5ad1032a761c4f37adda7b2aa5c676bb130fae0e Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Sun, 3 Dec 2023 21:08:17 +0900
+Subject: [PATCH 14/18] HID: magicmouse: Query device dimensions via HID report
+
+For SPI/MTP trackpads, query the dimensions via HID report instead of
+hardcoding values.
+
+TODO: Does this work for the USB/BT devices? Maybe we can get rid of the
+hardcoded sizes everywhere?
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/hid/hid-magicmouse.c | 104 +++++++++++++++++++++++++++--------
+ 1 file changed, 80 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index 36defa0c4..3c062f80c 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -63,6 +63,7 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+ #define SPI_REPORT_ID      0x02
+ #define SPI_RESET_REPORT_ID 0x60
+ #define MTP_REPORT_ID      0x75
++#define SENSOR_DIMENSIONS_REPORT_ID 0xd9
+ #define USB_BATTERY_TIMEOUT_SEC 60
  
-+#ifdef CONFIG_PM
-+static int magicmouse_reset_resume(struct hid_device *hdev)
+ #define MAX_CONTACTS 16
+@@ -117,6 +118,7 @@ MODULE_PARM_DESC(report_undeciphered, "Report undeciphered multi-touch state fie
+ #define TRACKPAD2_RES_Y \
+ 	((TRACKPAD2_MAX_Y - TRACKPAD2_MIN_Y) / (TRACKPAD2_DIMENSION_Y / 100))
+ 
++/* These are fallback values, since the real values will be queried from the device. */
+ #define J314_TP_DIMENSION_X (float)13000
+ #define J314_TP_MIN_X -5900
+ #define J314_TP_MAX_X 6500
+@@ -140,6 +142,7 @@ struct magicmouse_input_ops {
+  * struct magicmouse_sc - Tracks Magic Mouse-specific data.
+  * @input: Input device through which we report events.
+  * @quirks: Currently unused.
++ * @query_dimensions: Whether to query and update dimensions on first open
+  * @ntouches: Number of touches in most recent touch report.
+  * @scroll_accel: Number of consecutive scroll motions.
+  * @scroll_jiffies: Time of last scroll motion.
+@@ -154,6 +157,7 @@ struct magicmouse_input_ops {
+ struct magicmouse_sc {
+ 	struct input_dev *input;
+ 	unsigned long quirks;
++	bool query_dimensions;
+ 
+ 	int ntouches;
+ 	int scroll_accel;
+@@ -179,6 +183,11 @@ struct magicmouse_sc {
+ 
+ static int magicmouse_enable_multitouch(struct hid_device *hdev);
+ 
++static inline int le16_to_int(__le16 x)
 +{
-+	if (hdev->bus == BUS_SPI)
-+		return magicmouse_enable_multitouch(hdev);
-+
-+	return 0;
++	return (signed short)le16_to_cpu(x);
 +}
-+#endif
 +
- static struct hid_driver magicmouse_driver = {
- 	.name = "magicmouse",
- 	.id_table = magic_mice,
-@@ -1037,6 +1492,10 @@
- 	.event = magicmouse_event,
- 	.input_mapping = magicmouse_input_mapping,
- 	.input_configured = magicmouse_input_configured,
-+#ifdef CONFIG_PM
-+        .reset_resume = magicmouse_reset_resume,
-+#endif
-+
- };
- module_hid_driver(magicmouse_driver);
+ static int magicmouse_open(struct input_dev *dev)
+ {
+ 	struct hid_device *hdev = input_get_drvdata(dev);
+@@ -196,21 +205,69 @@ static int magicmouse_open(struct input_dev *dev)
+ 	 * This results in -EIO from the _raw low-level transport callback,
+ 	 * but there seems to be no other way of switching the mode.
+ 	 * Thus the super-ugly hacky success check below.
++	 *
++	 * MTP devices do not need this.
+ 	 */
+-	ret = magicmouse_enable_multitouch(hdev);
+-	if (ret != -EIO && ret < 0) {
+-		hid_err(hdev, "unable to request touch data (%d)\n", ret);
+-		return ret;
+-	}
+-	if (ret == -EIO && (hdev->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2 ||
+-			    hdev->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2_USBC)) {
+-		schedule_delayed_work(&msc->work, msecs_to_jiffies(500));
++	if (hdev->bus != BUS_HOST) {
++		ret = magicmouse_enable_multitouch(hdev);
++		if (ret != -EIO && ret < 0) {
++			hid_err(hdev, "unable to request touch data (%d)\n", ret);
++			return ret;
++		}
++		if (ret == -EIO && (hdev->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2 ||
++				hdev->product == USB_DEVICE_ID_APPLE_MAGICMOUSE2_USBC)) {
++			schedule_delayed_work(&msc->work, msecs_to_jiffies(500));
++		}
+ 	}
  
-Index: lernstick-linux/drivers/hid/Makefile
-===================================================================
---- lernstick-linux.orig/drivers/hid/Makefile	2025-12-05 13:58:05.393652402 +0100
-+++ lernstick-linux/drivers/hid/Makefile	2025-12-05 13:58:05.385652217 +0100
-@@ -172,6 +172,12 @@
+ 	/*
+-	 * MT enable is usually not required after the first time, so don't
+-	 * consider it fatal.
++	 * For Apple Silicon trackpads, we want to query the dimensions on
++	 * device open. This is because doing so requires the firmware, but
++	 * we don't want to force a firmware load until the device is opened
++	 * for the first time. So do that here and update the input properties
++	 * just in time before userspace queries them.
+ 	 */
++	if (msc->query_dimensions) {
++		struct input_dev *input = msc->input;
++		u8 buf[32];
++		struct {
++			__le32 width;
++			__le32 height;
++			__le16 min_x;
++			__le16 min_y;
++			__le16 max_x;
++			__le16 max_y;
++		} dim;
++		uint32_t x_span, y_span;
++
++		ret = hid_hw_raw_request(hdev, SENSOR_DIMENSIONS_REPORT_ID, buf, sizeof(buf), HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
++		if (ret < (int)(1 + sizeof(dim))) {
++			hid_err(hdev, "unable to request dimensions (%d)\n", ret);
++			return ret;
++		}
++
++		memcpy(&dim, buf + 1, sizeof(dim));
++
++		/* finger position */
++		input_set_abs_params(input, ABS_MT_POSITION_X,
++				     le16_to_int(dim.min_x), le16_to_int(dim.max_x), 0, 0);
++		/* Y axis is inverted */
++		input_set_abs_params(input, ABS_MT_POSITION_Y,
++				     -le16_to_int(dim.max_y), -le16_to_int(dim.min_y), 0, 0);
++		x_span = le16_to_int(dim.max_x) - le16_to_int(dim.min_x);
++		y_span = le16_to_int(dim.max_y) - le16_to_int(dim.min_y);
++
++		/* X/Y resolution */
++		input_abs_set_res(input, ABS_MT_POSITION_X, 100 * x_span / le32_to_cpu(dim.width) );
++		input_abs_set_res(input, ABS_MT_POSITION_Y, 100 * y_span / le32_to_cpu(dim.height) );
++
++		/* copy info, as input_mt_init_slots() does */
++		dev->absinfo[ABS_X] = dev->absinfo[ABS_MT_POSITION_X];
++		dev->absinfo[ABS_Y] = dev->absinfo[ABS_MT_POSITION_Y];
++
++		msc->query_dimensions = false;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -660,11 +717,6 @@ struct tp_mouse_report {
+ 	u8 padding[4];
+ };
+ 
+-static inline int le16_to_int(__le16 x)
+-{
+-	return (signed short)le16_to_cpu(x);
+-}
+-
+ static void report_finger_data(struct input_dev *input, int slot,
+ 			       const struct input_mt_pos *pos,
+ 			       const struct tp_finger *f)
+@@ -971,6 +1023,7 @@ static int magicmouse_setup_input_mtp(struct input_dev *input,
+ {
+ 	int error;
+ 	int mt_flags = 0;
++	struct magicmouse_sc *msc = hid_get_drvdata(hdev);
+ 
+ 	__set_bit(INPUT_PROP_BUTTONPAD, input->propbit);
+ 	__clear_bit(BTN_0, input->keybit);
+@@ -1036,6 +1089,18 @@ static int magicmouse_setup_input_mtp(struct input_dev *input,
+ 	if (error)
+ 		return error;
+ 
++	/*
++	 * Override the default input->open function to send the MT
++	 * enable every time the device is opened. This ensures it works
++	 * even if we missed a reset event due to the device being closed.
++	 * input->close is overridden for symmetry.
++	 *
++	 * This also takes care of the dimensions query.
++	 */
++	input->open = magicmouse_open;
++	input->close = magicmouse_close;
++	msc->query_dimensions = true;
++
+ 	return 0;
+ }
+ 
+@@ -1046,15 +1111,6 @@ static int magicmouse_setup_input_spi(struct input_dev *input,
+ 	if (ret)
+ 		return ret;
+ 
+-	/*
+-	 * Override the default input->open function to send the MT
+-	 * enable every time the device is opened. This ensures it works
+-	 * even if we missed a reset event due to the device being closed.
+-	 * input->close is overridden for symmetry.
+-	 */
+-	input->open = magicmouse_open;
+-	input->close = magicmouse_close;
+-
+ 	return 0;
+ }
+ 
+-- 
+2.50.1
+
+
+From 85fc68b9b6f8d51749e5095fe565466af865d04e Mon Sep 17 00:00:00 2001
+From: Janne Grunau <j@jannau.net>
+Date: Fri, 10 Dec 2021 19:38:43 +0100
+Subject: [PATCH 15/18] WIP: HID: transport: spi: add Apple SPI transport
+
+Keyboard and trackpad of Apple Sillicon SoCs (M1, M1 Pro/Max) laptops
+are are HID devices connected via SPI.
+
+This is the same protocol as implemented by applespi.c. It was not
+noticed that protocol is a transport for HID. Adding support for ACPI
+based Intel MacBooks will be done in a separate commit.
+
+How HID is mapped in this protocol is not yet fully understood.
+
+Microsoft has a specification for HID over SPI [1] incompatible with the
+transport protocol used by Apple.
+
+[1] https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/hid-over-spi
+
+Contains "HID: transport: spi: apple: Increase receive buffer size"
+
+The SPI receive buffer is passed directly to hid_input_report() if it
+contains a complete report. It is then passed to hid_report_raw_event()
+which computes the expected report size and memsets the "missing
+trailing data up to HID_MAX_BUFFER_SIZE (16K) or
+hid_ll_driver.max_buffer_size (if set) to zero.
+
+Co-developed-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Janne Grunau <j@jannau.net>
+---
+ drivers/hid/Kconfig                      |    2 +
+ drivers/hid/Makefile                     |    2 +
+ drivers/hid/spi-hid/Kconfig              |   26 +
+ drivers/hid/spi-hid/Makefile             |   10 +
+ drivers/hid/spi-hid/spi-hid-apple-core.c | 1194 ++++++++++++++++++++++
+ drivers/hid/spi-hid/spi-hid-apple-of.c   |  153 +++
+ drivers/hid/spi-hid/spi-hid-apple.h      |   35 +
+ 7 files changed, 1422 insertions(+)
+ create mode 100644 drivers/hid/spi-hid/Kconfig
+ create mode 100644 drivers/hid/spi-hid/Makefile
+ create mode 100644 drivers/hid/spi-hid/spi-hid-apple-core.c
+ create mode 100644 drivers/hid/spi-hid/spi-hid-apple-of.c
+ create mode 100644 drivers/hid/spi-hid/spi-hid-apple.h
+
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index d44afb5f8..cee9eaaca 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -1438,4 +1438,6 @@ endif # HID
+ 
+ source "drivers/hid/usbhid/Kconfig"
+ 
++source "drivers/hid/spi-hid/Kconfig"
++
+ endif # HID_SUPPORT
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index 10ae5dedb..42740b0dd 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -172,6 +172,8 @@ obj-$(CONFIG_INTEL_ISH_HID)	+= intel-ish-hid/
  
  obj-$(CONFIG_AMD_SFH_HID)       += amd-sfh-hid/
  
-+obj-$(CONFIG_HID_DOCKCHANNEL)   += dockchannel-hid/
-+
 +obj-$(CONFIG_SPI_HID_APPLE_CORE)	+= spi-hid/
-+
-+obj-$(CONFIG_HID_DOCKCHANNEL)   += dockchannel-hid/
 +
  obj-$(CONFIG_SURFACE_HID_CORE)  += surface-hid/
  
  obj-$(CONFIG_INTEL_THC_HID)     += intel-thc-hid/
-Index: lernstick-linux/drivers/hid/spi-hid/Kconfig
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/hid/spi-hid/Kconfig	2025-12-05 13:58:05.385652217 +0100
+diff --git a/drivers/hid/spi-hid/Kconfig b/drivers/hid/spi-hid/Kconfig
+new file mode 100644
+index 000000000..8e37f0fec
+--- /dev/null
++++ b/drivers/hid/spi-hid/Kconfig
 @@ -0,0 +1,26 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +menu "SPI HID support"
@@ -901,10 +1638,11 @@ Index: lernstick-linux/drivers/hid/spi-hid/Kconfig
 +	default m if SPI_HID_APPLE_OF=m
 +	select HID
 +	select CRC16
-Index: lernstick-linux/drivers/hid/spi-hid/Makefile
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/hid/spi-hid/Makefile	2025-12-05 13:58:05.385652217 +0100
+diff --git a/drivers/hid/spi-hid/Makefile b/drivers/hid/spi-hid/Makefile
+new file mode 100644
+index 000000000..f276ee12c
+--- /dev/null
++++ b/drivers/hid/spi-hid/Makefile
 @@ -0,0 +1,10 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +#
@@ -916,10 +1654,11 @@ Index: lernstick-linux/drivers/hid/spi-hid/Makefile
 +spi-hid-apple-objs				=  spi-hid-apple-core.o
 +
 +obj-$(CONFIG_SPI_HID_APPLE_OF)			+= spi-hid-apple-of.o
-Index: lernstick-linux/drivers/hid/spi-hid/spi-hid-apple-core.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/hid/spi-hid/spi-hid-apple-core.c	2025-12-05 13:58:05.385652217 +0100
+diff --git a/drivers/hid/spi-hid/spi-hid-apple-core.c b/drivers/hid/spi-hid/spi-hid-apple-core.c
+new file mode 100644
+index 000000000..2ed909895
+--- /dev/null
++++ b/drivers/hid/spi-hid/spi-hid-apple-core.c
 @@ -0,0 +1,1194 @@
 +/*
 + * SPDX-License-Identifier: GPL-2.0
@@ -2115,10 +2854,11 @@ Index: lernstick-linux/drivers/hid/spi-hid/spi-hid-apple-core.c
 +MODULE_DESCRIPTION("Apple SPI HID transport driver");
 +MODULE_AUTHOR("Janne Grunau <j@jannau.net>");
 +MODULE_LICENSE("GPL");
-Index: lernstick-linux/drivers/hid/spi-hid/spi-hid-apple-of.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/hid/spi-hid/spi-hid-apple-of.c	2025-12-05 13:58:05.385652217 +0100
+diff --git a/drivers/hid/spi-hid/spi-hid-apple-of.c b/drivers/hid/spi-hid/spi-hid-apple-of.c
+new file mode 100644
+index 000000000..b631212b8
+--- /dev/null
++++ b/drivers/hid/spi-hid/spi-hid-apple-of.c
 @@ -0,0 +1,153 @@
 +/*
 + * SPDX-License-Identifier: GPL-2.0
@@ -2273,10 +3013,11 @@ Index: lernstick-linux/drivers/hid/spi-hid/spi-hid-apple-of.c
 +MODULE_DESCRIPTION("Apple SPI HID transport driver for OpenFirmware systems");
 +MODULE_AUTHOR("Janne Grunau <j@jannau.net>");
 +MODULE_LICENSE("GPL");
-Index: lernstick-linux/drivers/hid/spi-hid/spi-hid-apple.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/hid/spi-hid/spi-hid-apple.h	2025-12-05 13:58:05.385652217 +0100
+diff --git a/drivers/hid/spi-hid/spi-hid-apple.h b/drivers/hid/spi-hid/spi-hid-apple.h
+new file mode 100644
+index 000000000..9abecd1ba
+--- /dev/null
++++ b/drivers/hid/spi-hid/spi-hid-apple.h
 @@ -0,0 +1,35 @@
 +/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
 +
@@ -2313,11 +3054,36 @@ Index: lernstick-linux/drivers/hid/spi-hid/spi-hid-apple.h
 +extern const struct dev_pm_ops spihid_apple_core_pm;
 +
 +#endif /* SPI_HID_APPLE_H */
-Index: lernstick-linux/drivers/soc/apple/Kconfig
-===================================================================
---- lernstick-linux.orig/drivers/soc/apple/Kconfig	2025-12-05 13:58:05.393652402 +0100
-+++ lernstick-linux/drivers/soc/apple/Kconfig	2025-12-05 13:58:05.389652309 +0100
-@@ -4,6 +4,16 @@
+-- 
+2.50.1
+
+
+From 893bbc8316f26e64478922abc8416cd17e65bf4f Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Fri, 8 Jul 2022 02:09:24 +0900
+Subject: [PATCH 16/18] soc: apple: Add DockChannel driver
+
+DockChannel is a simple FIFO interface used to communicate between SoC
+blocks. Add a driver that represents the shared interrupt controller for
+the DockChannel block, and then exposes probe and data transfer
+functions that child device drivers can use to instantiate individual
+FIFOs.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/soc/apple/Kconfig             |  10 +
+ drivers/soc/apple/Makefile            |   3 +
+ drivers/soc/apple/dockchannel.c       | 406 ++++++++++++++++++++++++++
+ include/linux/soc/apple/dockchannel.h |  26 ++
+ 4 files changed, 445 insertions(+)
+ create mode 100644 drivers/soc/apple/dockchannel.c
+ create mode 100644 include/linux/soc/apple/dockchannel.h
+
+diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
+index 6388cbe1e..82d0edadf 100644
+--- a/drivers/soc/apple/Kconfig
++++ b/drivers/soc/apple/Kconfig
+@@ -4,6 +4,16 @@ if ARCH_APPLE || COMPILE_TEST
  
  menu "Apple SoC drivers"
  
@@ -2334,32 +3100,11 @@ Index: lernstick-linux/drivers/soc/apple/Kconfig
  config APPLE_MAILBOX
  	tristate "Apple SoC mailboxes"
  	depends on PM
-@@ -30,6 +40,20 @@
- 
- 	  Say 'y' here if you have an Apple SoC.
- 
-+config APPLE_RTKIT_HELPER
-+	tristate "Apple Generic RTKit helper co-processor"
-+	depends on APPLE_RTKIT
-+	depends on ARCH_APPLE || COMPILE_TEST
-+	default ARCH_APPLE
-+	help
-+	  Apple SoCs such as the M1 come with various co-processors running
-+	  their proprietary RTKit operating system. This option enables support
-+	  for a generic co-processor that does not implement any additional
-+	  in-band communications. It can be used for testing purposes, or for
-+	  coprocessors such as MTP that communicate over a different interface.
-+
-+	  Say 'y' here if you have an Apple SoC.
-+
- config APPLE_SART
- 	tristate "Apple SART DMA address filter"
- 	depends on ARCH_APPLE || COMPILE_TEST
-Index: lernstick-linux/drivers/soc/apple/Makefile
-===================================================================
---- lernstick-linux.orig/drivers/soc/apple/Makefile	2025-12-05 13:58:05.393652402 +0100
-+++ lernstick-linux/drivers/soc/apple/Makefile	2025-12-05 13:58:05.389652309 +0100
-@@ -1,10 +1,16 @@
+diff --git a/drivers/soc/apple/Makefile b/drivers/soc/apple/Makefile
+index 4d9ab8f30..0b6a9f92b 100644
+--- a/drivers/soc/apple/Makefile
++++ b/drivers/soc/apple/Makefile
+@@ -1,5 +1,8 @@
  # SPDX-License-Identifier: GPL-2.0-only
  
 +obj-$(CONFIG_APPLE_DOCKCHANNEL) += apple-dockchannel.o
@@ -2368,18 +3113,11 @@ Index: lernstick-linux/drivers/soc/apple/Makefile
  obj-$(CONFIG_APPLE_MAILBOX) += apple-mailbox.o
  apple-mailbox-y = mailbox.o
  
- obj-$(CONFIG_APPLE_RTKIT) += apple-rtkit.o
- apple-rtkit-y = rtkit.o rtkit-crashlog.o
- 
-+obj-$(CONFIG_APPLE_RTKIT_HELPER) += apple-rtkit-helper.o
-+apple-rtkit-helper-y = rtkit-helper.o
-+
- obj-$(CONFIG_APPLE_SART) += apple-sart.o
- apple-sart-y = sart.o
-Index: lernstick-linux/drivers/soc/apple/dockchannel.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/soc/apple/dockchannel.c	2025-12-05 13:58:05.385652217 +0100
+diff --git a/drivers/soc/apple/dockchannel.c b/drivers/soc/apple/dockchannel.c
+new file mode 100644
+index 000000000..3a0d79640
+--- /dev/null
++++ b/drivers/soc/apple/dockchannel.c
 @@ -0,0 +1,406 @@
 +// SPDX-License-Identifier: GPL-2.0-only OR MIT
 +/*
@@ -2787,10 +3525,11 @@ Index: lernstick-linux/drivers/soc/apple/dockchannel.c
 +MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
 +MODULE_LICENSE("Dual MIT/GPL");
 +MODULE_DESCRIPTION("Apple DockChannel driver");
-Index: lernstick-linux/include/linux/soc/apple/dockchannel.h
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/include/linux/soc/apple/dockchannel.h	2025-12-05 13:58:05.385652217 +0100
+diff --git a/include/linux/soc/apple/dockchannel.h b/include/linux/soc/apple/dockchannel.h
+new file mode 100644
+index 000000000..0b7093935
+--- /dev/null
++++ b/include/linux/soc/apple/dockchannel.h
 @@ -0,0 +1,26 @@
 +/* SPDX-License-Identifier: GPL-2.0-only OR MIT */
 +/*
@@ -2818,10 +3557,65 @@ Index: lernstick-linux/include/linux/soc/apple/dockchannel.h
 +
 +#endif
 +#endif
-Index: lernstick-linux/drivers/hid/dockchannel-hid/Kconfig
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/hid/dockchannel-hid/Kconfig	2025-12-05 13:58:05.385652217 +0100
+-- 
+2.50.1
+
+
+From 11bd670615050cb6dcaf80d88fcf638628a879bd Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Fri, 8 Jul 2022 02:11:21 +0900
+Subject: [PATCH 17/18] HID: Add Apple DockChannel HID transport driver
+
+Apple M2 devices have an MTP coprocessor embedded in the SoC that
+handles HID for the integrated touchpad/keyboard, and communicates
+over the DockChannel interface. This driver implements this new
+interface.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/hid/Kconfig                           |    2 +
+ drivers/hid/Makefile                          |    4 +
+ drivers/hid/dockchannel-hid/Kconfig           |   14 +
+ drivers/hid/dockchannel-hid/Makefile          |    6 +
+ drivers/hid/dockchannel-hid/dockchannel-hid.c | 1213 +++++++++++++++++
+ 5 files changed, 1239 insertions(+)
+ create mode 100644 drivers/hid/dockchannel-hid/Kconfig
+ create mode 100644 drivers/hid/dockchannel-hid/Makefile
+ create mode 100644 drivers/hid/dockchannel-hid/dockchannel-hid.c
+
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index cee9eaaca..c172ca92f 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -1440,4 +1440,6 @@ source "drivers/hid/usbhid/Kconfig"
+ 
+ source "drivers/hid/spi-hid/Kconfig"
+ 
++source "drivers/hid/dockchannel-hid/Kconfig"
++
+ endif # HID_SUPPORT
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index 42740b0dd..e9d0c37ab 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -172,8 +172,12 @@ obj-$(CONFIG_INTEL_ISH_HID)	+= intel-ish-hid/
+ 
+ obj-$(CONFIG_AMD_SFH_HID)       += amd-sfh-hid/
+ 
++obj-$(CONFIG_HID_DOCKCHANNEL)   += dockchannel-hid/
++
+ obj-$(CONFIG_SPI_HID_APPLE_CORE)	+= spi-hid/
+ 
++obj-$(CONFIG_HID_DOCKCHANNEL)   += dockchannel-hid/
++
+ obj-$(CONFIG_SURFACE_HID_CORE)  += surface-hid/
+ 
+ obj-$(CONFIG_INTEL_THC_HID)     += intel-thc-hid/
+diff --git a/drivers/hid/dockchannel-hid/Kconfig b/drivers/hid/dockchannel-hid/Kconfig
+new file mode 100644
+index 000000000..8a81d551a
+--- /dev/null
++++ b/drivers/hid/dockchannel-hid/Kconfig
 @@ -0,0 +1,14 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR MIT
 +menu "DockChannel HID support"
@@ -2837,10 +3631,11 @@ Index: lernstick-linux/drivers/hid/dockchannel-hid/Kconfig
 +	  proprietary DockChannel interface.
 +
 +endmenu
-Index: lernstick-linux/drivers/hid/dockchannel-hid/Makefile
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/hid/dockchannel-hid/Makefile	2025-12-05 13:58:05.385652217 +0100
+diff --git a/drivers/hid/dockchannel-hid/Makefile b/drivers/hid/dockchannel-hid/Makefile
+new file mode 100644
+index 000000000..7dba766b0
+--- /dev/null
++++ b/drivers/hid/dockchannel-hid/Makefile
 @@ -0,0 +1,6 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR MIT
 +#
@@ -2848,10 +3643,11 @@ Index: lernstick-linux/drivers/hid/dockchannel-hid/Makefile
 +#
 +
 +obj-$(CONFIG_HID_DOCKCHANNEL)	+= dockchannel-hid.o
-Index: lernstick-linux/drivers/hid/dockchannel-hid/dockchannel-hid.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/hid/dockchannel-hid/dockchannel-hid.c	2025-12-05 13:58:05.389652309 +0100
+diff --git a/drivers/hid/dockchannel-hid/dockchannel-hid.c b/drivers/hid/dockchannel-hid/dockchannel-hid.c
+new file mode 100644
+index 000000000..a712a724d
+--- /dev/null
++++ b/drivers/hid/dockchannel-hid/dockchannel-hid.c
 @@ -0,0 +1,1213 @@
 +/*
 + * SPDX-License-Identifier: GPL-2.0 OR MIT
@@ -4066,10 +4862,70 @@ Index: lernstick-linux/drivers/hid/dockchannel-hid/dockchannel-hid.c
 +MODULE_DESCRIPTION("Apple DockChannel HID transport driver");
 +MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
 +MODULE_LICENSE("Dual MIT/GPL");
-Index: lernstick-linux/drivers/soc/apple/rtkit-helper.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ lernstick-linux/drivers/soc/apple/rtkit-helper.c	2025-12-05 13:58:05.389652309 +0100
+-- 
+2.50.1
+
+
+From c07ce156fda383cb0e26a384bab838a7e178e61e Mon Sep 17 00:00:00 2001
+From: Hector Martin <marcan@marcan.st>
+Date: Sun, 3 Jul 2022 23:33:37 +0900
+Subject: [PATCH 18/18] soc: apple: Add RTKit helper driver
+
+This driver can be used for coprocessors that do some background task or
+communicate out-of-band, and do not do any mailbox I/O beyond the
+standard RTKit initialization.
+
+Signed-off-by: Hector Martin <marcan@marcan.st>
+---
+ drivers/soc/apple/Kconfig        |  14 +++
+ drivers/soc/apple/Makefile       |   3 +
+ drivers/soc/apple/rtkit-helper.c | 151 +++++++++++++++++++++++++++++++
+ 3 files changed, 168 insertions(+)
+ create mode 100644 drivers/soc/apple/rtkit-helper.c
+
+diff --git a/drivers/soc/apple/Kconfig b/drivers/soc/apple/Kconfig
+index 82d0edadf..50f092732 100644
+--- a/drivers/soc/apple/Kconfig
++++ b/drivers/soc/apple/Kconfig
+@@ -40,6 +40,20 @@ config APPLE_RTKIT
+ 
+ 	  Say 'y' here if you have an Apple SoC.
+ 
++config APPLE_RTKIT_HELPER
++	tristate "Apple Generic RTKit helper co-processor"
++	depends on APPLE_RTKIT
++	depends on ARCH_APPLE || COMPILE_TEST
++	default ARCH_APPLE
++	help
++	  Apple SoCs such as the M1 come with various co-processors running
++	  their proprietary RTKit operating system. This option enables support
++	  for a generic co-processor that does not implement any additional
++	  in-band communications. It can be used for testing purposes, or for
++	  coprocessors such as MTP that communicate over a different interface.
++
++	  Say 'y' here if you have an Apple SoC.
++
+ config APPLE_SART
+ 	tristate "Apple SART DMA address filter"
+ 	depends on ARCH_APPLE || COMPILE_TEST
+diff --git a/drivers/soc/apple/Makefile b/drivers/soc/apple/Makefile
+index 0b6a9f92b..5e526a9ed 100644
+--- a/drivers/soc/apple/Makefile
++++ b/drivers/soc/apple/Makefile
+@@ -9,5 +9,8 @@ apple-mailbox-y = mailbox.o
+ obj-$(CONFIG_APPLE_RTKIT) += apple-rtkit.o
+ apple-rtkit-y = rtkit.o rtkit-crashlog.o
+ 
++obj-$(CONFIG_APPLE_RTKIT_HELPER) += apple-rtkit-helper.o
++apple-rtkit-helper-y = rtkit-helper.o
++
+ obj-$(CONFIG_APPLE_SART) += apple-sart.o
+ apple-sart-y = sart.o
+diff --git a/drivers/soc/apple/rtkit-helper.c b/drivers/soc/apple/rtkit-helper.c
+new file mode 100644
+index 000000000..080d083ed
+--- /dev/null
++++ b/drivers/soc/apple/rtkit-helper.c
 @@ -0,0 +1,151 @@
 +// SPDX-License-Identifier: GPL-2.0-only OR MIT
 +/*
@@ -4222,3 +5078,6 @@ Index: lernstick-linux/drivers/soc/apple/rtkit-helper.c
 +MODULE_AUTHOR("Hector Martin <marcan@marcan.st>");
 +MODULE_LICENSE("Dual MIT/GPL");
 +MODULE_DESCRIPTION("Apple RTKit helper driver");
+-- 
+2.50.1
+

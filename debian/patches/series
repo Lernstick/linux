@@ -109,8 +109,7 @@ bugfix/all/tools-hv-Make-the-sample-hv_get_dhcp_info-script-mor.patch
 # Lernstick specific patches
 t2-linux/1001-Add-apple-bce-driver.patch
 t2-linux/1002-Put-apple-bce-in-drivers-staging.patch
-t2-linux/1003-Fix-sparse-errors.patch
-t2-linux/1004-Fix-freezing-on-turning-off-camera.patch
+t2-linux/1003-Fix-freezing-on-turning-off-camera.patch
 t2-linux/2008-i915-4-lane-quirk-for-mbp15-1.patch
 t2-linux/2009-apple-gmux-allow-switching-to-igpu-at-probe.patch
 t2-linux/3001-applesmc-convert-static-structures-to-drvdata.patch
@@ -143,4 +142,5 @@ surface-linux/0012-surface-gpe.patch
 surface-linux/0013-cameras.patch
 surface-linux/0014-amd-gpio.patch
 surface-linux/0015-rtc.patch
+surface-linux/0016-hid-surface.patch
 
