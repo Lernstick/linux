@@ -56,12 +56,17 @@ rt = 'This kernel is configured with PREEMPT_RT real time support.'
 rt = 'PREEMPT_RT'
 
 [build]
-compiler = 'gcc-14'
 trusted_certs = 'debian/certs/lernstick-6.17.8-1~bpo13+lernstick.1.pem'
+c_compiler = 'gcc-14'
+rust_build_depends = [
+  'rustc:native (>= 1.78.0)',
+  'bindgen:native (>= 0.65.1)',
+  'rust-src (>= 1.78.0)',
+]
 
 [relations.image]
 depends = [
-  'initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool',
+  'dracut | initramfs-tools (>= 0.120+deb8u2) | linux-initramfs-tool',
 ]
 recommends = [
   'apparmor',
