@@ -10,11 +10,11 @@ https://github.com/t2linux/T2-Debian-and-Ubuntu-Kernel/issues/130#issuecomment-2
  drivers/staging/apple-bce/vhci/transfer.h |  4 +++-
  2 files changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/apple-bce/vhci/transfer.c b/drivers/staging/apple-bce/vhci/transfer.c
-index 8226363d6..d77220707 100644
---- a/drivers/staging/apple-bce/vhci/transfer.c
-+++ b/drivers/staging/apple-bce/vhci/transfer.c
-@@ -400,6 +400,7 @@ int bce_vhci_urb_request_cancel(struct bce_vhci_transfer_queue *q, struct urb *u
+Index: lernstick-linux/drivers/staging/apple-bce/vhci/transfer.c
+===================================================================
+--- lernstick-linux.orig/drivers/staging/apple-bce/vhci/transfer.c	2026-02-20 14:36:35.221011840 +0100
++++ lernstick-linux/drivers/staging/apple-bce/vhci/transfer.c	2026-02-20 14:36:35.213011655 +0100
+@@ -400,6 +400,7 @@
      struct bce_vhci_urb *vurb;
      unsigned long flags;
      int ret;
@@ -22,7 +22,7 @@ index 8226363d6..d77220707 100644
  
      spin_lock_irqsave(&q->urb_lock, flags);
      if ((ret = usb_hcd_check_unlink_urb(q->vhci->hcd, urb, status))) {
-@@ -408,8 +409,19 @@ int bce_vhci_urb_request_cancel(struct bce_vhci_transfer_queue *q, struct urb *u
+@@ -408,8 +409,19 @@
      }
  
      vurb = urb->hcpriv;
@@ -43,7 +43,7 @@ index 8226363d6..d77220707 100644
          pr_debug("bce-vhci: [%02x] Cancelling URB\n", q->endp_addr);
  
          spin_unlock_irqrestore(&q->urb_lock, flags);
-@@ -425,7 +437,7 @@ int bce_vhci_urb_request_cancel(struct bce_vhci_transfer_queue *q, struct urb *u
+@@ -425,7 +437,7 @@
  
      usb_hcd_giveback_urb(q->vhci->hcd, urb, status);
  
@@ -52,11 +52,11 @@ index 8226363d6..d77220707 100644
          bce_vhci_transfer_queue_resume(q, BCE_VHCI_PAUSE_INTERNAL_WQ);
  
      kfree(vurb);
-diff --git a/drivers/staging/apple-bce/vhci/transfer.h b/drivers/staging/apple-bce/vhci/transfer.h
-index 89ecad6bc..b5403d570 100644
---- a/drivers/staging/apple-bce/vhci/transfer.h
-+++ b/drivers/staging/apple-bce/vhci/transfer.h
-@@ -44,7 +44,9 @@ enum bce_vhci_urb_state {
+Index: lernstick-linux/drivers/staging/apple-bce/vhci/transfer.h
+===================================================================
+--- lernstick-linux.orig/drivers/staging/apple-bce/vhci/transfer.h	2026-02-20 14:36:35.221011840 +0100
++++ lernstick-linux/drivers/staging/apple-bce/vhci/transfer.h	2026-02-20 14:36:35.213011655 +0100
+@@ -44,7 +44,9 @@
  
      BCE_VHCI_URB_CONTROL_WAITING_FOR_SETUP_REQUEST,
      BCE_VHCI_URB_CONTROL_WAITING_FOR_SETUP_COMPLETION,
@@ -67,6 +67,3 @@ index 89ecad6bc..b5403d570 100644
  };
  struct bce_vhci_urb {
      struct urb *urb;
--- 
-2.49.0
-

@@ -12,10 +12,10 @@ Signed-off-by: Aditya Garg <gargaditya08@live.com>
  drivers/hid/hid-apple.c | 27 +++++++++++++++++----------
  1 file changed, 17 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index 4505e5839..cdc008c66 100644
---- a/drivers/hid/hid-apple.c
-+++ b/drivers/hid/hid-apple.c
+Index: lernstick-linux/drivers/hid/hid-apple.c
+===================================================================
+--- lernstick-linux.orig/drivers/hid/hid-apple.c	2026-02-20 14:36:38.893096868 +0100
++++ lernstick-linux/drivers/hid/hid-apple.c	2026-02-20 14:36:38.889096775 +0100
 @@ -30,7 +30,7 @@
  #include "hid-ids.h"
  
@@ -25,7 +25,7 @@ index 4505e5839..cdc008c66 100644
  #define APPLE_HAS_FN		BIT(2)
  /* BIT(3) reserved, was: APPLE_HIDDEV */
  #define APPLE_ISO_TILDE_QUIRK	BIT(4)
-@@ -951,6 +951,9 @@ static int apple_probe(struct hid_device *hdev,
+@@ -952,6 +952,9 @@
  	    hdev->type != HID_TYPE_SPI_KEYBOARD)
  		return -ENODEV;
  
@@ -35,7 +35,7 @@ index 4505e5839..cdc008c66 100644
  	asc = devm_kzalloc(&hdev->dev, sizeof(*asc), GFP_KERNEL);
  	if (asc == NULL) {
  		hid_err(hdev, "can't alloc apple descriptor\n");
-@@ -1173,27 +1176,31 @@ static const struct hid_device_id apple_devices[] = {
+@@ -1174,27 +1177,31 @@
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
  		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRINGT2_J140K),
@@ -76,6 +76,3 @@ index 4505e5839..cdc008c66 100644
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI),
  		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ISO),
--- 
-2.50.1
-

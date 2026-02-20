@@ -15,11 +15,11 @@ Signed-off-by: Aditya Garg <gargaditya08@live.com>
  drivers/hid/hid-magicmouse.c | 15 ++++++---------
  1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
-index b40f41168..4bf49d7ca 100644
---- a/drivers/hid/hid-magicmouse.c
-+++ b/drivers/hid/hid-magicmouse.c
-@@ -1589,7 +1589,7 @@ static int magicmouse_probe(struct hid_device *hdev,
+Index: lernstick-linux/drivers/hid/hid-magicmouse.c
+===================================================================
+--- lernstick-linux.orig/drivers/hid/hid-magicmouse.c	2026-02-20 14:36:39.377108075 +0100
++++ lernstick-linux/drivers/hid/hid-magicmouse.c	2026-02-20 14:36:39.369107890 +0100
+@@ -1589,7 +1589,7 @@
  		report = hid_register_report(hdev, HID_INPUT_REPORT,
  			TRACKPAD2_USB_REPORT_ID, 0);
  		break;
@@ -28,7 +28,7 @@ index b40f41168..4bf49d7ca 100644
  		switch (id->bus) {
  		case BUS_HOST:
  			report = hid_register_report(hdev, HID_INPUT_REPORT, MTP_REPORT_ID, 0);
-@@ -1597,15 +1597,12 @@ static int magicmouse_probe(struct hid_device *hdev,
+@@ -1597,15 +1597,12 @@
  		case BUS_SPI:
  			report = hid_register_report(hdev, HID_INPUT_REPORT, SPI_REPORT_ID, 0);
  			break;
@@ -49,6 +49,3 @@ index b40f41168..4bf49d7ca 100644
  	}
  
  	if (!report) {
--- 
-2.50.1
-

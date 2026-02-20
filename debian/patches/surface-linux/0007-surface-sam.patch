@@ -13,11 +13,11 @@ Patchset: surface-sam
  3 files changed, 137 insertions(+)
  create mode 100644 drivers/rtc/rtc-surface.c
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 2933c41c7..050eba74d 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1399,6 +1399,13 @@ config RTC_DRV_NTXEC
+Index: lernstick-linux/drivers/rtc/Kconfig
+===================================================================
+--- lernstick-linux.orig/drivers/rtc/Kconfig	2026-02-20 14:36:42.173172817 +0100
++++ lernstick-linux/drivers/rtc/Kconfig	2026-02-20 14:36:42.165172632 +0100
+@@ -1399,6 +1399,13 @@
  	  embedded controller found in certain e-book readers designed by the
  	  original design manufacturer Netronix.
  
@@ -31,11 +31,11 @@ index 2933c41c7..050eba74d 100644
  comment "on-CPU RTC drivers"
  
  config RTC_DRV_ASM9260
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 8221bda6e..8932df6e0 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -183,6 +183,7 @@ obj-$(CONFIG_RTC_DRV_SUN4V)	+= rtc-sun4v.o
+Index: lernstick-linux/drivers/rtc/Makefile
+===================================================================
+--- lernstick-linux.orig/drivers/rtc/Makefile	2026-02-20 14:36:42.173172817 +0100
++++ lernstick-linux/drivers/rtc/Makefile	2026-02-20 14:36:42.165172632 +0100
+@@ -183,6 +183,7 @@
  obj-$(CONFIG_RTC_DRV_SUN6I)	+= rtc-sun6i.o
  obj-$(CONFIG_RTC_DRV_SUNPLUS)	+= rtc-sunplus.o
  obj-$(CONFIG_RTC_DRV_SUNXI)	+= rtc-sunxi.o
@@ -43,11 +43,10 @@ index 8221bda6e..8932df6e0 100644
  obj-$(CONFIG_RTC_DRV_TEGRA)	+= rtc-tegra.o
  obj-$(CONFIG_RTC_DRV_TEST)	+= rtc-test.o
  obj-$(CONFIG_RTC_DRV_TI_K3)	+= rtc-ti-k3.o
-diff --git a/drivers/rtc/rtc-surface.c b/drivers/rtc/rtc-surface.c
-new file mode 100644
-index 000000000..f6c17c4e9
---- /dev/null
-+++ b/drivers/rtc/rtc-surface.c
+Index: lernstick-linux/drivers/rtc/rtc-surface.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ lernstick-linux/drivers/rtc/rtc-surface.c	2026-02-20 14:36:42.165172632 +0100
 @@ -0,0 +1,129 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
@@ -178,25 +177,11 @@ index 000000000..f6c17c4e9
 +MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
 +MODULE_DESCRIPTION("RTC driver for Surface System Aggregator Module");
 +MODULE_LICENSE("GPL");
--- 
-2.52.0
-
-From e6a3cef76cf1b9bfbf517d38fbb4078d9594cfe7 Mon Sep 17 00:00:00 2001
-From: Maximilian Luz <luzmaximilian@gmail.com>
-Date: Sun, 20 Apr 2025 01:05:14 +0200
-Subject: [PATCH] platform/surface: aggregator_registry: Add Surface Laptop 7
- (ACPI)
-
-Patchset: surface-sam
----
- drivers/platform/surface/surface_aggregator_registry.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
-index a594d5fcf..07b03aa4f 100644
---- a/drivers/platform/surface/surface_aggregator_registry.c
-+++ b/drivers/platform/surface/surface_aggregator_registry.c
-@@ -460,6 +460,9 @@ static const struct acpi_device_id ssam_platform_hub_acpi_match[] = {
+Index: lernstick-linux/drivers/platform/surface/surface_aggregator_registry.c
+===================================================================
+--- lernstick-linux.orig/drivers/platform/surface/surface_aggregator_registry.c	2026-02-20 14:36:42.173172817 +0100
++++ lernstick-linux/drivers/platform/surface/surface_aggregator_registry.c	2026-02-20 14:36:42.165172632 +0100
+@@ -460,6 +460,9 @@
  	/* Surface Laptop 6 */
  	{ "MSHW0530", (unsigned long)ssam_node_group_sl6 },
  
@@ -206,6 +191,3 @@ index a594d5fcf..07b03aa4f 100644
  	/* Surface Laptop Go 1 */
  	{ "MSHW0118", (unsigned long)ssam_node_group_slg1 },
  
--- 
-2.52.0
-
